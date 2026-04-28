@@ -16,6 +16,7 @@ import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppFlightsRouteImport } from './routes/_app.flights'
+import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
@@ -54,6 +55,11 @@ const AppFlightsRoute = AppFlightsRouteImport.update({
   path: '/flights',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDocumentsRoute = AppDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
   '/payments': typeof AppPaymentsRoute
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
   '/payments': typeof AppPaymentsRoute
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/documents': typeof AppDocumentsRoute
   '/_app/flights': typeof AppFlightsRoute
   '/_app/intake': typeof AppIntakeRoute
   '/_app/payments': typeof AppPaymentsRoute
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/documents'
     | '/flights'
     | '/intake'
     | '/payments'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/documents'
     | '/flights'
     | '/intake'
     | '/payments'
@@ -134,6 +145,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/auth'
     | '/_app/dashboard'
+    | '/_app/documents'
     | '/_app/flights'
     | '/_app/intake'
     | '/_app/payments'
@@ -199,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFlightsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/documents': {
+      id: '/_app/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AppDocumentsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -225,6 +244,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppDocumentsRoute: typeof AppDocumentsRoute
   AppFlightsRoute: typeof AppFlightsRoute
   AppIntakeRoute: typeof AppIntakeRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
@@ -235,6 +255,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppDocumentsRoute: AppDocumentsRoute,
   AppFlightsRoute: AppFlightsRoute,
   AppIntakeRoute: AppIntakeRoute,
   AppPaymentsRoute: AppPaymentsRoute,
