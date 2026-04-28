@@ -14,7 +14,527 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      car_rentals: {
+        Row: {
+          booking_status: Database["public"]["Enums"]["booking_status"] | null
+          car_type: string | null
+          company_name: string | null
+          created_at: string
+          customer_id: string
+          id: string
+          notes: string | null
+          owner_id: string
+          pickup_datetime: string | null
+          pickup_location: string | null
+          return_datetime: string | null
+          return_location: string | null
+        }
+        Insert: {
+          booking_status?: Database["public"]["Enums"]["booking_status"] | null
+          car_type?: string | null
+          company_name?: string | null
+          created_at?: string
+          customer_id: string
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          pickup_datetime?: string | null
+          pickup_location?: string | null
+          return_datetime?: string | null
+          return_location?: string | null
+        }
+        Update: {
+          booking_status?: Database["public"]["Enums"]["booking_status"] | null
+          car_type?: string | null
+          company_name?: string | null
+          created_at?: string
+          customer_id?: string
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          pickup_datetime?: string | null
+          pickup_location?: string | null
+          return_datetime?: string | null
+          return_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_rentals_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          content: string
+          created_at: string
+          customer_id: string
+          id: string
+          owner_id: string
+          source: Database["public"]["Enums"]["conversation_source"]
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          owner_id?: string
+          source?: Database["public"]["Enums"]["conversation_source"]
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          owner_id?: string
+          source?: Database["public"]["Enums"]["conversation_source"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          amount_paid: number | null
+          created_at: string
+          destination: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          owner_id: string
+          payment_status: string | null
+          phone: string | null
+          pnr: string | null
+          status: string | null
+          total_price: number | null
+          travel_end_date: string | null
+          travel_start_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number | null
+          created_at?: string
+          destination?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          owner_id?: string
+          payment_status?: string | null
+          phone?: string | null
+          pnr?: string | null
+          status?: string | null
+          total_price?: number | null
+          travel_end_date?: string | null
+          travel_start_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number | null
+          created_at?: string
+          destination?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          payment_status?: string | null
+          phone?: string | null
+          pnr?: string | null
+          status?: string | null
+          total_price?: number | null
+          travel_end_date?: string | null
+          travel_start_date?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          category: Database["public"]["Enums"]["document_category"] | null
+          customer_id: string
+          file_name: string
+          file_type: string | null
+          file_url: string
+          id: string
+          owner_id: string
+          uploaded_at: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["document_category"] | null
+          customer_id: string
+          file_name: string
+          file_type?: string | null
+          file_url: string
+          id?: string
+          owner_id?: string
+          uploaded_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["document_category"] | null
+          customer_id?: string
+          file_name?: string
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          owner_id?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flights: {
+        Row: {
+          airline: string | null
+          arrival_airport: string | null
+          arrival_datetime: string | null
+          check_in_status: Database["public"]["Enums"]["check_status"] | null
+          created_at: string
+          customer_id: string
+          departure_airport: string | null
+          departure_datetime: string | null
+          flight_number: string | null
+          id: string
+          insurance_status: Database["public"]["Enums"]["check_status"] | null
+          notes: string | null
+          owner_id: string
+          pnr: string | null
+          ticket_status: Database["public"]["Enums"]["check_status"] | null
+          updated_at: string
+        }
+        Insert: {
+          airline?: string | null
+          arrival_airport?: string | null
+          arrival_datetime?: string | null
+          check_in_status?: Database["public"]["Enums"]["check_status"] | null
+          created_at?: string
+          customer_id: string
+          departure_airport?: string | null
+          departure_datetime?: string | null
+          flight_number?: string | null
+          id?: string
+          insurance_status?: Database["public"]["Enums"]["check_status"] | null
+          notes?: string | null
+          owner_id?: string
+          pnr?: string | null
+          ticket_status?: Database["public"]["Enums"]["check_status"] | null
+          updated_at?: string
+        }
+        Update: {
+          airline?: string | null
+          arrival_airport?: string | null
+          arrival_datetime?: string | null
+          check_in_status?: Database["public"]["Enums"]["check_status"] | null
+          created_at?: string
+          customer_id?: string
+          departure_airport?: string | null
+          departure_datetime?: string | null
+          flight_number?: string | null
+          id?: string
+          insurance_status?: Database["public"]["Enums"]["check_status"] | null
+          notes?: string | null
+          owner_id?: string
+          pnr?: string | null
+          ticket_status?: Database["public"]["Enums"]["check_status"] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flights_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hotels: {
+        Row: {
+          booking_status: Database["public"]["Enums"]["booking_status"] | null
+          check_in_date: string | null
+          check_out_date: string | null
+          city: string | null
+          created_at: string
+          customer_id: string
+          hotel_name: string | null
+          id: string
+          notes: string | null
+          number_of_guests: number | null
+          owner_id: string
+          room_type: string | null
+        }
+        Insert: {
+          booking_status?: Database["public"]["Enums"]["booking_status"] | null
+          check_in_date?: string | null
+          check_out_date?: string | null
+          city?: string | null
+          created_at?: string
+          customer_id: string
+          hotel_name?: string | null
+          id?: string
+          notes?: string | null
+          number_of_guests?: number | null
+          owner_id?: string
+          room_type?: string | null
+        }
+        Update: {
+          booking_status?: Database["public"]["Enums"]["booking_status"] | null
+          check_in_date?: string | null
+          check_out_date?: string | null
+          city?: string | null
+          created_at?: string
+          customer_id?: string
+          hotel_name?: string | null
+          id?: string
+          notes?: string | null
+          number_of_guests?: number | null
+          owner_id?: string
+          room_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hotels_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_id: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"] | null
+          notes: string | null
+          owner_id: string
+          payment_date: string
+          payment_type: Database["public"]["Enums"]["payment_type"] | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_id: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"] | null
+          notes?: string | null
+          owner_id?: string
+          payment_date?: string
+          payment_type?: Database["public"]["Enums"]["payment_type"] | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_id?: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"] | null
+          notes?: string | null
+          owner_id?: string
+          payment_date?: string
+          payment_type?: Database["public"]["Enums"]["payment_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          owner_id: string
+          priority: Database["public"]["Enums"]["task_priority"] | null
+          status: Database["public"]["Enums"]["task_status"] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          owner_id?: string
+          priority?: Database["public"]["Enums"]["task_priority"] | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          owner_id?: string
+          priority?: Database["public"]["Enums"]["task_priority"] | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      telegram_updates: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          id: string
+          owner_id: string | null
+          parsed_action: Json | null
+          raw_message: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          owner_id?: string | null
+          parsed_action?: Json | null
+          raw_message: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          owner_id?: string | null
+          parsed_action?: Json | null
+          raw_message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_updates_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      timeline_events: {
+        Row: {
+          created_at: string
+          customer_id: string
+          description: string | null
+          id: string
+          owner_id: string
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          description?: string | null
+          id?: string
+          owner_id?: string
+          title: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          description?: string | null
+          id?: string
+          owner_id?: string
+          title?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timeline_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transfers: {
+        Row: {
+          created_at: string
+          customer_id: string
+          datetime: string | null
+          destination: string | null
+          id: string
+          notes: string | null
+          number_of_passengers: number | null
+          owner_id: string
+          pickup_location: string | null
+          status: Database["public"]["Enums"]["booking_status"] | null
+          supplier: string | null
+          transfer_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          datetime?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          number_of_passengers?: number | null
+          owner_id?: string
+          pickup_location?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+          supplier?: string | null
+          transfer_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          datetime?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          number_of_passengers?: number | null
+          owner_id?: string
+          pickup_location?: string | null
+          status?: Database["public"]["Enums"]["booking_status"] | null
+          supplier?: string | null
+          transfer_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transfers_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +543,22 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      booking_status: "pending" | "confirmed" | "cancelled"
+      check_status: "pending" | "done" | "not_required"
+      conversation_source: "whatsapp" | "telegram" | "manual"
+      document_category:
+        | "passport"
+        | "flight_ticket"
+        | "hotel_voucher"
+        | "visa"
+        | "insurance"
+        | "invoice"
+        | "supplier_document"
+        | "other"
+      payment_method: "cash" | "bank_transfer" | "credit_card" | "other"
+      payment_type: "deposit" | "full" | "refund"
+      task_priority: "low" | "medium" | "high" | "urgent"
+      task_status: "open" | "in_progress" | "done" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +685,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      booking_status: ["pending", "confirmed", "cancelled"],
+      check_status: ["pending", "done", "not_required"],
+      conversation_source: ["whatsapp", "telegram", "manual"],
+      document_category: [
+        "passport",
+        "flight_ticket",
+        "hotel_voucher",
+        "visa",
+        "insurance",
+        "invoice",
+        "supplier_document",
+        "other",
+      ],
+      payment_method: ["cash", "bank_transfer", "credit_card", "other"],
+      payment_type: ["deposit", "full", "refund"],
+      task_priority: ["low", "medium", "high", "urgent"],
+      task_status: ["open", "in_progress", "done", "cancelled"],
+    },
   },
 } as const
