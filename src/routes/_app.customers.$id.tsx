@@ -62,7 +62,7 @@ function CustomerCardPage() {
   const totalPaid = (related.data?.payments ?? []).reduce((s, p) => s + Number(p.amount), 0);
 
   const updateField = async (patch: Record<string, any>) => {
-    const { error } = await supabase.from("customers").update(patch).eq("id", id);
+    const { error } = await supabase.from("customers").update(patch as any).eq("id", id);
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["customer", id] });
   };
@@ -143,7 +143,7 @@ function CustomerCardPage() {
           <SimpleListTab title="מלונות" items={(related.data?.hotels ?? []).map((h) => ({
             id: h.id, primary: h.hotel_name ?? "—",
             secondary: `${h.city ?? ""} • ${formatDate(h.check_in_date)} – ${formatDate(h.check_out_date)}`,
-            badge: h.booking_status,
+            badge: h.booking_status ?? undefined,
           }))} />
         </TabsContent>
 
@@ -151,7 +151,7 @@ function CustomerCardPage() {
           <SimpleListTab title="השכרות רכב" items={(related.data?.cars ?? []).map((r) => ({
             id: r.id, primary: `${r.company_name ?? "—"} • ${r.car_type ?? ""}`,
             secondary: `${formatDateTime(r.pickup_datetime)} → ${formatDateTime(r.return_datetime)}`,
-            badge: r.booking_status,
+            badge: r.booking_status ?? undefined,
           }))} />
         </TabsContent>
 
@@ -159,7 +159,7 @@ function CustomerCardPage() {
           <SimpleListTab title="העברות" items={(related.data?.transfers ?? []).map((t) => ({
             id: t.id, primary: `${t.transfer_type ?? "—"}: ${t.pickup_location ?? ""} → ${t.destination ?? ""}`,
             secondary: formatDateTime(t.datetime),
-            badge: t.status,
+            badge: t.status ?? undefined,
           }))} />
         </TabsContent>
 
@@ -228,7 +228,7 @@ function FlightsTab({ customerId, customer, items }: { customerId: string; custo
     e.preventDefault();
     const payload: any = { customer_id: customerId };
     Object.entries(form).forEach(([k, v]) => { if (v) payload[k] = v; });
-    const { error } = await supabase.from("flights").insert(payload);
+    const { error } = await supabase.from("flights").insert(payload as any);
     if (error) { toast.error(error.message); return; }
     toast.success("טיסה נוספה");
     qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
