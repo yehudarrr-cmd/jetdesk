@@ -236,7 +236,7 @@ function FlightsTab({ customerId, customer, items }: { customerId: string; custo
   };
 
   const updateStatus = async (id: string, field: string, value: string) => {
-    const { error } = await supabase.from("flights").update({ [field]: value }).eq("id", id);
+    const { error } = await supabase.from("flights").update({ [field]: value } as any).eq("id", id);
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
   };
