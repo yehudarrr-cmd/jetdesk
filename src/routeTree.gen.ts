@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppFlightsRouteImport } from './routes/_app.flights'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
@@ -31,6 +32,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppTasksRoute = AppTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppIntakeRoute = AppIntakeRouteImport.update({
   id: '/intake',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
+  '/tasks': typeof AppTasksRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers/': typeof AppCustomersIndexRoute
 }
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
+  '/tasks': typeof AppTasksRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers': typeof AppCustomersIndexRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/flights': typeof AppFlightsRoute
   '/_app/intake': typeof AppIntakeRoute
+  '/_app/tasks': typeof AppTasksRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
 }
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/flights'
     | '/intake'
+    | '/tasks'
     | '/customers/$id'
     | '/customers/'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/flights'
     | '/intake'
+    | '/tasks'
     | '/customers/$id'
     | '/customers'
   id:
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/flights'
     | '/_app/intake'
+    | '/_app/tasks'
     | '/_app/customers/$id'
     | '/_app/customers/'
   fileRoutesById: FileRoutesById
@@ -146,6 +158,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_app/tasks': {
+      id: '/_app/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/intake': {
       id: '/_app/intake'
@@ -189,6 +208,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppFlightsRoute: typeof AppFlightsRoute
   AppIntakeRoute: typeof AppIntakeRoute
+  AppTasksRoute: typeof AppTasksRoute
   AppCustomersIdRoute: typeof AppCustomersIdRoute
   AppCustomersIndexRoute: typeof AppCustomersIndexRoute
 }
@@ -197,6 +217,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppFlightsRoute: AppFlightsRoute,
   AppIntakeRoute: AppIntakeRoute,
+  AppTasksRoute: AppTasksRoute,
   AppCustomersIdRoute: AppCustomersIdRoute,
   AppCustomersIndexRoute: AppCustomersIndexRoute,
 }
