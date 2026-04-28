@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIntakeRouteImport } from './routes/_app.intake'
+import { Route as AppFlightsRouteImport } from './routes/_app.flights'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
@@ -29,6 +31,16 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppIntakeRoute = AppIntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFlightsRoute = AppFlightsRouteImport.update({
+  id: '/flights',
+  path: '/flights',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
@@ -50,6 +62,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/flights': typeof AppFlightsRoute
+  '/intake': typeof AppIntakeRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers/': typeof AppCustomersIndexRoute
 }
@@ -57,6 +71,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
+  '/flights': typeof AppFlightsRoute
+  '/intake': typeof AppIntakeRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers': typeof AppCustomersIndexRoute
 }
@@ -66,20 +82,38 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/flights': typeof AppFlightsRoute
+  '/_app/intake': typeof AppIntakeRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/customers/$id' | '/customers/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/flights'
+    | '/intake'
+    | '/customers/$id'
+    | '/customers/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/customers/$id' | '/customers'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/flights'
+    | '/intake'
+    | '/customers/$id'
+    | '/customers'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/auth'
     | '/_app/dashboard'
+    | '/_app/flights'
+    | '/_app/intake'
     | '/_app/customers/$id'
     | '/_app/customers/'
   fileRoutesById: FileRoutesById
@@ -113,6 +147,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/intake': {
+      id: '/_app/intake'
+      path: '/intake'
+      fullPath: '/intake'
+      preLoaderRoute: typeof AppIntakeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/flights': {
+      id: '/_app/flights'
+      path: '/flights'
+      fullPath: '/flights'
+      preLoaderRoute: typeof AppFlightsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -139,12 +187,16 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppFlightsRoute: typeof AppFlightsRoute
+  AppIntakeRoute: typeof AppIntakeRoute
   AppCustomersIdRoute: typeof AppCustomersIdRoute
   AppCustomersIndexRoute: typeof AppCustomersIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppFlightsRoute: AppFlightsRoute,
+  AppIntakeRoute: AppIntakeRoute,
   AppCustomersIdRoute: AppCustomersIdRoute,
   AppCustomersIndexRoute: AppCustomersIndexRoute,
 }
@@ -159,3 +211,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
