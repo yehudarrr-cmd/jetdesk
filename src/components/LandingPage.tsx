@@ -32,7 +32,7 @@ import {
   Phone,
 } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
-import logoImage from "@/assets/goldtus-logo.png";
+import logoImage from "@/assets/goldtus-logo-transparent.png";
 
 const WHATSAPP_NUMBER = "972557756660";
 const PHONE_DISPLAY = "055-775-6660";
@@ -186,28 +186,34 @@ export function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-l from-background/70 via-transparent to-background/40" />
         </div>
 
-        {/* Top bar with logo */}
-        <header className="relative z-10 flex items-center justify-between px-5 sm:px-10 pt-4 sm:pt-6">
-          <img
-            src={logoImage}
-            alt="גולדטוס - GoldTus"
-            width={200}
-            height={200}
-            className="w-16 sm:w-20 lg:w-24 h-auto drop-shadow-[0_6px_20px_rgba(212,175,55,0.35)]"
-          />
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-foreground/85 hover:text-primary transition-colors"
-          >
-            <MessageCircle className="w-4 h-4 text-success" fill="currentColor" />
-            <span dir="ltr">{PHONE_DISPLAY}</span>
-          </a>
-        </header>
+        {/* Logo - integrated, top-center, ambient glow */}
+        <div className="relative z-10 flex justify-center pt-8 sm:pt-10 pointer-events-none">
+          <div className="relative animate-fade-in-down">
+            {/* Ambient gold halo behind logo - reads as hero lighting, not a backdrop */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -m-8 rounded-full blur-3xl opacity-40"
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, oklch(0.78 0.13 82 / 0.45), transparent 65%)",
+              }}
+            />
+            <img
+              src={logoImage}
+              alt="גולדטוס - GoldTus"
+              width={200}
+              height={200}
+              className="relative w-28 sm:w-32 lg:w-36 h-auto animate-float-soft"
+              style={{
+                filter:
+                  "drop-shadow(0 2px 24px rgba(212,175,55,0.18)) drop-shadow(0 1px 2px rgba(0,0,0,0.25))",
+              }}
+            />
+          </div>
+        </div>
 
         {/* Hero grid */}
-        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 py-6 sm:py-10">
+        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 py-4 sm:py-8">
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-10 items-center">
             {/* RIGHT (RTL) - Headline & subheadline */}
             <div className="space-y-4 sm:space-y-5 text-center lg:text-right">

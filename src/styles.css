@@ -104,3 +104,20 @@
   .shadow-gold-soft { box-shadow: var(--shadow-gold-soft); }
   .text-gold { color: var(--primary); }
 }
+
+@layer utilities {
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .animate-float-soft {
+    animation: float-soft 5s ease-in-out infinite;
+  }
+  @keyframes fade-in-down {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in-down {
+    animation: fade-in-down 1.2s ease-out both;
+  }
+}
