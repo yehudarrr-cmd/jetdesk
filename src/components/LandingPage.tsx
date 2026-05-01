@@ -30,6 +30,7 @@ import {
   Award,
   Globe,
   Phone,
+  ChevronDown,
 } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
 import logoImage from "@/assets/goldtus-logo-transparent.png";
@@ -172,7 +173,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
       {/* HERO - strict 60/40 split, logo top-right header */}
-      <section className="relative min-h-[100svh] flex flex-col overflow-hidden">
+      <section className="relative min-h-[92svh] flex flex-col overflow-hidden">
         {/* Background image with single dark overlay */}
         <div className="absolute inset-0">
           <img
@@ -187,15 +188,16 @@ export function LandingPage() {
         </div>
 
         {/* Header - logo pinned top-right (RTL) */}
-        <header className="absolute top-0 right-0 z-20 pt-5 pr-5 sm:pt-6 sm:pr-8 pointer-events-none">
+        <header className="absolute top-0 right-0 z-20 pt-6 pr-6 sm:pt-8 sm:pr-10 pointer-events-none">
           <img
             src={logoImage}
             alt="גולדטוס - GoldTus"
             width={200}
             height={200}
-            className="h-12 w-auto animate-fade-in-down"
+            className="h-16 w-auto animate-fade-in-down"
             style={{
-              filter: "drop-shadow(0 2px 12px rgba(0,0,0,0.45))",
+              filter:
+                "drop-shadow(0 0 18px rgba(212,175,55,0.18)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))",
             }}
           />
         </header>
@@ -205,13 +207,6 @@ export function LandingPage() {
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-14 items-center">
             {/* RIGHT (RTL first) - 60% - Headline & subheadline */}
             <div className="lg:col-span-3 space-y-5 sm:space-y-6 text-center lg:text-right">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-background/40 backdrop-blur-md">
-                <Sparkles className="w-3 h-3 text-primary" />
-                <span className="text-[11px] sm:text-xs font-medium text-primary/90 tracking-wider">
-                  מבית אמירים טורס
-                </span>
-              </div>
-
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
                 טיסות וחופשות
                 <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
@@ -232,11 +227,13 @@ export function LandingPage() {
             </div>
 
             {/* LEFT (RTL second) - 40% - Quick quote form */}
-            <Card className="lg:col-span-2 lg:self-center p-5 sm:p-6 lg:p-7 bg-black/55 backdrop-blur-2xl border border-primary/20 rounded-2xl shadow-elegant">
-              <form onSubmit={handleQuickQuote} className="space-y-3.5">
+            <Card className="lg:col-span-2 lg:self-center p-6 sm:p-7 lg:p-8 bg-black/55 backdrop-blur-2xl border border-primary/20 rounded-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
+              <form onSubmit={handleQuickQuote} className="space-y-5">
                 <div className="text-center space-y-1">
                   <h2 className="text-lg sm:text-xl font-bold">קבלו הצעה מותאמת אישית</h2>
-                  <p className="text-xs text-muted-foreground">תוך דקות בוואטסאפ</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    השאירו פרטים ונחזור אליכם בהקדם עם הצעה מותאמת אישית
+                  </p>
                 </div>
 
                 <div>
@@ -247,18 +244,18 @@ export function LandingPage() {
                     required
                     maxLength={120}
                     placeholder="מלדיביים, דובאי, יוון..."
-                    className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                    className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="q-depart" className="text-xs">תאריך יציאה</Label>
                     <Input
                       id="q-depart"
                       name="departDate"
                       type="date"
-                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                      className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary"
                     />
                   </div>
                   <div>
@@ -267,12 +264,12 @@ export function LandingPage() {
                       id="q-return"
                       name="returnDate"
                       type="date"
-                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                      className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="q-travelers" className="text-xs">מס' נוסעים</Label>
                     <Input
@@ -283,13 +280,13 @@ export function LandingPage() {
                       max={20}
                       defaultValue={2}
                       required
-                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                      className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary"
                     />
                   </div>
                   <div>
                     <Label htmlFor="q-level" className="text-xs">רמת חופשה</Label>
                     <Select value={quickLevel} onValueChange={(v) => setQuickLevel(v as typeof quickLevel)}>
-                      <SelectTrigger id="q-level" className="mt-1 h-10 bg-input/60 border-border/60">
+                      <SelectTrigger id="q-level" className="mt-1.5 h-11 bg-input/60 border-border/60">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -317,10 +314,27 @@ export function LandingPage() {
             </Card>
           </div>
         </div>
+
+        {/* Scroll-down indicator */}
+        <button
+          type="button"
+          onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+          aria-label="גללו להמשך"
+          className="hidden sm:flex absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex-col items-center gap-1.5 text-primary/80 hover:text-primary transition-colors group"
+        >
+          <span className="text-[11px] tracking-[0.25em] text-foreground/70 group-hover:text-foreground">
+            גללו להמשך
+          </span>
+          <ChevronDown
+            className="w-5 h-5 animate-bounce"
+            style={{ animationDuration: "2s" }}
+            strokeWidth={1.5}
+          />
+        </button>
       </section>
 
       {/* ABOUT - compact */}
-      <section className="py-14 sm:py-20 px-6 border-t border-border/40">
+      <section id="about" className="py-14 sm:py-20 px-6 border-t border-border/40">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">מי אנחנו</span>
           <p className="text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed text-foreground/90">
@@ -404,7 +418,7 @@ export function LandingPage() {
                 <div className="text-center space-y-1 mb-2">
                   <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">צרו קשר</span>
                   <h3 className="text-xl font-bold">השאירו פרטים מלאים</h3>
-                  <p className="text-xs text-muted-foreground">נחזור אליכם תוך 24 שעות</p>
+                  <p className="text-xs text-muted-foreground">נחזור אליכם בהקדם</p>
                 </div>
 
                 <div>
