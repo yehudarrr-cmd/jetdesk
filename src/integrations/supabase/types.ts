@@ -409,6 +409,120 @@ export type Database = {
           },
         ]
       }
+      telegram_bot_state: {
+        Row: {
+          id: number
+          update_offset: number
+          updated_at: string
+        }
+        Insert: {
+          id: number
+          update_offset?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          update_offset?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      telegram_chat_links: {
+        Row: {
+          chat_id: number
+          created_at: string
+          first_name: string | null
+          id: string
+          owner_id: string
+          paired_at: string | null
+          pairing_code: string | null
+          username: string | null
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          owner_id: string
+          paired_at?: string | null
+          pairing_code?: string | null
+          username?: string | null
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          first_name?: string | null
+          id?: string
+          owner_id?: string
+          paired_at?: string | null
+          pairing_code?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      telegram_messages: {
+        Row: {
+          ai_response: Json | null
+          chat_id: number
+          created_at: string
+          error: string | null
+          owner_id: string | null
+          raw_update: Json
+          reply_text: string | null
+          status: string
+          text: string | null
+          update_id: number
+        }
+        Insert: {
+          ai_response?: Json | null
+          chat_id: number
+          created_at?: string
+          error?: string | null
+          owner_id?: string | null
+          raw_update: Json
+          reply_text?: string | null
+          status?: string
+          text?: string | null
+          update_id: number
+        }
+        Update: {
+          ai_response?: Json | null
+          chat_id?: number
+          created_at?: string
+          error?: string | null
+          owner_id?: string | null
+          raw_update?: Json
+          reply_text?: string | null
+          status?: string
+          text?: string | null
+          update_id?: number
+        }
+        Relationships: []
+      }
+      telegram_pairing_codes: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string
+          owner_id: string
+          used_at: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at: string
+          owner_id: string
+          used_at?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string
+          owner_id?: string
+          used_at?: string | null
+        }
+        Relationships: []
+      }
       telegram_updates: {
         Row: {
           created_at: string
