@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plane, MapPin, Headphones, Sparkles, MessageCircle, Mail, ShieldCheck, Clock, Star } from "lucide-react";
+import { Plane, Sparkles, MessageCircle, Mail, ShieldCheck, Star, Briefcase, BookOpen, Crown, Umbrella, Hotel } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
 
 const WHATSAPP_NUMBER = "972500000000"; // לעדכון - מספר ווטסאפ של גולדטוס
@@ -112,20 +112,20 @@ export function LandingPage() {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">סוכנות נסיעות פרימיום</span>
+              <span className="text-sm font-medium text-primary">חברת בת של טוס - אמירים טורס</span>
             </div>
 
             <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-              החופשה
+              GOLD TUS
               <br />
               <span className="bg-gradient-to-l from-primary to-primary-glow bg-clip-text text-transparent">
-                שתמיד חלמתם עליה
+                לטוס בסטנדרט אחר
               </span>
             </h1>
 
             <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
-              חבילות יוקרה מותאמות אישית, יעדים אקסקלוסיביים, וליווי 24/7 לאורך כל הדרך.
-              השאירו פרטים וקבלו הצעה מותאמת תוך 24 שעות.
+              השירות האישי שלנו, העוצמה של הקבוצה המובילה בישראל. אנחנו לוקחים את המורכבות
+              של עולם התעופה והופכים אותה לחוויה חלקה, יוקרתית ובטוחה - הכל תחת גג אחד.
             </p>
 
             <div className="flex flex-wrap gap-4 items-center">
@@ -134,7 +134,7 @@ export function LandingPage() {
                 onClick={() => document.getElementById("lead-form")?.scrollIntoView({ behavior: "smooth" })}
                 className="gradient-primary shadow-glow text-primary-foreground font-semibold text-base h-12 px-8"
               >
-                קבלו הצעה אישית
+                אני רוצה הצעה מנצחת עכשיו
               </Button>
               <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/10 h-12 px-8 gap-2">
@@ -151,7 +151,7 @@ export function LandingPage() {
                     <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <span>+500 לקוחות מרוצים</span>
+                <span>אלפי לקוחות מרוצים בקבוצת טוס</span>
               </div>
             </div>
           </div>
@@ -186,8 +186,8 @@ export function LandingPage() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-1">
-                    <h2 className="text-2xl font-bold">קבלו הצעה אישית</h2>
-                    <p className="text-sm text-muted-foreground">מלאו פרטים ונחזור אליכם תוך 24 שעות</p>
+                  <h2 className="text-2xl font-bold">הצעה מנצחת בדרך אליכם</h2>
+                    <p className="text-sm text-muted-foreground">השאירו פרטים והמומחים שלנו יחזרו אליכם במהירות</p>
                   </div>
 
                   <div className="space-y-3">
@@ -243,29 +243,44 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-              למה <span className="bg-gradient-to-l from-primary to-primary-glow bg-clip-text text-transparent">Goldtus</span>?
+              המעטפת המלאה שלכם - <span className="bg-gradient-to-l from-primary to-primary-glow bg-clip-text text-transparent">הכל תחת גג אחד</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              חוויית נסיעה ברמה אחרת לגמרי - מהתכנון הראשוני ועד החזרה הביתה
+              חמישה תחומי התמחות שמעניקים לכם חוויית נסיעה ברמה אחרת לגמרי
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: MapPin,
-                title: "יעדים אקסקלוסיביים",
-                description: "מלונות בוטיק, וילות פרטיות וחוויות שלא תמצאו באף סוכנות אחרת",
+                icon: Hotel,
+                title: "הכול כולל הכול",
+                description: "טיסות, מלונות בוטיק ויוקרה, השכרת רכב והעברות פרטיות - סנכרון מושלם בין כל חלקי הנסיעה.",
               },
               {
-                icon: Headphones,
-                title: "ליווי אישי 24/7",
-                description: "סוכן אישי זמין לכם בכל רגע - לפני, במהלך ואחרי החופשה",
+                icon: Briefcase,
+                title: "מחלקה לטיסות עסקיות",
+                description: "ניהול מערך נסיעות Corporate מקצה לקצה, טיפול מהיר בשינויים של הרגע האחרון וחיסכון מקסימלי בזמן.",
               },
               {
-                icon: Clock,
-                title: "תגובה תוך 24 שעות",
-                description: "קבלו הצעה מותאמת אישית במהירות, ללא טפסים מיותרים",
+                icon: BookOpen,
+                title: "מחלקה למגזר הדתי",
+                description: "התמחות ייחודית בפתרונות כשרות, מלונות בקרבת קהילות יהודיות והבנה מעמיקה של צרכי המטייל הדתי והחרדי.",
+              },
+              {
+                icon: Crown,
+                title: "שירותי VIP בנמלי תעופה",
+                description: "מעבר מהיר בנתב\"ג ובעולם, אירוח בטרקלינים וליווי אישי לחוויית מעבר ללא תורים וללא המתנה.",
+              },
+              {
+                icon: Umbrella,
+                title: "ביטוח נסיעות מקיף",
+                description: "התאמת פוליסות מדויקות לכל סוג נסיעה, כדי שתוכלו לטוס עם שקט נפשי מלא.",
+              },
+              {
+                icon: Sparkles,
+                title: "כוח קנייה אדיר",
+                description: "השילוב של סוכן אישי עם העוצמה של קבוצת טוס - אמירים טורס מעניק לכם מחירים בלעדיים ושירות ללא פשרות.",
               },
             ].map((feature, i) => (
               <Card
@@ -291,21 +306,22 @@ export function LandingPage() {
             <div className="relative space-y-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
                 <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">מוכנים להתחיל?</span>
+                <span className="text-sm font-medium text-primary">למה דווקא גולד טוס?</span>
               </div>
               <h2 className="text-3xl lg:text-5xl font-bold tracking-tight">
-                החופשה הבאה שלכם
+                בידיים הכי טובות
                 <br />
-                במרחק שיחה אחת
+                בענף התעופה בישראל
               </h2>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                בחרו את הדרך הנוחה ביותר ליצור קשר - אנחנו כאן בשבילכם
+                הלב והנשמה של סוכן אישי שדואג לכל פרט, יחד עם העוצמה הבלתי מתפשרת של קבוצת טוס - אמירים טורס.
+                תנו למקצוענים של גולד טוס לתכנן לכם את הנסיעה הבאה.
               </p>
               <div className="flex flex-wrap gap-4 justify-center pt-4">
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                   <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow h-12 px-8 gap-2 font-semibold">
                     <MessageCircle className="w-5 h-5" />
-                    שיחה בווטסאפ
+                    אני רוצה הצעה מנצחת עכשיו
                   </Button>
                 </a>
                 <Button
