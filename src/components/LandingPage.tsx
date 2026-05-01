@@ -25,6 +25,7 @@ import {
   Phone,
 } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
+import logoImage from "@/assets/goldtus-logo.png";
 
 const WHATSAPP_NUMBER = "972557756660";
 const PHONE_DISPLAY = "055-775-6660";
@@ -116,34 +117,36 @@ export function LandingPage() {
             height={1080}
             className="w-full h-full object-cover"
           />
-          {/* Dark overlay for contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/60 to-background" />
-          <div className="absolute inset-0 bg-background/40" />
+          {/* Dark overlay for contrast - lighter so the image shines through */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
         </div>
 
         {/* Logo top center */}
-        <div className="relative z-10 absolute top-8 inset-x-0 flex justify-center pt-2 sm:pt-4">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/30 bg-background/40 backdrop-blur-md">
-            <Plane className="w-5 h-5 text-primary" strokeWidth={2} />
-            <span className="text-xl font-bold tracking-[0.2em] text-primary">GOLDTUS</span>
-          </div>
+        <div className="absolute top-6 sm:top-10 inset-x-0 flex justify-center z-10">
+          <img
+            src={logoImage}
+            alt="גולדטוס - GoldTus"
+            width={400}
+            height={400}
+            className="w-32 sm:w-40 lg:w-48 h-auto drop-shadow-[0_8px_24px_rgba(212,175,55,0.35)]"
+          />
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-8 mt-16 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm">
+        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-7 mt-40 sm:mt-44 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-background/50 backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-primary" />
             <span className="text-xs font-medium text-primary/90 tracking-wider">מבית אמירים טורס</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
             <span className="block text-foreground">טסים</span>
             <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
               ברמה אחרת
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-foreground/85 leading-relaxed max-w-xl mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
             טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד
           </p>
 
