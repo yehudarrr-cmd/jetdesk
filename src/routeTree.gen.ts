@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LandingRouteImport } from './routes/landing'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,11 +24,6 @@ import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.i
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
-const LandingRoute = LandingRouteImport.update({
-  id: '/landing',
-  path: '/landing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -103,7 +97,6 @@ const ApiPublicTelegramPollRoute = ApiPublicTelegramPollRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/landing': typeof LandingRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
@@ -119,7 +112,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/landing': typeof LandingRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
@@ -137,7 +129,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
-  '/landing': typeof LandingRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
   '/_app/flights': typeof AppFlightsRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
-    | '/landing'
     | '/dashboard'
     | '/documents'
     | '/flights'
@@ -171,7 +161,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/landing'
     | '/dashboard'
     | '/documents'
     | '/flights'
@@ -188,7 +177,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/auth'
-    | '/landing'
     | '/_app/dashboard'
     | '/_app/documents'
     | '/_app/flights'
@@ -206,19 +194,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
-  LandingRoute: typeof LandingRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/landing': {
-      id: '/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof LandingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -352,7 +332,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
-  LandingRoute: LandingRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
 export const routeTree = rootRouteImport
