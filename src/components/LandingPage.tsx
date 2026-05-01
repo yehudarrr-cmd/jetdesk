@@ -7,6 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   Plane,
@@ -39,13 +46,21 @@ const leadSchema = z.object({
   message: z.string().trim().max(1000).optional(),
 });
 
+const quickQuoteSchema = z.object({
+  destination: z.string().trim().min(2, "אנא מלאו יעד").max(120),
+  departDate: z.string().trim().max(20).optional(),
+  returnDate: z.string().trim().max(20).optional(),
+  travelers: z.string().trim().min(1).max(3),
+  level: z.enum(["regular", "premium", "luxury"]),
+});
+
 const services = [
-  { icon: Hotel, title: "טיסות + מלונות יוקרה", description: "חבילות מתוזמרות עד הפרט האחרון - בוטיק ויוקרה בלבד." },
-  { icon: Car, title: "השכרת רכב והעברות", description: "רכבי פרימיום והעברות פרטיות בכל יעד בעולם." },
-  { icon: Briefcase, title: "טיסות עסקיות", description: "ניהול נסיעות Corporate מקצה לקצה, בכל שעה ביממה." },
-  { icon: BookOpen, title: "מגזר דתי", description: "פתרונות כשרות, קהילות יהודיות ומומחיות בצרכי המטייל הדתי." },
-  { icon: Crown, title: "שירותי VIP בנתב\"ג", description: "מעבר מהיר, טרקלינים וליווי אישי - ללא תורים." },
-  { icon: Umbrella, title: "ביטוח נסיעות", description: "פוליסות מותאמות אישית לשקט נפשי מלא בכל יעד." },
+  { icon: Hotel, title: "טיסות + מלונות יוקרה" },
+  { icon: Car, title: "השכרת רכב והעברות" },
+  { icon: Briefcase, title: "טיסות עסקיות" },
+  { icon: BookOpen, title: "מגזר דתי" },
+  { icon: Crown, title: "VIP בנתב\"ג" },
+  { icon: Umbrella, title: "ביטוח נסיעות" },
 ];
 
 const whyUs = [
@@ -55,9 +70,16 @@ const whyUs = [
   { icon: ShieldCheck, title: "ביטחון מלא" },
 ];
 
+const levelLabel: Record<string, string> = {
+  regular: "רגילה",
+  premium: "פרימיום",
+  luxury: "יוקרה",
+};
+
 export function LandingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [quickLevel, setQuickLevel] = useState<"regular" | "premium" | "luxury">("premium");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -101,116 +123,241 @@ export function LandingPage() {
     }
   };
 
+  const handleQuickQuote = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const raw = {
+      destination: String(formData.get("destination") || ""),
+      departDate: String(formData.get("departDate") || ""),
+      returnDate: String(formData.get("returnDate") || ""),
+      travelers: String(formData.get("travelers") || "2"),
+      level: quickLevel,
+    };
+
+    const parsed = quickQuoteSchema.safeParse(raw);
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message || "אנא מלאו את הפרטים");
+      return;
+    }
+
+    const d = parsed.data;
+    const lines = [
+      "שלום, אשמח לקבל הצעה לחופשה:",
+      `יעד: ${d.destination}`,
+      d.departDate ? `תאריך יציאה: ${d.departDate}` : null,
+      d.returnDate ? `תאריך חזרה: ${d.returnDate}` : null,
+      `מספר נוסעים: ${d.travelers}`,
+      `רמת חופשה: ${levelLabel[d.level]}`,
+    ].filter(Boolean).join("\n");
+
+    // Fire-and-forget save to leads (best effort, don't block WhatsApp)
+    supabase.from("landing_leads").insert({
+      name: "פנייה מהירה (וואטסאפ)",
+      phone: "—",
+      destination: d.destination,
+      number_of_travelers: parseInt(d.travelers) || 1,
+      message: lines,
+      source: "quick_quote_whatsapp",
+    }).then(({ error }) => {
+      if (error) console.error("Quick quote save error:", error);
+    });
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("שלום, אני מעוניין/ת לקבל הצעה לחופשה")}`;
   const scrollToForm = () => document.getElementById("lead-form")?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
-      {/* HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6">
+      {/* HERO - compact, two-column on desktop, stacked on mobile */}
+      <section className="relative min-h-[100svh] flex flex-col overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="מטוס פרטי יוקרתי טס מעל עננים בשקיעת זהב"
+            alt="חלון מטוס פרטי עם נוף עננים בשקיעת זהב וכוס שמפניה"
             width={1920}
             height={1080}
             className="w-full h-full object-cover"
           />
-          {/* Dark overlay for contrast - lighter so the image shines through */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/55 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-l from-background/70 via-transparent to-background/40" />
         </div>
 
-        {/* Logo top center */}
-        <div className="absolute top-6 sm:top-10 inset-x-0 flex justify-center z-10">
+        {/* Top bar with logo */}
+        <header className="relative z-10 flex items-center justify-between px-5 sm:px-10 pt-4 sm:pt-6">
           <img
             src={logoImage}
             alt="גולדטוס - GoldTus"
-            width={400}
-            height={400}
-            className="w-32 sm:w-40 lg:w-48 h-auto drop-shadow-[0_8px_24px_rgba(212,175,55,0.35)]"
+            width={200}
+            height={200}
+            className="w-16 sm:w-20 lg:w-24 h-auto drop-shadow-[0_6px_20px_rgba(212,175,55,0.35)]"
           />
-        </div>
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-foreground/85 hover:text-primary transition-colors"
+          >
+            <MessageCircle className="w-4 h-4 text-success" fill="currentColor" />
+            <span dir="ltr">{PHONE_DISPLAY}</span>
+          </a>
+        </header>
 
-        {/* Hero content */}
-        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-7 mt-40 sm:mt-44 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-background/50 backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-medium text-primary/90 tracking-wider">מבית אמירים טורס</span>
+        {/* Hero grid */}
+        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 py-6 sm:py-10">
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-10 items-center">
+            {/* RIGHT (RTL) - Headline & subheadline */}
+            <div className="space-y-4 sm:space-y-5 text-center lg:text-right">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-background/40 backdrop-blur-md">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span className="text-[11px] sm:text-xs font-medium text-primary/90 tracking-wider">
+                  מבית אמירים טורס
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+                טיסות וחופשות
+                <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+                  פרימיום בהתאמה אישית
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base lg:text-lg text-foreground/85 leading-relaxed max-w-lg mx-auto lg:mx-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+                שלחו יעד, תאריכים ומספר נוסעים - ונמצא לכם דיל מדויק בלי כאב ראש.
+              </p>
+
+              {/* Trust strip - compact */}
+              <div className="hidden sm:flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground justify-center lg:justify-start pt-1">
+                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-primary" /> שירות אישי</span>
+                <span className="flex items-center gap-1.5"><Award className="w-3.5 h-3.5 text-primary" /> מחירים בלעדיים</span>
+                <span className="flex items-center gap-1.5"><Crown className="w-3.5 h-3.5 text-primary" /> VIP בנתב"ג</span>
+              </div>
+            </div>
+
+            {/* LEFT (RTL) - Quick quote form */}
+            <Card className="p-5 sm:p-6 lg:p-7 bg-card/70 backdrop-blur-xl border border-primary/25 shadow-elegant">
+              <form onSubmit={handleQuickQuote} className="space-y-3.5">
+                <div className="text-center space-y-1">
+                  <h2 className="text-lg sm:text-xl font-bold">קבלו הצעה מותאמת אישית</h2>
+                  <p className="text-xs text-muted-foreground">תוך דקות בוואטסאפ</p>
+                </div>
+
+                <div>
+                  <Label htmlFor="q-destination" className="text-xs">יעד *</Label>
+                  <Input
+                    id="q-destination"
+                    name="destination"
+                    required
+                    maxLength={120}
+                    placeholder="מלדיביים, דובאי, יוון..."
+                    className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <Label htmlFor="q-depart" className="text-xs">תאריך יציאה</Label>
+                    <Input
+                      id="q-depart"
+                      name="departDate"
+                      type="date"
+                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="q-return" className="text-xs">תאריך חזרה</Label>
+                    <Input
+                      id="q-return"
+                      name="returnDate"
+                      type="date"
+                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <Label htmlFor="q-travelers" className="text-xs">מס' נוסעים</Label>
+                    <Input
+                      id="q-travelers"
+                      name="travelers"
+                      type="number"
+                      min={1}
+                      max={20}
+                      defaultValue={2}
+                      required
+                      className="mt-1 h-10 bg-input/60 border-border/60 focus:border-primary"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="q-level" className="text-xs">רמת חופשה</Label>
+                    <Select value={quickLevel} onValueChange={(v) => setQuickLevel(v as typeof quickLevel)}>
+                      <SelectTrigger id="q-level" className="mt-1 h-10 bg-input/60 border-border/60">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="regular">רגילה</SelectItem>
+                        <SelectItem value="premium">פרימיום</SelectItem>
+                        <SelectItem value="luxury">יוקרה</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-success hover:bg-success/90 text-white font-semibold gap-2 shadow-glow text-base hover:scale-[1.02] transition-transform"
+                >
+                  <MessageCircle className="w-5 h-5" fill="currentColor" />
+                  קבלו הצעה בוואטסאפ
+                </Button>
+
+                <p className="text-[11px] text-muted-foreground text-center">
+                  <ShieldCheck className="w-3 h-3 inline ml-1" />
+                  הפרטים שלכם מאובטחים. ללא ספאם.
+                </p>
+              </form>
+            </Card>
           </div>
-
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            <span className="block text-foreground">טסים</span>
-            <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
-              ברמה אחרת
-            </span>
-          </h1>
-
-          <p className="text-base sm:text-lg lg:text-xl text-foreground/85 leading-relaxed max-w-xl mx-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
-            טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-4">
-            <Button
-              size="lg"
-              onClick={scrollToForm}
-              className="gradient-primary shadow-glow text-primary-foreground font-semibold h-12 px-8 text-base hover:scale-105 transition-transform w-full sm:w-auto"
-            >
-              קבלו הצעה עכשיו
-            </Button>
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-primary/30 hover:border-primary hover:bg-primary/10 h-12 px-8 gap-2 backdrop-blur-sm w-full"
-              >
-                <MessageCircle className="w-5 h-5" />
-                וואטסאפ
-              </Button>
-            </a>
-          </div>
         </div>
-
-        {/* Subtle gold glow at bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-32 gradient-radial-gold opacity-50 pointer-events-none" />
       </section>
 
-      {/* ABOUT */}
-      <section className="py-24 lg:py-32 px-6">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
+      {/* ABOUT - compact */}
+      <section className="py-14 sm:py-20 px-6 border-t border-border/40">
+        <div className="max-w-3xl mx-auto text-center space-y-4">
           <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">מי אנחנו</span>
-          <p className="text-2xl sm:text-3xl lg:text-4xl font-light leading-relaxed text-foreground/90">
-            <span className="text-primary font-medium">גולדטוס</span> לוקחת את המורכבות של עולם התעופה והופכת אותה
+          <p className="text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed text-foreground/90">
+            <span className="text-primary font-medium">גולדטוס</span> הופכת את עולם התעופה
             לחוויה <span className="text-primary font-medium">חלקה, יוקרתית ובטוחה</span>.
-          </p>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            אנחנו לא רק מזמינים כרטיס – אנחנו מנהלים לכם את הדרך.
+            <br className="hidden sm:block" />
+            לא רק מזמינים כרטיס - מנהלים לכם את הדרך.
           </p>
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section className="py-20 lg:py-28 px-6 border-t border-border/40">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים שלנו</span>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              המעטפת המלאה
-              <span className="block text-primary mt-2">תחת גג אחד</span>
+      {/* SERVICES - condensed grid */}
+      <section className="py-14 sm:py-20 px-6 border-t border-border/40">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10 space-y-2">
+            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים</span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+              הכל תחת <span className="text-primary">גג אחד</span>
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             {services.map((service, i) => (
               <Card
                 key={i}
-                className="group p-8 bg-card/40 backdrop-blur-sm border border-border/40 hover:border-primary/40 transition-all duration-500 hover:shadow-gold-soft hover:-translate-y-1"
+                className="p-4 sm:p-5 bg-card/40 backdrop-blur-sm border border-border/40 hover:border-primary/40 transition-colors flex flex-col items-center text-center gap-2.5"
               >
-                <div className="w-12 h-12 rounded-xl border border-primary/30 bg-primary/5 flex items-center justify-center mb-6 group-hover:border-primary/60 group-hover:bg-primary/10 transition-all">
-                  <service.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center">
+                  <service.icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-lg font-semibold mb-3 text-foreground">{service.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
+                <h3 className="text-sm sm:text-base font-semibold text-foreground leading-tight">{service.title}</h3>
               </Card>
             ))}
           </div>
@@ -218,73 +365,33 @@ export function LandingPage() {
       </section>
 
       {/* WHY US */}
-      <section className="py-20 lg:py-28 px-6 border-t border-border/40 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-radial-gold opacity-40 pointer-events-none" />
-        <div className="relative max-w-6xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">למה גולדטוס</span>
-            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
-              היתרון <span className="text-primary">שלכם</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      <section className="py-14 sm:py-20 px-6 border-t border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0 gradient-radial-gold opacity-30 pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
             {whyUs.map((item, i) => (
-              <div key={i} className="text-center space-y-4 group">
-                <div className="w-16 h-16 mx-auto rounded-full border border-primary/40 flex items-center justify-center group-hover:border-primary group-hover:scale-110 transition-all duration-500 bg-background/60 backdrop-blur-sm">
-                  <item.icon className="w-7 h-7 text-primary" strokeWidth={1.5} />
+              <div key={i} className="text-center space-y-3 group">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-full border border-primary/40 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+                  <item.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-foreground">{item.title}</h3>
+                <h3 className="text-sm sm:text-base font-semibold text-foreground">{item.title}</h3>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-24 lg:py-32 px-6 border-t border-border/40 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            width={1920}
-            height={1080}
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/70" />
-        </div>
-        <div className="relative max-w-3xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-            תנו לנו לבנות לכם את
-            <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-2">
-              הנסיעה הבאה
-            </span>
-          </h2>
-          <Button
-            size="lg"
-            onClick={scrollToForm}
-            className="gradient-primary shadow-glow text-primary-foreground font-semibold h-14 px-10 text-base hover:scale-105 transition-transform"
-          >
-            אני רוצה הצעה מנצחת עכשיו
-          </Button>
-        </div>
-      </section>
-
-      {/* LEAD FORM */}
-      <section id="lead-form" className="py-20 lg:py-28 px-6 border-t border-border/40">
+      {/* DETAILED LEAD FORM (kept for users who want a fuller channel) */}
+      <section id="lead-form" className="py-16 sm:py-24 px-6 border-t border-border/40">
         <div className="max-w-xl mx-auto">
-          <Card className="p-8 lg:p-10 bg-card/60 backdrop-blur-xl border border-primary/20 shadow-elegant">
+          <Card className="p-6 sm:p-8 bg-card/60 backdrop-blur-xl border border-primary/20 shadow-elegant">
             {submitted ? (
-              <div className="text-center py-6 space-y-5">
-                <div className="w-16 h-16 mx-auto rounded-full border border-primary/40 flex items-center justify-center">
-                  <Sparkles className="w-7 h-7 text-primary" />
+              <div className="text-center py-4 space-y-4">
+                <div className="w-14 h-14 mx-auto rounded-full border border-primary/40 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold">תודה רבה!</h3>
-                <p className="text-muted-foreground">
-                  קיבלנו את פרטיכם, נחזור אליכם בהקדם.
-                </p>
+                <h3 className="text-xl font-bold">תודה רבה!</h3>
+                <p className="text-sm text-muted-foreground">קיבלנו את פרטיכם, נחזור אליכם בהקדם.</p>
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="inline-block">
                   <Button className="gradient-primary text-primary-foreground gap-2">
                     <MessageCircle className="w-4 h-4" />
@@ -293,45 +400,44 @@ export function LandingPage() {
                 </a>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="block mx-auto text-sm text-muted-foreground hover:text-primary mt-4 transition-colors"
+                  className="block mx-auto text-xs text-muted-foreground hover:text-primary mt-3 transition-colors"
                 >
                   שליחת פנייה נוספת
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="text-center space-y-2 mb-2">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="text-center space-y-1 mb-2">
                   <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">צרו קשר</span>
-                  <h3 className="text-2xl font-bold">הצעה אישית בדרך אליכם</h3>
+                  <h3 className="text-xl font-bold">השאירו פרטים מלאים</h3>
+                  <p className="text-xs text-muted-foreground">נחזור אליכם תוך 24 שעות</p>
                 </div>
 
-                <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name" className="text-sm">שם מלא *</Label>
+                  <Input id="name" name="name" required maxLength={100} placeholder="ישראל ישראלי" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="name" className="text-sm">שם מלא *</Label>
-                    <Input id="name" name="name" required maxLength={100} placeholder="ישראל ישראלי" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="phone" className="text-sm">טלפון *</Label>
-                      <Input id="phone" name="phone" required type="tel" maxLength={20} placeholder="050-1234567" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
-                    </div>
-                    <div>
-                      <Label htmlFor="travelers" className="text-sm">מס' נוסעים</Label>
-                      <Input id="travelers" name="travelers" type="number" min="1" max="20" defaultValue="2" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
-                    </div>
+                    <Label htmlFor="phone" className="text-sm">טלפון *</Label>
+                    <Input id="phone" name="phone" required type="tel" maxLength={20} placeholder="050-1234567" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
                   </div>
                   <div>
-                    <Label htmlFor="email" className="text-sm">אימייל</Label>
-                    <Input id="email" name="email" type="email" maxLength={255} placeholder="email@example.com" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                    <Label htmlFor="travelers" className="text-sm">מס' נוסעים</Label>
+                    <Input id="travelers" name="travelers" type="number" min="1" max="20" defaultValue="2" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
                   </div>
-                  <div>
-                    <Label htmlFor="destination" className="text-sm">יעד מבוקש</Label>
-                    <Input id="destination" name="destination" maxLength={200} placeholder="מלדיביים, יוון, דובאי..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
-                  </div>
-                  <div>
-                    <Label htmlFor="message" className="text-sm">פרטים נוספים</Label>
-                    <Textarea id="message" name="message" rows={3} maxLength={1000} placeholder="תאריכים, סגנון נופש, דרישות מיוחדות..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary resize-none" />
-                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="email" className="text-sm">אימייל</Label>
+                  <Input id="email" name="email" type="email" maxLength={255} placeholder="email@example.com" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                </div>
+                <div>
+                  <Label htmlFor="destination" className="text-sm">יעד מבוקש</Label>
+                  <Input id="destination" name="destination" maxLength={200} placeholder="מלדיביים, יוון, דובאי..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                </div>
+                <div>
+                  <Label htmlFor="message" className="text-sm">פרטים נוספים</Label>
+                  <Textarea id="message" name="message" rows={3} maxLength={1000} placeholder="תאריכים, סגנון נופש, דרישות מיוחדות..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary resize-none" />
                 </div>
 
                 <Button
@@ -339,13 +445,8 @@ export function LandingPage() {
                   disabled={submitting}
                   className="w-full gradient-primary shadow-glow text-primary-foreground font-semibold h-12 text-base hover:scale-[1.02] transition-transform"
                 >
-                  {submitting ? "שולח..." : "קבלו הצעה אישית"}
+                  {submitting ? "שולח..." : "שלחו פנייה"}
                 </Button>
-
-                <p className="text-xs text-muted-foreground text-center">
-                  <ShieldCheck className="w-3 h-3 inline ml-1" />
-                  הפרטים שלכם מאובטחים ולא יועברו לצד שלישי
-                </p>
               </form>
             )}
           </Card>
@@ -353,9 +454,9 @@ export function LandingPage() {
       </section>
 
       {/* CONTACT STRIP */}
-      <section className="py-12 px-6 border-t border-border/40 bg-card/30">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm">
-          <a href={`tel:${WHATSAPP_NUMBER}`} className="flex items-center gap-2.5 hover:text-primary transition-colors group">
+      <section className="py-10 px-6 border-t border-border/40 bg-card/30">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-5 sm:gap-10 text-sm">
+          <a href={`tel:${WHATSAPP_NUMBER}`} className="flex items-center gap-2.5 hover:text-primary transition-colors">
             <Phone className="w-4 h-4 text-primary" />
             <span className="font-medium tracking-wide" dir="ltr">{PHONE_DISPLAY}</span>
           </a>
@@ -373,7 +474,7 @@ export function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-10 px-6 border-t border-border/40">
+      <footer className="py-8 px-6 border-t border-border/40">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Plane className="w-4 h-4 text-primary" />
