@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const TABLES = ["customers", "payments", "tasks", "flights", "timeline_events"] as const;
+const TABLES = ["customers", "payments", "tasks", "flights", "timeline_events", "landing_leads"] as const;
 
 export function useRealtimeSync() {
   const qc = useQueryClient();

@@ -318,6 +318,54 @@ export type Database = {
           },
         ]
       }
+      landing_leads: {
+        Row: {
+          created_at: string
+          destination: string | null
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          number_of_travelers: number | null
+          phone: string | null
+          source: string | null
+          status: string | null
+          travel_end_date: string | null
+          travel_start_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          number_of_travelers?: number | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          travel_end_date?: string | null
+          travel_start_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          number_of_travelers?: number | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          travel_end_date?: string | null
+          travel_start_date?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
