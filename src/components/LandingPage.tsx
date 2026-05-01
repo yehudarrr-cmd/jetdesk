@@ -418,7 +418,7 @@ export function LandingPage() {
                 <div className="text-center space-y-1 mb-2">
                   <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">צרו קשר</span>
                   <h3 className="text-xl font-bold">השאירו פרטים מלאים</h3>
-                  <p className="text-xs text-muted-foreground">נחזור אליכם תוך 24 שעות</p>
+                  <p className="text-xs text-muted-foreground">נחזור אליכם בהקדם</p>
                 </div>
 
                 <div>
