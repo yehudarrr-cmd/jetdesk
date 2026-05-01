@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Session } from "@supabase/supabase-js";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 const NAV = [
   { to: "/", label: "לוח בקרה", icon: LayoutDashboard },
@@ -35,6 +36,8 @@ export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useRealtimeSync();
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
