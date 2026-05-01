@@ -11,6 +11,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  Bot,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Session } from "@supabase/supabase-js";
@@ -23,6 +24,7 @@ const NAV = [
   { to: "/tasks", label: "משימות", icon: CheckSquare },
   { to: "/payments", label: "תשלומים", icon: CreditCard },
   { to: "/documents", label: "מסמכים", icon: FileText },
+  { to: "/telegram", label: "בוט טלגרם", icon: Bot },
 ] as const;
 
 export function AppLayout() {
