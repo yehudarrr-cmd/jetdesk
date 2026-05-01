@@ -34,8 +34,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Travel CRM — כרטסת לקוח" },
       { name: "description", content: "מערכת CRM לסוכן נסיעות עם כרטסת לקוח חכמה, ניהול טיסות, מסמכים ותקשורת ווטסאפ." },
       { property: "og:title", content: "Travel CRM — כרטסת לקוח" },
-      { property: "og:description", content: "ניהול לקוחות, טיסות ומסמכים בעברית עם AI." },
+      { property: "og:description", content: "מערכת CRM לסוכן נסיעות עם כרטסת לקוח חכמה, ניהול טיסות, מסמכים ותקשורת ווטסאפ." },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Travel CRM — כרטסת לקוח" },
+      { name: "twitter:description", content: "מערכת CRM לסוכן נסיעות עם כרטסת לקוח חכמה, ניהול טיסות, מסמכים ותקשורת ווטסאפ." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d19f45c0-351d-4ce2-9f87-cd3a411cb376/id-preview-19160f3b--fa083a57-bf7e-486f-bb85-ef6bb2c704ca.lovable.app-1777605871938.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d19f45c0-351d-4ce2-9f87-cd3a411cb376/id-preview-19160f3b--fa083a57-bf7e-486f-bb85-ef6bb2c704ca.lovable.app-1777605871938.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
