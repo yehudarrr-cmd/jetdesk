@@ -8,7 +8,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plane, Sparkles, MessageCircle, ShieldCheck, Briefcase, BookOpen, Crown, Umbrella, Hotel, Car, Heart, Award, Globe, Phone } from "lucide-react";
+import {
+  Plane,
+  Sparkles,
+  MessageCircle,
+  ShieldCheck,
+  Briefcase,
+  BookOpen,
+  Crown,
+  Umbrella,
+  Hotel,
+  Car,
+  Heart,
+  Award,
+  Globe,
+  Phone,
+} from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
 
 const WHATSAPP_NUMBER = "972557756660";
@@ -22,6 +37,22 @@ const leadSchema = z.object({
   travelers: z.string().trim().max(10).optional(),
   message: z.string().trim().max(1000).optional(),
 });
+
+const services = [
+  { icon: Hotel, title: "טיסות + מלונות יוקרה", description: "חבילות מתוזמרות עד הפרט האחרון - בוטיק ויוקרה בלבד." },
+  { icon: Car, title: "השכרת רכב והעברות", description: "רכבי פרימיום והעברות פרטיות בכל יעד בעולם." },
+  { icon: Briefcase, title: "טיסות עסקיות", description: "ניהול נסיעות Corporate מקצה לקצה, בכל שעה ביממה." },
+  { icon: BookOpen, title: "מגזר דתי", description: "פתרונות כשרות, קהילות יהודיות ומומחיות בצרכי המטייל הדתי." },
+  { icon: Crown, title: "שירותי VIP בנתב\"ג", description: "מעבר מהיר, טרקלינים וליווי אישי - ללא תורים." },
+  { icon: Umbrella, title: "ביטוח נסיעות", description: "פוליסות מותאמות אישית לשקט נפשי מלא בכל יעד." },
+];
+
+const whyUs = [
+  { icon: Heart, title: "שירות אישי" },
+  { icon: Award, title: "גב של אמירים טורס" },
+  { icon: Sparkles, title: "מחירים בלעדיים" },
+  { icon: ShieldCheck, title: "ביטחון מלא" },
+];
 
 export function LandingPage() {
   const [submitting, setSubmitting] = useState(false);
@@ -70,288 +101,283 @@ export function LandingPage() {
   };
 
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("שלום, אני מעוניין/ת לקבל הצעה לחופשה")}`;
+  const scrollToForm = () => document.getElementById("lead-form")?.scrollIntoView({ behavior: "smooth" });
 
   return (
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
-      {/* Header */}
-      <header className="absolute top-0 inset-x-0 z-20 px-6 py-5 lg:px-12">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
-              <Plane className="w-5 h-5 text-primary-foreground" strokeWidth={2.5} />
-            </div>
-            <span className="text-xl font-bold tracking-tight">Goldtus</span>
-          </div>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
-          >
-            <MessageCircle className="w-4 h-4" />
-            ווטסאפ
-          </a>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* HERO */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6">
+        {/* Background image */}
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="טיסה יוקרתית מעל איי המלדיביים בשקיעה"
+            alt="מטוס פרטי יוקרתי טס מעל עננים בשקיעת זהב"
             width={1920}
             height={1080}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-l from-background via-background/80 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+          {/* Dark overlay for contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/60 to-background" />
+          <div className="absolute inset-0 bg-background/40" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-32 lg:py-0 grid lg:grid-cols-2 gap-12 items-center w-full">
-          {/* Right side - text */}
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">חברת בת של טוס - אמירים טורס</span>
-            </div>
+        {/* Logo top center */}
+        <div className="relative z-10 absolute top-8 inset-x-0 flex justify-center pt-2 sm:pt-4">
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/30 bg-background/40 backdrop-blur-md">
+            <Plane className="w-5 h-5 text-primary" strokeWidth={2} />
+            <span className="text-xl font-bold tracking-[0.2em] text-primary">GOLDTUS</span>
+          </div>
+        </div>
 
-            <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
-              GOLD TUS
-              <br />
-              <span className="bg-gradient-to-l from-primary to-primary-glow bg-clip-text text-transparent">
-                לטוס בסטנדרט אחר
-              </span>
-            </h1>
+        {/* Hero content */}
+        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-8 mt-16 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <span className="text-xs font-medium text-primary/90 tracking-wider">מבית אמירים טורס</span>
+          </div>
 
-            <p className="text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl">
-              השירות האישי שלנו, העוצמה של הקבוצה המובילה בישראל. אנחנו לוקחים את המורכבות
-              של עולם התעופה והופכים אותה לחוויה חלקה, יוקרתית ובטוחה - הכל תחת גג אחד.
-            </p>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
+            <span className="block text-foreground">טסים</span>
+            <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+              ברמה אחרת
+            </span>
+          </h1>
 
-            <div className="flex flex-wrap gap-4 items-center">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-4">
+            <Button
+              size="lg"
+              onClick={scrollToForm}
+              className="gradient-primary shadow-glow text-primary-foreground font-semibold h-12 px-8 text-base hover:scale-105 transition-transform w-full sm:w-auto"
+            >
+              קבלו הצעה עכשיו
+            </Button>
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button
                 size="lg"
-                onClick={() => document.getElementById("lead-form")?.scrollIntoView({ behavior: "smooth" })}
-                className="gradient-primary shadow-glow text-primary-foreground font-semibold text-base h-12 px-8"
+                variant="outline"
+                className="border-primary/30 hover:border-primary hover:bg-primary/10 h-12 px-8 gap-2 backdrop-blur-sm w-full"
               >
-                אני רוצה הצעה מנצחת עכשיו
+                <MessageCircle className="w-5 h-5" />
+                וואטסאפ
               </Button>
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-primary/30 hover:bg-primary/10 h-12 px-8 gap-2">
-                  <MessageCircle className="w-5 h-5" />
-                  שיחה בווטסאפ
-                </Button>
-              </a>
-            </div>
-
-            <div className="flex items-center gap-6 pt-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <span>אלפי לקוחות מרוצים בקבוצת טוס</span>
-              </div>
-            </div>
+            </a>
           </div>
+        </div>
 
-          {/* Left side - lead form */}
-          <div id="lead-form" className="lg:pr-8">
-            <Card className="p-6 lg:p-8 bg-card/80 backdrop-blur-xl border-border/50 shadow-elegant">
-              {submitted ? (
-                <div className="text-center py-8 space-y-4">
-                  <div className="w-16 h-16 mx-auto rounded-full gradient-primary flex items-center justify-center shadow-glow">
-                    <Sparkles className="w-8 h-8 text-primary-foreground" />
-                  </div>
-                  <h3 className="text-2xl font-bold">תודה רבה!</h3>
-                  <p className="text-muted-foreground">
-                    קיבלנו את פרטיך ונחזור אליך בהקדם האפשרי.
-                    <br />
-                    בינתיים אפשר ליצור קשר בווטסאפ:
-                  </p>
-                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                    <Button className="gradient-primary text-primary-foreground gap-2 mt-2">
-                      <MessageCircle className="w-4 h-4" />
-                      פתחו צ'אט בווטסאפ
-                    </Button>
-                  </a>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="block mx-auto text-sm text-muted-foreground hover:text-primary mt-4"
-                  >
-                    שליחת פנייה נוספת
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-1">
-                  <h2 className="text-2xl font-bold">הצעה מנצחת בדרך אליכם</h2>
-                    <p className="text-sm text-muted-foreground">השאירו פרטים והמומחים שלנו יחזרו אליכם במהירות</p>
-                  </div>
+        {/* Subtle gold glow at bottom */}
+        <div className="absolute bottom-0 inset-x-0 h-32 gradient-radial-gold opacity-50 pointer-events-none" />
+      </section>
 
-                  <div className="space-y-3">
-                    <div>
-                      <Label htmlFor="name" className="text-sm">שם מלא *</Label>
-                      <Input id="name" name="name" required maxLength={100} placeholder="ישראל ישראלי" className="mt-1.5 bg-input/50" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="phone" className="text-sm">טלפון *</Label>
-                        <Input id="phone" name="phone" required type="tel" maxLength={20} placeholder="050-1234567" className="mt-1.5 bg-input/50" />
-                      </div>
-                      <div>
-                        <Label htmlFor="travelers" className="text-sm">מס' נוסעים</Label>
-                        <Input id="travelers" name="travelers" type="number" min="1" max="20" defaultValue="2" className="mt-1.5 bg-input/50" />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-sm">אימייל</Label>
-                      <Input id="email" name="email" type="email" maxLength={255} placeholder="email@example.com" className="mt-1.5 bg-input/50" />
-                    </div>
-                    <div>
-                      <Label htmlFor="destination" className="text-sm">יעד מבוקש</Label>
-                      <Input id="destination" name="destination" maxLength={200} placeholder="מלדיביים, יוון, דובאי..." className="mt-1.5 bg-input/50" />
-                    </div>
-                    <div>
-                      <Label htmlFor="message" className="text-sm">פרטים נוספים</Label>
-                      <Textarea id="message" name="message" rows={3} maxLength={1000} placeholder="תאריכים מועדפים, סגנון נופש, דרישות מיוחדות..." className="mt-1.5 bg-input/50 resize-none" />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full gradient-primary shadow-glow text-primary-foreground font-semibold h-12 text-base"
-                  >
-                    {submitting ? "שולח..." : "קבלו הצעה אישית"}
-                  </Button>
-
-                  <p className="text-xs text-muted-foreground text-center">
-                    <ShieldCheck className="w-3 h-3 inline mr-1" />
-                    הפרטים שלכם מאובטחים ולא יועברו לצד שלישי
-                  </p>
-                </form>
-              )}
-            </Card>
-          </div>
+      {/* ABOUT */}
+      <section className="py-24 lg:py-32 px-6">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">מי אנחנו</span>
+          <p className="text-2xl sm:text-3xl lg:text-4xl font-light leading-relaxed text-foreground/90">
+            <span className="text-primary font-medium">גולדטוס</span> לוקחת את המורכבות של עולם התעופה והופכת אותה
+            לחוויה <span className="text-primary font-medium">חלקה, יוקרתית ובטוחה</span>.
+          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            אנחנו לא רק מזמינים כרטיס – אנחנו מנהלים לכם את הדרך.
+          </p>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 lg:py-28 px-6 lg:px-12 border-t border-border/30">
-        <div className="max-w-7xl mx-auto">
+      {/* SERVICES */}
+      <section className="py-20 lg:py-28 px-6 border-t border-border/40">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-              המעטפת המלאה שלכם - <span className="bg-gradient-to-l from-primary to-primary-glow bg-clip-text text-transparent">הכל תחת גג אחד</span>
+            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים שלנו</span>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              המעטפת המלאה
+              <span className="block text-primary mt-2">תחת גג אחד</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              חמישה תחומי התמחות שמעניקים לכם חוויית נסיעה ברמה אחרת לגמרי
-            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Hotel,
-                title: "הכול כולל הכול",
-                description: "טיסות, מלונות בוטיק ויוקרה, השכרת רכב והעברות פרטיות - סנכרון מושלם בין כל חלקי הנסיעה.",
-              },
-              {
-                icon: Briefcase,
-                title: "מחלקה לטיסות עסקיות",
-                description: "ניהול מערך נסיעות Corporate מקצה לקצה, טיפול מהיר בשינויים של הרגע האחרון וחיסכון מקסימלי בזמן.",
-              },
-              {
-                icon: BookOpen,
-                title: "מחלקה למגזר הדתי",
-                description: "התמחות ייחודית בפתרונות כשרות, מלונות בקרבת קהילות יהודיות והבנה מעמיקה של צרכי המטייל הדתי והחרדי.",
-              },
-              {
-                icon: Crown,
-                title: "שירותי VIP בנמלי תעופה",
-                description: "מעבר מהיר בנתב\"ג ובעולם, אירוח בטרקלינים וליווי אישי לחוויית מעבר ללא תורים וללא המתנה.",
-              },
-              {
-                icon: Umbrella,
-                title: "ביטוח נסיעות מקיף",
-                description: "התאמת פוליסות מדויקות לכל סוג נסיעה, כדי שתוכלו לטוס עם שקט נפשי מלא.",
-              },
-              {
-                icon: Sparkles,
-                title: "כוח קנייה אדיר",
-                description: "השילוב של סוכן אישי עם העוצמה של קבוצת טוס - אמירים טורס מעניק לכם מחירים בלעדיים ושירות ללא פשרות.",
-              },
-            ].map((feature, i) => (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+            {services.map((service, i) => (
               <Card
                 key={i}
-                className="p-8 bg-card/50 backdrop-blur border-border/50 hover:border-primary/30 transition-all hover:shadow-elegant group"
+                className="group p-8 bg-card/40 backdrop-blur-sm border border-border/40 hover:border-primary/40 transition-all duration-500 hover:shadow-gold-soft hover:-translate-y-1"
               >
-                <div className="w-14 h-14 rounded-xl gradient-primary flex items-center justify-center mb-6 shadow-glow group-hover:scale-110 transition-transform">
-                  <feature.icon className="w-7 h-7 text-primary-foreground" strokeWidth={2} />
+                <div className="w-12 h-12 rounded-xl border border-primary/30 bg-primary/5 flex items-center justify-center mb-6 group-hover:border-primary/60 group-hover:bg-primary/10 transition-all">
+                  <service.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold mb-3 text-foreground">{service.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{service.description}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 lg:py-28 px-6 lg:px-12">
-        <div className="max-w-4xl mx-auto">
-          <Card className="p-10 lg:p-16 bg-gradient-to-br from-card to-card/40 border-primary/20 shadow-elegant text-center relative overflow-hidden">
-            <div className="absolute inset-0 gradient-primary opacity-5" />
-            <div className="relative space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">למה דווקא גולד טוס?</span>
+      {/* WHY US */}
+      <section className="py-20 lg:py-28 px-6 border-t border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0 gradient-radial-gold opacity-40 pointer-events-none" />
+        <div className="relative max-w-6xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">למה גולדטוס</span>
+            <h2 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              היתרון <span className="text-primary">שלכם</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {whyUs.map((item, i) => (
+              <div key={i} className="text-center space-y-4 group">
+                <div className="w-16 h-16 mx-auto rounded-full border border-primary/40 flex items-center justify-center group-hover:border-primary group-hover:scale-110 transition-all duration-500 bg-background/60 backdrop-blur-sm">
+                  <item.icon className="w-7 h-7 text-primary" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-base sm:text-lg font-semibold text-foreground">{item.title}</h3>
               </div>
-              <h2 className="text-3xl lg:text-5xl font-bold tracking-tight">
-                בידיים הכי טובות
-                <br />
-                בענף התעופה בישראל
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                הלב והנשמה של סוכן אישי שדואג לכל פרט, יחד עם העוצמה הבלתי מתפשרת של קבוצת טוס - אמירים טורס.
-                תנו למקצוענים של גולד טוס לתכנן לכם את הנסיעה הבאה.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center pt-4">
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gradient-primary text-primary-foreground shadow-glow h-12 px-8 gap-2 font-semibold">
-                    <MessageCircle className="w-5 h-5" />
-                    אני רוצה הצעה מנצחת עכשיו
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 lg:py-32 px-6 border-t border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroImage}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={1920}
+            height={1080}
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/90 to-background/70" />
+        </div>
+        <div className="relative max-w-3xl mx-auto text-center space-y-8">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+            תנו לנו לבנות לכם את
+            <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-2">
+              הנסיעה הבאה
+            </span>
+          </h2>
+          <Button
+            size="lg"
+            onClick={scrollToForm}
+            className="gradient-primary shadow-glow text-primary-foreground font-semibold h-14 px-10 text-base hover:scale-105 transition-transform"
+          >
+            אני רוצה הצעה מנצחת עכשיו
+          </Button>
+        </div>
+      </section>
+
+      {/* LEAD FORM */}
+      <section id="lead-form" className="py-20 lg:py-28 px-6 border-t border-border/40">
+        <div className="max-w-xl mx-auto">
+          <Card className="p-8 lg:p-10 bg-card/60 backdrop-blur-xl border border-primary/20 shadow-elegant">
+            {submitted ? (
+              <div className="text-center py-6 space-y-5">
+                <div className="w-16 h-16 mx-auto rounded-full border border-primary/40 flex items-center justify-center">
+                  <Sparkles className="w-7 h-7 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold">תודה רבה!</h3>
+                <p className="text-muted-foreground">
+                  קיבלנו את פרטיכם, נחזור אליכם בהקדם.
+                </p>
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="inline-block">
+                  <Button className="gradient-primary text-primary-foreground gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    שיחה בוואטסאפ
                   </Button>
                 </a>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => document.getElementById("lead-form")?.scrollIntoView({ behavior: "smooth" })}
-                  className="border-primary/30 hover:bg-primary/10 h-12 px-8 gap-2"
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="block mx-auto text-sm text-muted-foreground hover:text-primary mt-4 transition-colors"
                 >
-                  <Mail className="w-5 h-5" />
-                  השאירו פרטים
-                </Button>
+                  שליחת פנייה נוספת
+                </button>
               </div>
-            </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="text-center space-y-2 mb-2">
+                  <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">צרו קשר</span>
+                  <h3 className="text-2xl font-bold">הצעה אישית בדרך אליכם</h3>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name" className="text-sm">שם מלא *</Label>
+                    <Input id="name" name="name" required maxLength={100} placeholder="ישראל ישראלי" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="phone" className="text-sm">טלפון *</Label>
+                      <Input id="phone" name="phone" required type="tel" maxLength={20} placeholder="050-1234567" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                    </div>
+                    <div>
+                      <Label htmlFor="travelers" className="text-sm">מס' נוסעים</Label>
+                      <Input id="travelers" name="travelers" type="number" min="1" max="20" defaultValue="2" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="text-sm">אימייל</Label>
+                    <Input id="email" name="email" type="email" maxLength={255} placeholder="email@example.com" className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                  </div>
+                  <div>
+                    <Label htmlFor="destination" className="text-sm">יעד מבוקש</Label>
+                    <Input id="destination" name="destination" maxLength={200} placeholder="מלדיביים, יוון, דובאי..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary" />
+                  </div>
+                  <div>
+                    <Label htmlFor="message" className="text-sm">פרטים נוספים</Label>
+                    <Textarea id="message" name="message" rows={3} maxLength={1000} placeholder="תאריכים, סגנון נופש, דרישות מיוחדות..." className="mt-1.5 bg-input/60 border-border/60 focus:border-primary resize-none" />
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full gradient-primary shadow-glow text-primary-foreground font-semibold h-12 text-base hover:scale-[1.02] transition-transform"
+                >
+                  {submitting ? "שולח..." : "קבלו הצעה אישית"}
+                </Button>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  <ShieldCheck className="w-3 h-3 inline ml-1" />
+                  הפרטים שלכם מאובטחים ולא יועברו לצד שלישי
+                </p>
+              </form>
+            )}
           </Card>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-border/30 py-10 px-6 lg:px-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+      {/* CONTACT STRIP */}
+      <section className="py-12 px-6 border-t border-border/40 bg-card/30">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm">
+          <a href={`tel:${WHATSAPP_NUMBER}`} className="flex items-center gap-2.5 hover:text-primary transition-colors group">
+            <Phone className="w-4 h-4 text-primary" />
+            <span className="font-medium tracking-wide" dir="ltr">{PHONE_DISPLAY}</span>
+          </a>
+          <div className="hidden sm:block w-px h-5 bg-border/60" />
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-primary transition-colors">
+            <MessageCircle className="w-4 h-4 text-success" fill="currentColor" />
+            <span className="font-medium">וואטסאפ</span>
+          </a>
+          <div className="hidden sm:block w-px h-5 bg-border/60" />
+          <a href="https://www.goldtus.com" className="flex items-center gap-2.5 hover:text-primary transition-colors">
+            <Globe className="w-4 h-4 text-primary" />
+            <span className="font-medium tracking-wide" dir="ltr">www.goldtus.com</span>
+          </a>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="py-10 px-6 border-t border-border/40">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Plane className="w-4 h-4 text-primary" />
-            <span>© {new Date().getFullYear()} Goldtus. כל הזכויות שמורות.</span>
+            <span className="tracking-wide">גולדטוס מבית אמירים טורס</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1.5">
-              <MessageCircle className="w-4 h-4" />
-              ווטסאפ
-            </a>
+            <span>© {new Date().getFullYear()} GoldTus</span>
             <Link to="/auth" className="hover:text-primary transition-colors">
               כניסה למערכת
             </Link>
@@ -359,7 +385,7 @@ export function LandingPage() {
         </div>
       </footer>
 
-      {/* Floating WhatsApp button */}
+      {/* Floating WhatsApp */}
       <a
         href={whatsappLink}
         target="_blank"
