@@ -171,9 +171,9 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
-      {/* HERO - compact, two-column on desktop, stacked on mobile */}
+      {/* HERO - strict 60/40 split, logo top-right header */}
       <section className="relative min-h-[100svh] flex flex-col overflow-hidden">
-        {/* Background image */}
+        {/* Background image with single dark overlay */}
         <div className="absolute inset-0">
           <img
             src={heroImage}
@@ -182,41 +182,29 @@ export function LandingPage() {
             height={1080}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/55 to-background" />
-          <div className="absolute inset-0 bg-gradient-to-l from-background/70 via-transparent to-background/40" />
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
         </div>
 
-        {/* Logo - integrated, top-center, ambient glow */}
-        <div className="relative z-10 flex justify-center pt-8 sm:pt-10 pointer-events-none">
-          <div className="relative animate-fade-in-down">
-            {/* Ambient gold halo behind logo - reads as hero lighting, not a backdrop */}
-            <div
-              aria-hidden
-              className="absolute inset-0 -m-8 rounded-full blur-3xl opacity-40"
-              style={{
-                background:
-                  "radial-gradient(ellipse at center, oklch(0.78 0.13 82 / 0.45), transparent 65%)",
-              }}
-            />
-            <img
-              src={logoImage}
-              alt="גולדטוס - GoldTus"
-              width={200}
-              height={200}
-              className="relative w-28 sm:w-32 lg:w-36 h-auto animate-float-soft"
-              style={{
-                filter:
-                  "drop-shadow(0 2px 24px rgba(212,175,55,0.18)) drop-shadow(0 1px 2px rgba(0,0,0,0.25))",
-              }}
-            />
-          </div>
-        </div>
+        {/* Header - logo pinned top-right (RTL) */}
+        <header className="absolute top-0 right-0 z-20 pt-5 pr-5 sm:pt-6 sm:pr-8 pointer-events-none">
+          <img
+            src={logoImage}
+            alt="גולדטוס - GoldTus"
+            width={200}
+            height={200}
+            className="h-12 w-auto animate-fade-in-down"
+            style={{
+              filter: "drop-shadow(0 2px 12px rgba(0,0,0,0.45))",
+            }}
+          />
+        </header>
 
-        {/* Hero grid */}
-        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 py-4 sm:py-8">
-          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-6 sm:gap-10 items-center">
-            {/* RIGHT (RTL) - Headline & subheadline */}
-            <div className="space-y-4 sm:space-y-5 text-center lg:text-right">
+        {/* Hero grid - 60/40 split on desktop, stacked on mobile */}
+        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 pt-24 sm:pt-28 pb-8">
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-14 items-center">
+            {/* RIGHT (RTL first) - 60% - Headline & subheadline */}
+            <div className="lg:col-span-3 space-y-5 sm:space-y-6 text-center lg:text-right">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-background/40 backdrop-blur-md">
                 <Sparkles className="w-3 h-3 text-primary" />
                 <span className="text-[11px] sm:text-xs font-medium text-primary/90 tracking-wider">
@@ -235,16 +223,16 @@ export function LandingPage() {
                 שלחו יעד, תאריכים ומספר נוסעים - ונמצא לכם דיל מדויק בלי כאב ראש.
               </p>
 
-              {/* Trust strip - compact */}
-              <div className="hidden sm:flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground justify-center lg:justify-start pt-1">
-                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-primary" /> שירות אישי</span>
-                <span className="flex items-center gap-1.5"><Award className="w-3.5 h-3.5 text-primary" /> מחירים בלעדיים</span>
-                <span className="flex items-center gap-1.5"><Crown className="w-3.5 h-3.5 text-primary" /> VIP בנתב"ג</span>
+              {/* Features line - icons + text, always visible */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/80 justify-center lg:justify-start pt-1">
+                <span className="flex items-center gap-1.5"><Plane className="w-4 h-4 text-primary" strokeWidth={1.5} /> טיסות פרטיות</span>
+                <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} /> שירות אישי</span>
+                <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-primary" strokeWidth={1.5} /> VIP בנתב"ג</span>
               </div>
             </div>
 
-            {/* LEFT (RTL) - Quick quote form */}
-            <Card className="p-5 sm:p-6 lg:p-7 bg-card/70 backdrop-blur-xl border border-primary/25 shadow-elegant">
+            {/* LEFT (RTL second) - 40% - Quick quote form */}
+            <Card className="lg:col-span-2 lg:self-center p-5 sm:p-6 lg:p-7 bg-black/55 backdrop-blur-2xl border border-primary/20 rounded-2xl shadow-elegant">
               <form onSubmit={handleQuickQuote} className="space-y-3.5">
                 <div className="text-center space-y-1">
                   <h2 className="text-lg sm:text-xl font-bold">קבלו הצעה מותאמת אישית</h2>
