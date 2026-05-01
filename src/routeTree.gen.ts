@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
+import { Route as AppLeadsRouteImport } from './routes/_app.leads'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppFlightsRouteImport } from './routes/_app.flights'
 import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
@@ -56,6 +57,11 @@ const AppTasksRoute = AppTasksRouteImport.update({
 const AppPaymentsRoute = AppPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeadsRoute = AppLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
   getParentRoute: () => AppRoute,
 } as any)
 const AppIntakeRoute = AppIntakeRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
+  '/leads': typeof AppLeadsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
   '/intake': typeof AppIntakeRoute
+  '/leads': typeof AppLeadsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/_app/documents': typeof AppDocumentsRoute
   '/_app/flights': typeof AppFlightsRoute
   '/_app/intake': typeof AppIntakeRoute
+  '/_app/leads': typeof AppLeadsRoute
   '/_app/payments': typeof AppPaymentsRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/telegram': typeof AppTelegramRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/flights'
     | '/intake'
+    | '/leads'
     | '/payments'
     | '/tasks'
     | '/telegram'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/flights'
     | '/intake'
+    | '/leads'
     | '/payments'
     | '/tasks'
     | '/telegram'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/_app/documents'
     | '/_app/flights'
     | '/_app/intake'
+    | '/_app/leads'
     | '/_app/payments'
     | '/_app/tasks'
     | '/_app/telegram'
@@ -249,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPaymentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/leads': {
+      id: '/_app/leads'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof AppLeadsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/intake': {
       id: '/_app/intake'
       path: '/intake'
@@ -306,6 +325,7 @@ interface AppRouteChildren {
   AppDocumentsRoute: typeof AppDocumentsRoute
   AppFlightsRoute: typeof AppFlightsRoute
   AppIntakeRoute: typeof AppIntakeRoute
+  AppLeadsRoute: typeof AppLeadsRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTelegramRoute: typeof AppTelegramRoute
@@ -318,6 +338,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDocumentsRoute: AppDocumentsRoute,
   AppFlightsRoute: AppFlightsRoute,
   AppIntakeRoute: AppIntakeRoute,
+  AppLeadsRoute: AppLeadsRoute,
   AppPaymentsRoute: AppPaymentsRoute,
   AppTasksRoute: AppTasksRoute,
   AppTelegramRoute: AppTelegramRoute,
