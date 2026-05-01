@@ -13,6 +13,7 @@ import {
   Sparkles,
   Bot,
   Menu,
+  Sprout,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -21,6 +22,7 @@ import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 const NAV = [
   { to: "/", label: "לוח בקרה", icon: LayoutDashboard },
+  { to: "/leads", label: "לידים מהאתר", icon: Sprout },
   { to: "/customers", label: "לקוחות", icon: Users },
   { to: "/intake", label: "תיבת קליטה", icon: Inbox },
   { to: "/flights", label: "טיסות", icon: Plane },
