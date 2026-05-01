@@ -8,10 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plane, Sparkles, MessageCircle, Mail, ShieldCheck, Star, Briefcase, BookOpen, Crown, Umbrella, Hotel } from "lucide-react";
+import { Plane, Sparkles, MessageCircle, ShieldCheck, Briefcase, BookOpen, Crown, Umbrella, Hotel, Car, Heart, Award, Globe, Phone } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
 
-const WHATSAPP_NUMBER = "972500000000"; // לעדכון - מספר ווטסאפ של גולדטוס
+const WHATSAPP_NUMBER = "972557756660";
+const PHONE_DISPLAY = "055-775-6660";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "שם חייב להכיל לפחות 2 תווים").max(100),
