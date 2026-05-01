@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Plane, MapPin, Headphones, Sparkles, MessageCircle, Phone, Mail, ShieldCheck, Clock, Star } from "lucide-react";
+import { Plane, MapPin, Headphones, Sparkles, MessageCircle, Mail, ShieldCheck, Clock, Star } from "lucide-react";
 import heroImage from "@/assets/landing-hero.jpg";
 
 const WHATSAPP_NUMBER = "972500000000"; // לעדכון - מספר ווטסאפ של גולדטוס
@@ -22,23 +22,7 @@ const leadSchema = z.object({
   message: z.string().trim().max(1000).optional(),
 });
 
-export const Route = createFileRoute("/landing")({
-  head: () => ({
-    meta: [
-      { title: "Goldtus — חופשת היוקרה הבאה שלכם מתחילה כאן" },
-      { name: "description", content: "סוכנות נסיעות פרימיום: טיסות, מלונות וחבילות יוקרה מותאמות אישית. השאירו פרטים וקבלו הצעה תוך 24 שעות." },
-      { property: "og:title", content: "Goldtus — חופשת היוקרה הבאה שלכם" },
-      { property: "og:description", content: "תכנון נסיעות יוקרה אישי, ליווי 24/7, יעדים אקסקלוסיביים ברחבי העולם." },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: heroImage },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: heroImage },
-    ],
-  }),
-  component: LandingPage,
-});
-
-function LandingPage() {
+export function LandingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -371,3 +355,5 @@ function LandingPage() {
     </div>
   );
 }
+
+export { heroImage as landingHeroImage };

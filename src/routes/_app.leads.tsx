@@ -99,7 +99,7 @@ function LeadsPage() {
             פניות שהתקבלו דרך טופס יצירת הקשר באתר
           </p>
         </div>
-        <a href="/landing" target="_blank" rel="noopener noreferrer">
+        <a href="/" target="_blank" rel="noopener noreferrer">
           <Button variant="outline" className="gap-2">
             <ExternalLink className="w-4 h-4" />
             לדף הנחיתה
