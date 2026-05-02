@@ -362,6 +362,57 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* TRAVEL INSURANCE - moved up for visibility */}
+      <section id="travel-insurance" className="py-14 sm:py-20 px-6 border-t border-border/40">
+        <div className="max-w-3xl mx-auto">
+          <Card className="relative p-8 sm:p-10 bg-card/40 backdrop-blur-sm border border-primary/30 rounded-2xl shadow-gold-soft text-center overflow-hidden">
+            <div className="absolute inset-0 gradient-radial-gold opacity-30 pointer-events-none" />
+            <div className="relative space-y-5">
+              <div className="relative w-16 h-16 mx-auto rounded-full border border-primary/40 bg-primary/10 flex items-center justify-center">
+                <ShieldCheck className="w-8 h-8 text-primary" strokeWidth={1.5} />
+                <Plane className="absolute -bottom-1 -left-1 w-4 h-4 text-primary bg-background rounded-full p-0.5 border border-primary/40" strokeWidth={1.5} />
+              </div>
+
+              <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">שירות נוסף</span>
+
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight tracking-tight">
+                ביטוח נסיעות לחו"ל
+                <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-1">
+                  סוגרים את זה לפני הטיסה
+                </span>
+              </h2>
+
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
+                לפני שממריאים, דואגים גם לשקט הנפשי. דרך האתר תוכלו לעבור ישירות לרכישת ביטוח נסיעות לחו"ל בפספורט קארד, במהירות ובנוחות.
+              </p>
+
+              <div className="pt-2">
+                <a
+                  href="https://bit.ly/4fW6B98"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full sm:w-auto"
+                >
+                  <Button
+                    type="button"
+                    className="w-full sm:w-auto gradient-primary text-primary-foreground shadow-glow font-semibold h-12 px-8 text-base gap-2 hover:scale-[1.02] transition-transform"
+                  >
+                    <ShieldCheck className="w-5 h-5" />
+                    לרכישת ביטוח נסיעות
+                  </Button>
+                </a>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground pt-2">
+                <span className="flex items-center gap-1.5"><Plane className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> מותאם לטיסה</span>
+                <span className="flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> פוליסה דיגיטלית</span>
+                <span className="flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-primary" strokeWidth={1.5} /> מאובטח</span>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </section>
+
       {/* SERVICES - condensed grid */}
       <section className="py-14 sm:py-20 px-6 border-t border-border/40">
         <div className="max-w-5xl mx-auto">
