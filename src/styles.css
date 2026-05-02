@@ -120,4 +120,11 @@
   .animate-fade-in-down {
     animation: fade-in-down 1.2s ease-out both;
   }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent); }
+    50% { box-shadow: 0 0 0 12px color-mix(in oklab, var(--primary) 0%, transparent); }
+  }
+  .animate-pulse-slow {
+    animation: pulse-glow 2.2s ease-in-out infinite;
+  }
 }
