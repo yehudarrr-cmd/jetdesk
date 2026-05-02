@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { getUpdates, sendMessage } from "@/lib/telegram.server";
 import { processMessage } from "@/lib/telegram-ai.server";
+import { createClient } from "@supabase/supabase-js";
 
 const MAX_RUNTIME_MS = 25_000;
 const MIN_REMAINING_MS = 3_000;
@@ -15,22 +16,49 @@ export const Route = createFileRoute("/api/public/telegram/poll")({
   },
 });
 
-function isAuthorized(request: Request): boolean {
-  const expected = process.env.TELEGRAM_POLL_SECRET;
-  if (!expected) return false;
-  const provided =
-    request.headers.get("x-poll-token") ??
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
-    new URL(request.url).searchParams.get("token");
-  if (!provided || provided.length !== expected.length) return false;
-  // constant-time compare
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
   let diff = 0;
-  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ provided.charCodeAt(i);
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
 }
 
+async function isAuthorized(request: Request): Promise<boolean> {
+  const authHeader = request.headers.get("authorization");
+  const bearer = authHeader?.replace(/^Bearer\s+/i, "");
+  const token =
+    request.headers.get("x-poll-token") ??
+    bearer ??
+    new URL(request.url).searchParams.get("token") ??
+    null;
+  if (!token) return false;
+
+  // 1. Shared secret (used by cron / external schedulers)
+  const expected = process.env.TELEGRAM_POLL_SECRET;
+  if (expected && constantTimeEqual(expected, token)) return true;
+
+  // 2. Authenticated Supabase user (used by the in-app "poll now" button)
+  if (bearer) {
+    const url = process.env.SUPABASE_URL;
+    const anon = process.env.SUPABASE_PUBLISHABLE_KEY;
+    if (url && anon) {
+      try {
+        const sb = createClient(url, anon, {
+          auth: { persistSession: false, autoRefreshToken: false },
+        });
+        const { data, error } = await sb.auth.getClaims(bearer);
+        if (!error && data?.claims?.sub) return true;
+      } catch (e) {
+        console.error("auth check failed:", e);
+      }
+    }
+  }
+
+  return false;
+}
+
 async function handle(request: Request) {
-  if (!isAuthorized(request)) {
+  if (!(await isAuthorized(request))) {
     return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
   }
   const startTime = Date.now();
