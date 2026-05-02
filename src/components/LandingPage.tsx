@@ -224,6 +224,22 @@ export function LandingPage() {
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} /> שירות אישי</span>
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-primary" strokeWidth={1.5} /> VIP בנתב"ג</span>
               </div>
+
+              {/* Travel insurance quick chip */}
+              <div className="flex justify-center lg:justify-start pt-1">
+                <a
+                  href="#travel-insurance"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("travel-insurance")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm text-foreground hover:bg-primary/20 hover:border-primary/60 transition-colors shadow-gold-soft"
+                >
+                  <ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                  <span className="font-medium">ביטוח נסיעות לחו"ל</span>
+                  <span className="text-primary">←</span>
+                </a>
+              </div>
             </div>
 
             {/* LEFT (RTL second) - 40% - Quick quote form */}
@@ -346,50 +362,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* SERVICES - condensed grid */}
-      <section className="py-14 sm:py-20 px-6 border-t border-border/40">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10 space-y-2">
-            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים</span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
-              הכל תחת <span className="text-primary">גג אחד</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-            {services.map((service, i) => (
-              <Card
-                key={i}
-                className="p-4 sm:p-5 bg-card/40 backdrop-blur-sm border border-border/40 hover:border-primary/40 transition-colors flex flex-col items-center text-center gap-2.5"
-              >
-                <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center">
-                  <service.icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
-                </div>
-                <h3 className="text-sm sm:text-base font-semibold text-foreground leading-tight">{service.title}</h3>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY US */}
-      <section className="py-14 sm:py-20 px-6 border-t border-border/40 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-radial-gold opacity-30 pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
-            {whyUs.map((item, i) => (
-              <div key={i} className="text-center space-y-3 group">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-full border border-primary/40 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-                  <item.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
-                </div>
-                <h3 className="text-sm sm:text-base font-semibold text-foreground">{item.title}</h3>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TRAVEL INSURANCE */}
+      {/* TRAVEL INSURANCE - moved up for visibility */}
       <section id="travel-insurance" className="py-14 sm:py-20 px-6 border-t border-border/40">
         <div className="max-w-3xl mx-auto">
           <Card className="relative p-8 sm:p-10 bg-card/40 backdrop-blur-sm border border-primary/30 rounded-2xl shadow-gold-soft text-center overflow-hidden">
@@ -437,6 +410,49 @@ export function LandingPage() {
               </div>
             </div>
           </Card>
+        </div>
+      </section>
+
+      {/* SERVICES - condensed grid */}
+      <section className="py-14 sm:py-20 px-6 border-t border-border/40">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10 space-y-2">
+            <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים</span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+              הכל תחת <span className="text-primary">גג אחד</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            {services.map((service, i) => (
+              <Card
+                key={i}
+                className="p-4 sm:p-5 bg-card/40 backdrop-blur-sm border border-border/40 hover:border-primary/40 transition-colors flex flex-col items-center text-center gap-2.5"
+              >
+                <div className="w-10 h-10 rounded-lg border border-primary/30 bg-primary/5 flex items-center justify-center">
+                  <service.icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-sm sm:text-base font-semibold text-foreground leading-tight">{service.title}</h3>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY US */}
+      <section className="py-14 sm:py-20 px-6 border-t border-border/40 relative overflow-hidden">
+        <div className="absolute inset-0 gradient-radial-gold opacity-30 pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+            {whyUs.map((item, i) => (
+              <div key={i} className="text-center space-y-3 group">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-full border border-primary/40 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+                  <item.icon className="w-6 h-6 text-primary" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-sm sm:text-base font-semibold text-foreground">{item.title}</h3>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
