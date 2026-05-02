@@ -73,7 +73,13 @@ function TelegramPage() {
   const triggerPoll = async () => {
     setPolling(true);
     try {
-      const res = await fetch("/api/public/telegram/poll", { method: "POST" });
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess.session?.access_token;
+      if (!token) throw new Error("נדרשת התחברות");
+      const res = await fetch("/api/public/telegram/poll", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error ?? "polling failed");
       toast.success(`עיבוד הסתיים: ${data.processed ?? 0} הודעות`);
