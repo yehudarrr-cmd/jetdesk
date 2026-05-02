@@ -224,6 +224,22 @@ export function LandingPage() {
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} /> שירות אישי</span>
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-primary" strokeWidth={1.5} /> VIP בנתב"ג</span>
               </div>
+
+              {/* Travel insurance quick chip */}
+              <div className="flex justify-center lg:justify-start pt-1">
+                <a
+                  href="#travel-insurance"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("travel-insurance")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm text-foreground hover:bg-primary/20 hover:border-primary/60 transition-colors shadow-gold-soft"
+                >
+                  <ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} />
+                  <span className="font-medium">ביטוח נסיעות לחו"ל</span>
+                  <span className="text-primary">←</span>
+                </a>
+              </div>
             </div>
 
             {/* LEFT (RTL second) - 40% - Quick quote form */}
