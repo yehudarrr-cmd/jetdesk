@@ -9,13 +9,30 @@ const MIN_REMAINING_MS = 3_000;
 export const Route = createFileRoute("/api/public/telegram/poll")({
   server: {
     handlers: {
-      GET: async () => handle(),
-      POST: async () => handle(),
+      GET: async ({ request }) => handle(request),
+      POST: async ({ request }) => handle(request),
     },
   },
 });
 
-async function handle() {
+function isAuthorized(request: Request): boolean {
+  const expected = process.env.TELEGRAM_POLL_SECRET;
+  if (!expected) return false;
+  const provided =
+    request.headers.get("x-poll-token") ??
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+    new URL(request.url).searchParams.get("token");
+  if (!provided || provided.length !== expected.length) return false;
+  // constant-time compare
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ provided.charCodeAt(i);
+  return diff === 0;
+}
+
+async function handle(request: Request) {
+  if (!isAuthorized(request)) {
+    return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
   const startTime = Date.now();
   let totalProcessed = 0;
 
@@ -54,7 +71,10 @@ async function handle() {
     return Response.json({ ok: true, processed: totalProcessed });
   } catch (e) {
     console.error("telegram poll error:", e);
-    return Response.json({ ok: false, error: e instanceof Error ? e.message : "unknown", processed: totalProcessed }, { status: 500 });
+    return Response.json(
+      { ok: false, error: "Processing failed. Please try again.", processed: totalProcessed },
+      { status: 500 }
+    );
   }
 }
 
@@ -127,7 +147,7 @@ async function handleMessage(update: any) {
   } catch (e) {
     const err = e instanceof Error ? e.message : "unknown";
     console.error("process message error:", err);
-    await sendMessage(chatId, `❌ שגיאה: ${err}`);
+    await sendMessage(chatId, "❌ אירעה שגיאה. נסה שוב מאוחר יותר.");
     await supabaseAdmin
       .from("telegram_messages")
       .update({ status: "error", error: err })
