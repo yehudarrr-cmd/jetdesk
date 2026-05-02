@@ -233,11 +233,11 @@ export function LandingPage() {
                     e.preventDefault();
                     document.getElementById("travel-insurance")?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm text-foreground hover:bg-primary/20 hover:border-primary/60 transition-colors shadow-gold-soft"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-primary gradient-primary text-primary-foreground px-5 py-2.5 text-sm font-bold shadow-glow hover:scale-[1.04] transition-transform animate-pulse-slow"
                 >
-                  <ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} />
-                  <span className="font-medium">ביטוח נסיעות לחו"ל</span>
-                  <span className="text-primary">←</span>
+                  <ShieldCheck className="w-4 h-4" strokeWidth={2} />
+                  <span>ביטוח נסיעות לחו"ל - לחצו עכשיו</span>
+                  <span>←</span>
                 </a>
               </div>
             </div>
@@ -585,6 +585,21 @@ export function LandingPage() {
         className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-success flex items-center justify-center shadow-elegant hover:scale-110 transition-transform"
       >
         <MessageCircle className="w-7 h-7 text-white" fill="currentColor" />
+      </a>
+
+      {/* Floating Travel Insurance CTA (mobile only) */}
+      <a
+        href="https://bit.ly/4fW6B98"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="לרכישת ביטוח נסיעות לחו״ל"
+        onClick={() => {
+          document.getElementById("travel-insurance")?.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="sm:hidden fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 rounded-full gradient-primary text-primary-foreground font-bold px-5 py-3 shadow-glow border-2 border-primary-glow hover:scale-105 transition-transform animate-pulse-slow"
+      >
+        <ShieldCheck className="w-5 h-5" strokeWidth={2} />
+        <span className="text-sm">ביטוח נסיעות</span>
       </a>
     </div>
   );
