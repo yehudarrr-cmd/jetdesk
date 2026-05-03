@@ -1,1 +1,4 @@
 project_id = "fhhhazhaqhutlwddglbf"
+
+[functions.get-travel-requirements]
+verify_jwt = false
