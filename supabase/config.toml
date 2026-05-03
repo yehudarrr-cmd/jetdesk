@@ -2,3 +2,6 @@ project_id = "fhhhazhaqhutlwddglbf"
 
 [functions.get-travel-requirements]
 verify_jwt = false
+
+[functions.extract-intake]
+verify_jwt = true
