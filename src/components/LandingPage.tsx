@@ -225,8 +225,8 @@ export function LandingPage() {
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-primary" strokeWidth={1.5} /> VIP בנתב"ג</span>
               </div>
 
-              {/* Travel insurance quick chip */}
-              <div className="flex justify-center lg:justify-start pt-1">
+              {/* Quick action chips */}
+              <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-1">
                 <a
                   href="#travel-insurance"
                   onClick={(e) => {
@@ -239,6 +239,14 @@ export function LandingPage() {
                   <span>ביטוח נסיעות לחו"ל - לחצו עכשיו</span>
                   <span>←</span>
                 </a>
+                <Link
+                  to="/travel-requirements"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-primary/70 bg-background/40 backdrop-blur-sm text-foreground px-5 py-2.5 text-sm font-bold hover:bg-primary/10 hover:scale-[1.04] transition-all"
+                >
+                  <Globe className="w-4 h-4 text-primary" strokeWidth={2} />
+                  <span>בדיקת ויזה ודרישות נסיעה</span>
+                  <span>←</span>
+                </Link>
               </div>
             </div>
 
