@@ -9,10 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TravelRequirementsRouteImport } from './routes/travel-requirements'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AppRouteImport } from './routes/_app'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
@@ -25,23 +24,17 @@ import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.i
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
-const TravelRequirementsRoute = TravelRequirementsRouteImport.update({
-  id: '/travel-requirements',
-  path: '/travel-requirements',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
+const SiteRoute = SiteRouteImport.update({
+  id: '/_site',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppTelegramRoute = AppTelegramRouteImport.update({
@@ -101,9 +94,8 @@ const ApiPublicTelegramPollRoute = ApiPublicTelegramPollRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof SiteRoute
   '/auth': typeof AuthRoute
-  '/travel-requirements': typeof TravelRequirementsRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
@@ -117,9 +109,8 @@ export interface FileRoutesByFullPath {
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof SiteRoute
   '/auth': typeof AuthRoute
-  '/travel-requirements': typeof TravelRequirementsRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
@@ -134,10 +125,9 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/_site': typeof SiteRoute
   '/auth': typeof AuthRoute
-  '/travel-requirements': typeof TravelRequirementsRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
   '/_app/flights': typeof AppFlightsRoute
@@ -155,7 +145,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
-    | '/travel-requirements'
     | '/dashboard'
     | '/documents'
     | '/flights'
@@ -171,7 +160,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/travel-requirements'
     | '/dashboard'
     | '/documents'
     | '/flights'
@@ -185,10 +173,9 @@ export interface FileRouteTypes {
     | '/api/public/telegram/poll'
   id:
     | '__root__'
-    | '/'
     | '/_app'
+    | '/_site'
     | '/auth'
-    | '/travel-requirements'
     | '/_app/dashboard'
     | '/_app/documents'
     | '/_app/flights'
@@ -203,22 +190,14 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  SiteRoute: typeof SiteRoute
   AuthRoute: typeof AuthRoute
-  TravelRequirementsRoute: typeof TravelRequirementsRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/travel-requirements': {
-      id: '/travel-requirements'
-      path: '/travel-requirements'
-      fullPath: '/travel-requirements'
-      preLoaderRoute: typeof TravelRequirementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -226,18 +205,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_site': {
+      id: '/_site'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/telegram': {
@@ -349,12 +328,20 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  SiteRoute: SiteRoute,
   AuthRoute: AuthRoute,
-  TravelRequirementsRoute: TravelRequirementsRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
