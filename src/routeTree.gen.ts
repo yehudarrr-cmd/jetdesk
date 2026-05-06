@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteTravelRequirementsRouteImport } from './routes/_site.travel-requirements'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
 import { Route as SiteContactRouteImport } from './routes/_site.contact'
@@ -44,6 +45,11 @@ const AppRoute = AppRouteImport.update({
 const SiteIndexRoute = SiteIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteTravelRequirementsRoute = SiteTravelRequirementsRouteImport.update({
+  id: '/travel-requirements',
+  path: '/travel-requirements',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteServicesRoute = SiteServicesRouteImport.update({
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
   '/services': typeof SiteServicesRoute
+  '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
   '/services': typeof SiteServicesRoute
+  '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/_site/contact': typeof SiteContactRoute
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/services': typeof SiteServicesRoute
+  '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insurance'
     | '/services'
+    | '/travel-requirements'
     | '/customers/$id'
     | '/customers/'
     | '/api/public/telegram/poll'
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insurance'
     | '/services'
+    | '/travel-requirements'
     | '/customers/$id'
     | '/customers'
     | '/api/public/telegram/poll'
@@ -227,6 +238,7 @@ export interface FileRouteTypes {
     | '/_site/contact'
     | '/_site/insurance'
     | '/_site/services'
+    | '/_site/travel-requirements'
     | '/_site/'
     | '/_app/customers/$id'
     | '/_app/customers/'
@@ -268,6 +280,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/travel-requirements': {
+      id: '/_site/travel-requirements'
+      path: '/travel-requirements'
+      fullPath: '/travel-requirements'
+      preLoaderRoute: typeof SiteTravelRequirementsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/services': {
@@ -403,6 +422,7 @@ interface SiteRouteChildren {
   SiteContactRoute: typeof SiteContactRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SiteServicesRoute: typeof SiteServicesRoute
+  SiteTravelRequirementsRoute: typeof SiteTravelRequirementsRoute
   SiteIndexRoute: typeof SiteIndexRoute
 }
 
@@ -410,6 +430,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteContactRoute: SiteContactRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
   SiteServicesRoute: SiteServicesRoute,
+  SiteTravelRequirementsRoute: SiteTravelRequirementsRoute,
   SiteIndexRoute: SiteIndexRoute,
 }
 
