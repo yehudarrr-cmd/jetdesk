@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
+import { Route as SiteContactRouteImport } from './routes/_site.contact'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
@@ -53,6 +54,11 @@ const SiteServicesRoute = SiteServicesRouteImport.update({
 const SiteInsuranceRoute = SiteInsuranceRouteImport.update({
   id: '/insurance',
   path: '/insurance',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteContactRoute = SiteContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => SiteRoute,
 } as any)
 const AppTelegramRoute = AppTelegramRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
+  '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
   '/services': typeof SiteServicesRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
+  '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
   '/services': typeof SiteServicesRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/_app/payments': typeof AppPaymentsRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/telegram': typeof AppTelegramRoute
+  '/_site/contact': typeof SiteContactRoute
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/services': typeof SiteServicesRoute
   '/_site/': typeof SiteIndexRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/payments'
     | '/tasks'
     | '/telegram'
+    | '/contact'
     | '/insurance'
     | '/services'
     | '/customers/$id'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/payments'
     | '/tasks'
     | '/telegram'
+    | '/contact'
     | '/insurance'
     | '/services'
     | '/customers/$id'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/_app/payments'
     | '/_app/tasks'
     | '/_app/telegram'
+    | '/_site/contact'
     | '/_site/insurance'
     | '/_site/services'
     | '/_site/'
@@ -270,6 +282,13 @@ declare module '@tanstack/react-router' {
       path: '/insurance'
       fullPath: '/insurance'
       preLoaderRoute: typeof SiteInsuranceRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/contact': {
+      id: '/_site/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof SiteContactRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_app/telegram': {
@@ -381,12 +400,14 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface SiteRouteChildren {
+  SiteContactRoute: typeof SiteContactRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SiteServicesRoute: typeof SiteServicesRoute
   SiteIndexRoute: typeof SiteIndexRoute
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
+  SiteContactRoute: SiteContactRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
   SiteServicesRoute: SiteServicesRoute,
   SiteIndexRoute: SiteIndexRoute,
