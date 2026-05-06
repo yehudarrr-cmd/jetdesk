@@ -1,53 +1,73 @@
-## Add Travel Requirements Search Engine
+# GoldTus — אפיון אתר רב-עמודי
 
-Port the AI-powered travel requirements search from the Passport Pal project into a new dedicated page on the GoldTus site, plus a prominent CTA on the landing page.
+לפי האפיון, האתר צריך להיות **ממוקד וקצר** עם **מפת עמודים אמיתית** (לא דף אחד ארוך עם גלילה). כיום הכל בעמוד הבית. אני אפצל לפי ה-Sitemap מהאפיון, אשמור את העיצוב היוקרתי הקיים (שחור/זהב, לוגו, כפתור וואטסאפ צף, טופס חכם), ואוסיף SEO ייחודי לכל עמוד.
 
-### What to copy from Passport Pal
+## מפת עמודים חדשה
 
-1. **Edge function** → `supabase/functions/get-travel-requirements/index.ts`
-   - Uses Lovable AI Gateway (`google/gemini-2.5-flash`) with tool-calling for structured JSON.
-   - No external API key needed — `LOVABLE_API_KEY` already configured in this project.
-   - Returns Hebrew travel requirements (passport validity, visa type, summary, documents list).
-   - Add `[functions.get-travel-requirements] verify_jwt = false` to `supabase/config.toml` so it's publicly callable.
+| נתיב | קובץ | מטרה |
+|---|---|---|
+| `/` | `src/routes/index.tsx` | דף בית קצר וחד — Hero + טופס מהיר + USP + CTA לעמודים |
+| `/services` | `src/routes/services.tsx` | פירוט שירותי פרימיום (טיסות, מלונות, רכב, VIP, עסקי, דתי) |
+| `/insurance` | `src/routes/insurance.tsx` | דף מכירתי לביטוח נסיעות + לינק שותף |
+| `/contact` | `src/routes/contact.tsx` | טופס הצעת מחיר מלא + טלפון + וואטסאפ |
+| `/travel-requirements` | קיים | מנוע חיפוש דרישות נסיעה (ללא שינוי) |
 
-2. **Data file** → `src/data/travelRequirements.ts`
-   - Copy types `DocumentRequirement`, `TravelRequirements`.
-   - Copy `countries` array (~196 countries with flag emojis, Hebrew labels) + sorted exports `nationalities` and `destinations`.
-   - Skip the unused static `requirementsDb` and `_unused`/`getDefaultRequirements` (legacy fallback, not used).
+## רכיבים משותפים חדשים
 
-3. **Components** → `src/components/`
-   - `TravelSearchForm.tsx` — two-select form (lאום + יעד). Adapt: replace `bg-gradient-navy` and `focus:ring-gold` with project tokens (`gradient-primary`, `focus:ring-primary`).
-   - `RequirementsResults.tsx` — renders summary cards + grouped required/recommended document cards with source links. Adapt color tokens (`text-gold` → `text-primary`, `text-navy-light` → `text-primary`, `font-serif` → default).
+- `src/components/site/SiteHeader.tsx` — Header קבוע עם לוגו (ימין) + תפריט ניווט (Home / שירותים / ביטוח / דרישות נסיעה / צור קשר). שקוף מעל ה-Hero, מוצק בשאר העמודים. תפריט המבורגר במובייל.
+- `src/components/site/SiteFooter.tsx` — Footer קיים מועבר לכאן.
+- `src/components/site/FloatingWhatsApp.tsx` — כפתור הוואטסאפ הצף, יוצג בכל עמוד.
+- `src/components/site/QuickQuoteForm.tsx` — הטופס המהיר הקיים (הצעה בוואטסאפ), שימוש בדף הבית.
+- `src/components/site/LeadForm.tsx` — טופס הליד המלא הקיים, שימוש ב-`/contact`.
+- Layout route `src/routes/_site.tsx` — עוטף את העמודים הציבוריים עם Header + Footer + WhatsApp צף + `<Outlet />`. הקבצים יהיו `_site.index.tsx`, `_site.services.tsx`, `_site.insurance.tsx`, `_site.contact.tsx`, `_site.travel-requirements.tsx`.
 
-### New page
+## תכולת כל עמוד
 
-Create `src/routes/travel-requirements.tsx`:
-- TanStack Start file route with proper `head()` metadata (title, description, og:title/description in Hebrew).
-- Page layout: hero header → `TravelSearchForm` → loading state → `RequirementsResults`.
-- Calls the edge function via `supabase.functions.invoke('get-travel-requirements', { body: { nationality, destination, nationalityLabel, destinationLabel } })`.
-- Handles errors (429 rate limit, 402 credits, generic) with `toast` from `sonner`.
-- RTL layout to match the rest of the site.
+### `/` — דף בית (קצר, ללא גלילה אינסופית)
+1. Hero: לוגו, כותרת "טיסות וחופשות פרימיום בהתאמה אישית", תת-כותרת קצרה, טופס מהיר (QuickQuoteForm) בצד.
+2. רצועת USP קצרה (4 אייקונים: שירות אישי, גב של אמירים טורס, מחירים בלעדיים, ביטחון מלא).
+3. רצועת CTA כפולה: "לכל השירותים →" + "ביטוח נסיעות →".
+4. Footer.
 
-### Landing page CTA
+### `/services` — שירותי פרימיום
+- כותרת + תיאור קצר.
+- גריד 6 שירותים בכרטיסים (טיסות+מלונות, השכרת רכב, טיסות עסקיות, מגזר דתי, VIP בנתב"ג, ביטוח). כל כרטיס עם פסקת תיאור קצרה (עד 2 שורות).
+- CTA תחתון: "לקבלת הצעה אישית" → `/contact`.
 
-Edit `src/components/LandingPage.tsx`:
-- Add a prominent CTA section (or button in hero) with gradient + glow styling similar to the existing insurance CTA, linking to `/travel-requirements`.
-- Hebrew copy: e.g. "בדקו דרישות ויזה ומסמכים ליעד שלכם" with a "התחילו עכשיו" button.
-- Use the same `animate-pulse-slow` + `gradient-primary` treatment so it stands out.
+### `/insurance` — ביטוח נסיעות
+- כרטיס מרכזי עם כותרת, יתרונות (3-4 בולטים), כפתור "לרכישה" → `https://bit.ly/4fW6B98`.
+- הסבר קצר על שותף הפוליסה (פספורט קארד) ואייקוני אמון.
 
-### Technical notes
+### `/contact` — צור קשר
+- שתי עמודות: טופס הליד המלא משמאל, פרטי קשר מימין (טלפון 055-775-6660, וואטסאפ, שעות, www.goldtus.com).
 
-- The edge function deploys automatically; no manual step needed.
-- The browser client (`@/integrations/supabase/client`) is used to invoke the function — it works without auth thanks to `verify_jwt = false`.
-- Style adaptation: Passport Pal uses navy/gold tokens that don't exist here. Map to existing tokens (`primary`, `accent`, `muted`) so it inherits the GoldTus visual identity.
-- All text remains in Hebrew with `dir="rtl"`.
+## SEO לכל עמוד
 
-### Files to be created/edited
+כל route יקבל `head()` ייעודי עם `title`, `description`, `og:title`, `og:description`, ו-`og:image` (תמונת ה-Hero לדף הבית, לוגו לשאר). דוגמאות:
 
-- `supabase/functions/get-travel-requirements/index.ts` (new)
-- `supabase/config.toml` (add function block)
-- `src/data/travelRequirements.ts` (new — types + countries only)
-- `src/components/TravelSearchForm.tsx` (new, adapted styling)
-- `src/components/RequirementsResults.tsx` (new, adapted styling)
-- `src/routes/travel-requirements.tsx` (new)
-- `src/components/LandingPage.tsx` (add CTA linking to new route)
+- `/` — "גולדטוס | טיסות וחופשות פרימיום בהתאמה אישית"
+- `/services` — "שירותי פרימיום | גולדטוס — טיסות, מלונות, VIP בנתב\"ג"
+- `/insurance` — "ביטוח נסיעות לחו\"ל | גולדטוס"
+- `/contact` — "צור קשר וקבלת הצעת מחיר | גולדטוס"
+
+בנוסף: `<h1>` יחיד לכל עמוד, היררכיית `<h2>/<h3>` נקייה, `alt` לתמונות, `lang="he"` ו-`dir="rtl"` (כבר קיים).
+
+## שינויים נוספים
+
+- `LandingPage.tsx` הקיים יפורק לרכיבים ויימחק (או יוקטן ל-`HomePage`).
+- ניווט: כל הקישורים `<a href="#section">` יוחלפו ב-`<Link to="...">` לעמודים אמיתיים.
+- כפתור "ביטוח נסיעות" הצף במובייל יישאר אבל יקשר ל-`/insurance` (ולא לאנקור).
+- מנוע דרישות נסיעה (`/travel-requirements`) יקבל גם הוא את ה-Header המשותף.
+
+## הערות טכניות
+
+- שימוש בפיצ'ר Layout Routes של TanStack Start: `src/routes/_site.tsx` כולל `<Outlet />` ועוטף את כל העמודים הציבוריים. ה-CRM הקיים (`_app.*`) לא מושפע.
+- כל הטפסים שומרים ולידציה עם Zod (כבר קיים) ושומרים ל-`landing_leads`.
+- הקובץ `src/routeTree.gen.ts` יתעדכן אוטומטית ע"י Vite plugin.
+- ללא שינויים ב-DB / edge functions / auth.
+
+## מה לא משתנה
+- עיצוב, צבעים, גופנים, לוגו.
+- CRM הפנימי (`/dashboard`, `/customers` וכו').
+- מנוע דרישות נסיעה.
+- אבטחת RLS וטבלאות קיימות.

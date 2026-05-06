@@ -1,13 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import TravelSearchForm from "@/components/TravelSearchForm";
 import RequirementsResults from "@/components/RequirementsResults";
 import { countries, type TravelRequirements } from "@/data/travelRequirements";
 
-export const Route = createFileRoute("/travel-requirements")({
+export const Route = createFileRoute("/_site/travel-requirements")({
   head: () => ({
     meta: [
       { title: "בדיקת דרישות נסיעה ויזה ומסמכים | גולדטוס" },
@@ -29,29 +29,21 @@ function TravelRequirementsPage() {
 
     setLoading(true);
     setData(null);
-
     try {
       const { data: result, error } = await supabase.functions.invoke("get-travel-requirements", {
         body: { nationality, destination, nationalityLabel, destinationLabel },
       });
-
       if (error) {
         const ctx = (error as { context?: { status?: number } }).context;
-        if (ctx?.status === 429) {
-          toast.error("יותר מדי בקשות, נסה שוב בעוד רגע");
-        } else if (ctx?.status === 402) {
-          toast.error("שירות הבדיקה זמנית לא זמין, נסה שוב מאוחר יותר");
-        } else {
-          toast.error("שגיאה בקבלת הדרישות, נסה שוב");
-        }
+        if (ctx?.status === 429) toast.error("יותר מדי בקשות, נסה שוב בעוד רגע");
+        else if (ctx?.status === 402) toast.error("שירות הבדיקה זמנית לא זמין, נסה שוב מאוחר יותר");
+        else toast.error("שגיאה בקבלת הדרישות, נסה שוב");
         return;
       }
-
       if (result?.error) {
         toast.error(result.error);
         return;
       }
-
       setData(result as TravelRequirements);
     } catch (err) {
       console.error(err);
@@ -62,17 +54,10 @@ function TravelRequirementsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground" dir="rtl">
+    <>
       <section className="relative px-6 pt-12 pb-16 sm:pt-20 sm:pb-24 overflow-hidden border-b border-border/40">
         <div className="absolute inset-0 gradient-radial-gold opacity-20 pointer-events-none" />
         <div className="relative max-w-3xl mx-auto text-center space-y-5">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowRight className="w-4 h-4" />
-            חזרה לעמוד הבית
-          </Link>
           <div className="inline-flex items-center justify-center w-16 h-16 mx-auto rounded-full border border-primary/40 bg-primary/10">
             <Globe className="w-8 h-8 text-primary" strokeWidth={1.5} />
           </div>
@@ -100,6 +85,6 @@ function TravelRequirementsPage() {
       )}
 
       {data && !loading && <RequirementsResults data={data} />}
-    </div>
+    </>
   );
 }
