@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as SiteIndexRouteImport } from './routes/_site.index'
+import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
@@ -36,6 +38,16 @@ const SiteRoute = SiteRouteImport.update({
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SiteIndexRoute = SiteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteServicesRoute = SiteServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => SiteRoute,
 } as any)
 const AppTelegramRoute = AppTelegramRouteImport.update({
   id: '/telegram',
@@ -94,7 +106,7 @@ const ApiPublicTelegramPollRoute = ApiPublicTelegramPollRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof SiteRoute
+  '/': typeof SiteIndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
@@ -104,12 +116,13 @@ export interface FileRoutesByFullPath {
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
+  '/services': typeof SiteServicesRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof SiteRoute
+  '/': typeof SiteIndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
@@ -119,6 +132,7 @@ export interface FileRoutesByTo {
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
+  '/services': typeof SiteServicesRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -126,7 +140,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
-  '/_site': typeof SiteRoute
+  '/_site': typeof SiteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
@@ -136,6 +150,8 @@ export interface FileRoutesById {
   '/_app/payments': typeof AppPaymentsRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/telegram': typeof AppTelegramRoute
+  '/_site/services': typeof SiteServicesRoute
+  '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -153,6 +169,7 @@ export interface FileRouteTypes {
     | '/payments'
     | '/tasks'
     | '/telegram'
+    | '/services'
     | '/customers/$id'
     | '/customers/'
     | '/api/public/telegram/poll'
@@ -168,6 +185,7 @@ export interface FileRouteTypes {
     | '/payments'
     | '/tasks'
     | '/telegram'
+    | '/services'
     | '/customers/$id'
     | '/customers'
     | '/api/public/telegram/poll'
@@ -184,6 +202,8 @@ export interface FileRouteTypes {
     | '/_app/payments'
     | '/_app/tasks'
     | '/_app/telegram'
+    | '/_site/services'
+    | '/_site/'
     | '/_app/customers/$id'
     | '/_app/customers/'
     | '/api/public/telegram/poll'
@@ -191,7 +211,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
-  SiteRoute: typeof SiteRoute
+  SiteRoute: typeof SiteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
@@ -218,6 +238,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_site/': {
+      id: '/_site/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/services': {
+      id: '/_site/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof SiteServicesRouteImport
+      parentRoute: typeof SiteRoute
     }
     '/_app/telegram': {
       id: '/_app/telegram'
@@ -327,9 +361,21 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface SiteRouteChildren {
+  SiteServicesRoute: typeof SiteServicesRoute
+  SiteIndexRoute: typeof SiteIndexRoute
+}
+
+const SiteRouteChildren: SiteRouteChildren = {
+  SiteServicesRoute: SiteServicesRoute,
+  SiteIndexRoute: SiteIndexRoute,
+}
+
+const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
-  SiteRoute: SiteRoute,
+  SiteRoute: SiteRouteWithChildren,
   AuthRoute: AuthRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
