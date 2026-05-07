@@ -60,7 +60,7 @@ function ImportPage() {
       if (r.sabrePnr) {
         const { data: existing } = await supabase.from("customers").select("id").eq("pnr", r.sabrePnr).maybeSingle();
         if (existing) {
-          next[i] = { ...r, status: "skip", message: "PNR כבר קיים" };
+          next[i] = { ...r, importStatus: "skip", message: "PNR כבר קיים" };
           skipped++;
           continue;
         }
@@ -73,7 +73,7 @@ function ImportPage() {
         r.supplierPnrs.length && `PNR ספק: ${r.supplierPnrs.join(" / ")}`,
         r.agency && `סוכנות: ${r.agency}`,
         r.agent && `סוכן: ${r.agent}`,
-        r.status && `סטטוס: ${r.status}`,
+        r.bookingStatus && `סטטוס: ${r.status}`,
         r.pax && `נוסעים: ${r.pax}`,
         r.remarks && `הערות: ${r.remarks}`,
       ].filter(Boolean).join("\n");
@@ -93,7 +93,7 @@ function ImportPage() {
         .single();
 
       if (custErr || !cust) {
-        next[i] = { ...r, status: "error", message: custErr?.message ?? "שגיאה" };
+        next[i] = { ...r, importStatus: "error", message: custErr?.message ?? "שגיאה" };
         fail++;
         continue;
       }
@@ -118,7 +118,7 @@ function ImportPage() {
         description: fileName,
       });
 
-      next[i] = { ...r, status: "ok" };
+      next[i] = { ...r, importStatus: "ok" };
       ok++;
     }
 
@@ -205,9 +205,9 @@ function ImportPage() {
                     <td className="px-3 py-2 text-xs">{r.suppliers.join(" / ")}</td>
                     <td className="px-3 py-2">{r.fare ?? "—"}</td>
                     <td className="px-3 py-2">
-                      {r.status === "ok" && <Badge className="bg-green-600">נוצר</Badge>}
-                      {r.status === "skip" && <Badge variant="secondary">דולג</Badge>}
-                      {r.status === "error" && <Badge variant="destructive" title={r.message}>שגיאה</Badge>}
+                      {r.importStatus === "ok" && <Badge className="bg-green-600">נוצר</Badge>}
+                      {r.importStatus === "skip" && <Badge variant="secondary">דולג</Badge>}
+                      {r.importStatus === "error" && <Badge variant="destructive" title={r.message}>שגיאה</Badge>}
                     </td>
                   </tr>
                 ))}
@@ -215,7 +215,7 @@ function ImportPage() {
             </table>
           </div>
 
-          {rows.some((r) => r.status === "ok") && (
+          {rows.some((r) => r.importStatus === "ok") && (
             <div className="p-4 border-t flex justify-end">
               <Button variant="outline" onClick={() => navigate({ to: "/customers" })}>
                 לצפייה בלקוחות
