@@ -16,7 +16,7 @@ export type ParsedReservation = {
   type: string;
   agency: string;
   agent: string;
-  status: string;
+  bookingStatus: string;
   pax: number;
   remarks: string;
 };
@@ -80,7 +80,7 @@ function mapRow(r: Record<string, unknown>, i: number): ParsedReservation {
     type: splitBr(pick(r, "TYPE")).join(" / "),
     agency: String(pick(r, "AGENCY") ?? "").trim(),
     agent: String(pick(r, "AGENT") ?? "").trim(),
-    status: String(pick(r, "STATUS") ?? "").trim(),
+    bookingStatus: String(pick(r, "STATUS") ?? "").trim(),
     pax: Number(pick(r, "PAX") ?? 1) || 1,
     remarks: String(pick(r, "REMARKS") ?? "").trim(),
   };
