@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import TravelSearchForm from "@/components/TravelSearchForm";
 import RequirementsResults from "@/components/RequirementsResults";
 import { countries, type TravelRequirements } from "@/data/travelRequirements";
+import { canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site/travel-requirements")({
   head: () => ({
@@ -14,6 +15,24 @@ export const Route = createFileRoute("/_site/travel-requirements")({
       { name: "description", content: "בדקו תוך שניות את דרישות הויזה, תוקף הדרכון, חיסונים ומסמכים נדרשים לכל יעד בעולם. מנוע חיפוש חכם המבוסס על מקורות רשמיים." },
       { property: "og:title", content: "בדיקת דרישות נסיעה - גולדטוס" },
       { property: "og:description", content: "מנוע חכם לבדיקת ויזה, דרכון, חיסונים ומסמכים לכל יעד בעולם." },
+    ],
+    links: [{ rel: "canonical", href: canonical("/travel-requirements") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "דרישות נסיעה", path: "/travel-requirements" },
+      ])),
+      ldScript({
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: "איך לבדוק דרישות נסיעה ליעד בעולם",
+        description: "שלושה צעדים פשוטים לקבלת דרישות ויזה, דרכון, חיסונים ומסמכים לכל יעד.",
+        step: [
+          { "@type": "HowToStep", position: 1, name: "בחירת לאום", text: "בחרו את הלאום (האזרחות שלכם) מתוך הרשימה." },
+          { "@type": "HowToStep", position: 2, name: "בחירת יעד", text: "בחרו את היעד אליו אתם מתכננים לטוס." },
+          { "@type": "HowToStep", position: 3, name: "קבלת תוצאות", text: "קבלו תוך שניות את כל הדרישות: ויזה, דרכון, חיסונים ומסמכים נדרשים." },
+        ],
+      }),
     ],
   }),
   component: TravelRequirementsPage,

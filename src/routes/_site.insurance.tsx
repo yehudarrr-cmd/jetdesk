@@ -2,7 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ShieldCheck, Plane, Briefcase, Globe, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { INSURANCE_URL } from "@/lib/site-constants";
+import { INSURANCE_URL, canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
+
+const insuranceFaqs = [
+  { q: "מה כולל ביטוח הנסיעות?", a: "כיסוי רפואי בחו\"ל, ביטול וקיצור נסיעה, אובדן ועיכוב כבודה, ועוד הרחבות אופציונליות בהתאם למסלול." },
+  { q: "כמה זמן לוקח להוציא פוליסה?", a: "הפוליסה מונפקת דיגיטלית תוך מספר דקות ונשלחת לדוא\"ל מיד לאחר התשלום." },
+  { q: "האם הביטוח תקף לכל יעד בעולם?", a: "כן. ניתן לבחור כיסוי לפי אזור (אירופה, צפון אמריקה, כל העולם) במהלך הרכישה." },
+  { q: "מי מנפיק את הפוליסה?", a: "הפוליסה מונפקת דרך פספורט קארד — אחת מחברות הביטוח המובילות בישראל לתחום הנסיעות." },
+];
 
 export const Route = createFileRoute("/_site/insurance")({
   head: () => ({
@@ -11,6 +18,22 @@ export const Route = createFileRoute("/_site/insurance")({
       { name: "description", content: "ביטוח נסיעות לחו\"ל בפספורט קארד דרך גולדטוס - פוליסה דיגיטלית מאובטחת, רכישה עצמאית במהירות, כיסוי מלא לכל יעד." },
       { property: "og:title", content: "ביטוח נסיעות לחו\"ל | גולדטוס" },
       { property: "og:description", content: "סגרו ביטוח נסיעות לחו\"ל לפני הטיסה — דיגיטלי, מהיר ומאובטח." },
+    ],
+    links: [{ rel: "canonical", href: canonical("/insurance") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "ביטוח נסיעות", path: "/insurance" },
+      ])),
+      ldScript({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: insuranceFaqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }),
     ],
   }),
   component: InsurancePage,

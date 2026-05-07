@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Heart, Award, Sparkles, ShieldCheck, Plane, Crown, Globe } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
 import heroImage from "@/assets/landing-hero.jpg";
+import { canonical, ldScript, SITE_URL } from "@/lib/site-constants";
 
 export { heroImage as landingHeroImage };
 
@@ -17,6 +18,18 @@ export const Route = createFileRoute("/_site/")({
       { property: "og:image", content: heroImage },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: heroImage },
+    ],
+    links: [{ rel: "canonical", href: canonical("/") }],
+    scripts: [
+      ldScript({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "גולדטוס",
+        alternateName: "GoldTus",
+        url: SITE_URL,
+        inLanguage: "he-IL",
+        publisher: { "@type": "Organization", name: "גולדטוס" },
+      }),
     ],
   }),
   component: HomePage,

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site/privacy")({
   head: () => ({
@@ -6,6 +7,13 @@ export const Route = createFileRoute("/_site/privacy")({
       { title: "מדיניות פרטיות | גולדטוס" },
       { name: "description", content: "מדיניות הפרטיות של גולדטוס - איסוף, שימוש ושמירת מידע אישי בהתאם לחוק הגנת הפרטיות, התשמ\"א-1981." },
       { name: "robots", content: "index,follow" },
+    ],
+    links: [{ rel: "canonical", href: canonical("/privacy") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "מדיניות פרטיות", path: "/privacy" },
+      ])),
     ],
   }),
   component: PrivacyPage,

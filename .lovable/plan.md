@@ -1,73 +1,115 @@
-# GoldTus — אפיון אתר רב-עמודי
+## SEO & AI Discoverability Fixes for GoldTus
 
-לפי האפיון, האתר צריך להיות **ממוקד וקצר** עם **מפת עמודים אמיתית** (לא דף אחד ארוך עם גלילה). כיום הכל בעמוד הבית. אני אפצל לפי ה-Sitemap מהאפיון, אשמור את העיצוב היוקרתי הקיים (שחור/זהב, לוגו, כפתור וואטסאפ צף, טופס חכם), ואוסיף SEO ייחודי לכל עמוד.
+Add the missing technical SEO and AI-discovery signals flagged by the scan. All changes are additive — no visual or behavioral changes to the site.
 
-## מפת עמודים חדשה
+### 1. Canonical URLs (per route)
 
-| נתיב | קובץ | מטרה |
-|---|---|---|
-| `/` | `src/routes/index.tsx` | דף בית קצר וחד — Hero + טופס מהיר + USP + CTA לעמודים |
-| `/services` | `src/routes/services.tsx` | פירוט שירותי פרימיום (טיסות, מלונות, רכב, VIP, עסקי, דתי) |
-| `/insurance` | `src/routes/insurance.tsx` | דף מכירתי לביטוח נסיעות + לינק שותף |
-| `/contact` | `src/routes/contact.tsx` | טופס הצעת מחיר מלא + טלפון + וואטסאפ |
-| `/travel-requirements` | קיים | מנוע חיפוש דרישות נסיעה (ללא שינוי) |
+Add a canonical `<link>` to every `_site.*` route via `head().links`, pointing to `https://www.goldtus.com<path>`.
 
-## רכיבים משותפים חדשים
+- `/` → `https://www.goldtus.com/`
+- `/services`, `/insurance`, `/contact`, `/travel-requirements`, `/privacy`, `/terms`, `/accessibility`
 
-- `src/components/site/SiteHeader.tsx` — Header קבוע עם לוגו (ימין) + תפריט ניווט (Home / שירותים / ביטוח / דרישות נסיעה / צור קשר). שקוף מעל ה-Hero, מוצק בשאר העמודים. תפריט המבורגר במובייל.
-- `src/components/site/SiteFooter.tsx` — Footer קיים מועבר לכאן.
-- `src/components/site/FloatingWhatsApp.tsx` — כפתור הוואטסאפ הצף, יוצג בכל עמוד.
-- `src/components/site/QuickQuoteForm.tsx` — הטופס המהיר הקיים (הצעה בוואטסאפ), שימוש בדף הבית.
-- `src/components/site/LeadForm.tsx` — טופס הליד המלא הקיים, שימוש ב-`/contact`.
-- Layout route `src/routes/_site.tsx` — עוטף את העמודים הציבוריים עם Header + Footer + WhatsApp צף + `<Outlet />`. הקבצים יהיו `_site.index.tsx`, `_site.services.tsx`, `_site.insurance.tsx`, `_site.contact.tsx`, `_site.travel-requirements.tsx`.
+Add a `SITE_URL = "https://www.goldtus.com"` constant in `src/lib/site-constants.ts`.
 
-## תכולת כל עמוד
+### 2. Organization + LocalBusiness JSON-LD (global)
 
-### `/` — דף בית (קצר, ללא גלילה אינסופית)
-1. Hero: לוגו, כותרת "טיסות וחופשות פרימיום בהתאמה אישית", תת-כותרת קצרה, טופס מהיר (QuickQuoteForm) בצד.
-2. רצועת USP קצרה (4 אייקונים: שירות אישי, גב של אמירים טורס, מחירים בלעדיים, ביטחון מלא).
-3. רצועת CTA כפולה: "לכל השירותים →" + "ביטוח נסיעות →".
-4. Footer.
+In `src/routes/_site.tsx` (or root via `head().scripts`), inject a JSON-LD `<script type="application/ld+json">` describing the business:
 
-### `/services` — שירותי פרימיום
-- כותרת + תיאור קצר.
-- גריד 6 שירותים בכרטיסים (טיסות+מלונות, השכרת רכב, טיסות עסקיות, מגזר דתי, VIP בנתב"ג, ביטוח). כל כרטיס עם פסקת תיאור קצרה (עד 2 שורות).
-- CTA תחתון: "לקבלת הצעה אישית" → `/contact`.
+```json
+{
+  "@context": "https://schema.org",
+  "@type": ["Organization", "TravelAgency"],
+  "name": "גולדטוס",
+  "alternateName": "GoldTus",
+  "url": "https://www.goldtus.com",
+  "logo": "https://www.goldtus.com/logo.png",
+  "telephone": "+972-55-775-6660",
+  "areaServed": "IL",
+  "parentOrganization": { "@type": "Organization", "name": "אמירים טורס" },
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "telephone": "+972-55-775-6660",
+    "contactType": "customer service",
+    "availableLanguage": ["he", "en"]
+  }],
+  "sameAs": []
+}
+```
 
-### `/insurance` — ביטוח נסיעות
-- כרטיס מרכזי עם כותרת, יתרונות (3-4 בולטים), כפתור "לרכישה" → `https://bit.ly/4fW6B98`.
-- הסבר קצר על שותף הפוליסה (פספורט קארד) ואייקוני אמון.
+Use TanStack's `head().scripts` with `type: "application/ld+json"` so it renders in SSR HTML (visible to crawlers/AI).
 
-### `/contact` — צור קשר
-- שתי עמודות: טופס הליד המלא משמאל, פרטי קשר מימין (טלפון 055-775-6660, וואטסאפ, שעות, www.goldtus.com).
+### 3. WebSite + SearchAction JSON-LD (home page)
 
-## SEO לכל עמוד
+On `_site.index.tsx`, add a second JSON-LD block of type `WebSite` so Google can show a sitelinks search box and AI assistants identify the site.
 
-כל route יקבל `head()` ייעודי עם `title`, `description`, `og:title`, `og:description`, ו-`og:image` (תמונת ה-Hero לדף הבית, לוגו לשאר). דוגמאות:
+### 4. FAQ JSON-LD
 
-- `/` — "גולדטוס | טיסות וחופשות פרימיום בהתאמה אישית"
-- `/services` — "שירותי פרימיום | גולדטוס — טיסות, מלונות, VIP בנתב\"ג"
-- `/insurance` — "ביטוח נסיעות לחו\"ל | גולדטוס"
-- `/contact` — "צור קשר וקבלת הצעת מחיר | גולדטוס"
+Add an `FAQPage` JSON-LD to `_site.insurance.tsx` and `_site.services.tsx` covering the existing Q&A-style content (e.g. "מה כולל הביטוח?", "איך מקבלים הצעת מחיר?"). 4–6 Q/A pairs each. No visible UI change required (markup is invisible), but if helpful we'll also render a small visible FAQ block on the insurance page so the markup matches DOM content (Google's recommendation).
 
-בנוסף: `<h1>` יחיד לכל עמוד, היררכיית `<h2>/<h3>` נקייה, `alt` לתמונות, `lang="he"` ו-`dir="rtl"` (כבר קיים).
+### 5. BreadcrumbList JSON-LD
 
-## שינויים נוספים
+Add breadcrumb JSON-LD on each non-home `_site.*` route: Home → {Page Title}.
 
-- `LandingPage.tsx` הקיים יפורק לרכיבים ויימחק (או יוקטן ל-`HomePage`).
-- ניווט: כל הקישורים `<a href="#section">` יוחלפו ב-`<Link to="...">` לעמודים אמיתיים.
-- כפתור "ביטוח נסיעות" הצף במובייל יישאר אבל יקשר ל-`/insurance` (ולא לאנקור).
-- מנוע דרישות נסיעה (`/travel-requirements`) יקבל גם הוא את ה-Header המשותף.
+### 6. `llms.txt` + AI discovery link
 
-## הערות טכניות
+Create `public/llms.txt` (TanStack Start serves `public/` at the root) with:
 
-- שימוש בפיצ'ר Layout Routes של TanStack Start: `src/routes/_site.tsx` כולל `<Outlet />` ועוטף את כל העמודים הציבוריים. ה-CRM הקיים (`_app.*`) לא מושפע.
-- כל הטפסים שומרים ולידציה עם Zod (כבר קיים) ושומרים ל-`landing_leads`.
-- הקובץ `src/routeTree.gen.ts` יתעדכן אוטומטית ע"י Vite plugin.
-- ללא שינויים ב-DB / edge functions / auth.
+```
+# GoldTus / גולדטוס
+> סוכנות נסיעות פרימיום מבית אמירים טורס. טיסות, מלונות, רכב, VIP בנתב"ג, ביטוח נסיעות.
 
-## מה לא משתנה
-- עיצוב, צבעים, גופנים, לוגו.
-- CRM הפנימי (`/dashboard`, `/customers` וכו').
-- מנוע דרישות נסיעה.
-- אבטחת RLS וטבלאות קיימות.
+## Contact
+- Phone: +972-55-775-6660
+- WhatsApp: https://wa.me/972557756660
+- Site: https://www.goldtus.com
+
+## Key pages
+- [Home](https://www.goldtus.com/)
+- [Services](https://www.goldtus.com/services)
+- [Travel Insurance](https://www.goldtus.com/insurance)
+- [Travel Requirements Tool](https://www.goldtus.com/travel-requirements)
+- [Contact](https://www.goldtus.com/contact)
+
+## Policies
+- [Privacy](https://www.goldtus.com/privacy)
+- [Terms](https://www.goldtus.com/terms)
+- [Accessibility](https://www.goldtus.com/accessibility)
+```
+
+In `__root.tsx` head().links add: `{ rel: "llms-txt", href: "/llms.txt" }` and also a regular `<link rel="alternate" type="text/markdown" href="/llms.txt">` for broader discovery.
+
+### 7. robots.txt + sitemap.xml
+
+Add `public/robots.txt`:
+```
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /_app/
+Sitemap: https://www.goldtus.com/sitemap.xml
+```
+
+Add a static `public/sitemap.xml` listing the 8 public routes with `lastmod` = build date. (Dynamic server-route sitemap is overkill for a fixed-page site.)
+
+### 8. HowTo JSON-LD (optional, low cost)
+
+Add a small `HowTo` JSON-LD on `_site.travel-requirements.tsx` describing the 3 steps to use the tool (choose country → view requirements → contact agent).
+
+### Files to change
+
+- `src/lib/site-constants.ts` — add `SITE_URL`
+- `src/routes/__root.tsx` — add `llms-txt` link
+- `src/routes/_site.tsx` — inject Organization JSON-LD globally
+- `src/routes/_site.index.tsx` — canonical + WebSite JSON-LD
+- `src/routes/_site.services.tsx` — canonical + Breadcrumb + FAQ JSON-LD
+- `src/routes/_site.insurance.tsx` — canonical + Breadcrumb + FAQ JSON-LD
+- `src/routes/_site.contact.tsx` — canonical + Breadcrumb JSON-LD
+- `src/routes/_site.travel-requirements.tsx` — canonical + Breadcrumb + HowTo
+- `src/routes/_site.privacy.tsx`, `_site.terms.tsx`, `_site.accessibility.tsx` — canonical + Breadcrumb
+- `public/llms.txt` (new)
+- `public/robots.txt` (new)
+- `public/sitemap.xml` (new)
+
+### Out of scope
+
+No visual/UX changes, no copy rewrites, no new pages. No changes to backend, auth, RLS, or edge functions.

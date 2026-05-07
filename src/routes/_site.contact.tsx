@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Phone, MessageCircle, Globe, Clock } from "lucide-react";
 import { LeadForm } from "@/components/site/LeadForm";
-import { PHONE_DISPLAY, WHATSAPP_NUMBER, whatsappUrl } from "@/lib/site-constants";
+import { PHONE_DISPLAY, WHATSAPP_NUMBER, whatsappUrl, canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site/contact")({
   head: () => ({
@@ -10,6 +10,13 @@ export const Route = createFileRoute("/_site/contact")({
       { name: "description", content: "השאירו פרטים וגולדטוס תחזור אליכם עם הצעה אישית. ניתן ליצור קשר גם בטלפון 055-775-6660 או בוואטסאפ." },
       { property: "og:title", content: "צור קשר | גולדטוס" },
       { property: "og:description", content: "טופס בקשת הצעת מחיר חכם, טלפון וחיבור ישיר לוואטסאפ." },
+    ],
+    links: [{ rel: "canonical", href: canonical("/contact") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "צור קשר", path: "/contact" },
+      ])),
     ],
   }),
   component: ContactPage,

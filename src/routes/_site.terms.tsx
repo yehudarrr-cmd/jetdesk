@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site/terms")({
   head: () => ({
@@ -6,6 +7,13 @@ export const Route = createFileRoute("/_site/terms")({
       { title: "תנאי שימוש | גולדטוס" },
       { name: "description", content: "תנאי השימוש באתר גולדטוס - זכויות, חובות והגבלת אחריות בהתאם לדין הישראלי." },
       { name: "robots", content: "index,follow" },
+    ],
+    links: [{ rel: "canonical", href: canonical("/terms") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "תנאי שימוש", path: "/terms" },
+      ])),
     ],
   }),
   component: TermsPage,

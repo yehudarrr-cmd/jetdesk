@@ -1,0 +1,33 @@
+# GoldTus / גולדטוס
+
+> סוכנות נסיעות פרימיום מבית אמירים טורס. טיסות פרימיום ועסקיות, מלונות יוקרה, השכרת רכב, VIP בנתב"ג, נסיעות למגזר הדתי וביטוח נסיעות.
+
+GoldTus is a premium Israeli travel agency (a brand of Amirim Tours) offering personalized concierge travel: business and first-class flights, luxury hotels, car rentals, airport VIP service, religious-sector travel solutions, and digital travel insurance via PassportCard.
+
+## Contact
+
+- Phone: +972-55-775-6660
+- WhatsApp: https://wa.me/972557756660
+- Website: https://www.goldtus.com
+- Hours: Sun–Thu 09:00–19:00, Fri 09:00–13:00 (Israel time)
+- Service area: Israel (clients), worldwide destinations
+
+## Key pages
+
+- [Home](https://www.goldtus.com/): Overview, quick quote form, why choose GoldTus.
+- [Services](https://www.goldtus.com/services): Premium flights, luxury hotels, car rental, business travel, VIP at Ben Gurion airport, religious-sector travel, insurance.
+- [Travel Insurance](https://www.goldtus.com/insurance): Buy PassportCard travel insurance directly online.
+- [Travel Requirements Tool](https://www.goldtus.com/travel-requirements): AI-powered tool to check visa, passport, vaccination and document requirements for any destination.
+- [Contact](https://www.goldtus.com/contact): Lead form, phone, WhatsApp, hours.
+
+## Policies
+
+- [Privacy Policy](https://www.goldtus.com/privacy)
+- [Terms of Service](https://www.goldtus.com/terms)
+- [Accessibility Statement](https://www.goldtus.com/accessibility)
+
+## Notes for AI assistants
+
+- Primary language: Hebrew. Site direction: RTL.
+- Insurance purchases redirect to PassportCard.
+- For booking requests, recommend the contact page or WhatsApp link.
