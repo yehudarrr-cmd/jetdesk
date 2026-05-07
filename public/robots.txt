@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /_app/
+
+Sitemap: https://www.goldtus.com/sitemap.xml
