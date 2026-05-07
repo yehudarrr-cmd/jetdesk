@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site/accessibility")({
   head: () => ({
@@ -6,6 +7,13 @@ export const Route = createFileRoute("/_site/accessibility")({
       { title: "הצהרת נגישות | גולדטוס" },
       { name: "description", content: "הצהרת נגישות אתר גולדטוס לפי תקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע\"ג-2013 ותקן ישראלי 5568." },
       { name: "robots", content: "index,follow" },
+    ],
+    links: [{ rel: "canonical", href: canonical("/accessibility") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "הצהרת נגישות", path: "/accessibility" },
+      ])),
     ],
   }),
   component: AccessibilityPage,
