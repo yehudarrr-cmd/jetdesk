@@ -14,6 +14,7 @@ import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteTravelRequirementsRouteImport } from './routes/_site.travel-requirements'
+import { Route as SiteTermsRouteImport } from './routes/_site.terms'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
@@ -51,6 +52,11 @@ const SiteIndexRoute = SiteIndexRouteImport.update({
 const SiteTravelRequirementsRoute = SiteTravelRequirementsRouteImport.update({
   id: '/travel-requirements',
   path: '/travel-requirements',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteTermsRoute = SiteTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteServicesRoute = SiteServicesRouteImport.update({
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers/': typeof AppCustomersIndexRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
   '/customers': typeof AppCustomersIndexRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
+  '/_site/terms': typeof SiteTermsRoute
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
     | '/customers/'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
     | '/customers'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/_site/insurance'
     | '/_site/privacy'
     | '/_site/services'
+    | '/_site/terms'
     | '/_site/travel-requirements'
     | '/_site/'
     | '/_app/customers/$id'
@@ -299,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/travel-requirements'
       fullPath: '/travel-requirements'
       preLoaderRoute: typeof SiteTravelRequirementsRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/terms': {
+      id: '/_site/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof SiteTermsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/services': {
@@ -442,6 +461,7 @@ interface SiteRouteChildren {
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
+  SiteTermsRoute: typeof SiteTermsRoute
   SiteTravelRequirementsRoute: typeof SiteTravelRequirementsRoute
   SiteIndexRoute: typeof SiteIndexRoute
 }
@@ -451,6 +471,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteInsuranceRoute: SiteInsuranceRoute,
   SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
+  SiteTermsRoute: SiteTermsRoute,
   SiteTravelRequirementsRoute: SiteTravelRequirementsRoute,
   SiteIndexRoute: SiteIndexRoute,
 }
