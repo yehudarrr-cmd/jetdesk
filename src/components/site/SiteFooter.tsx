@@ -30,16 +30,25 @@ export function SiteFooter() {
       </section>
 
       <footer className="py-8 px-6 border-t border-border/40">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Plane className="w-4 h-4 text-primary" />
-            <span className="tracking-wide">גולדטוס מבית אמירים טורס</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <span>© {new Date().getFullYear()} GoldTus</span>
-            <Link to="/auth" className="hover:text-primary transition-colors">
-              כניסה למערכת
-            </Link>
+        <div className="max-w-6xl mx-auto space-y-4 text-sm text-muted-foreground">
+          <nav aria-label="קישורים משפטיים" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
+            <Link to="/privacy" className="hover:text-primary transition-colors">מדיניות פרטיות</Link>
+            <span aria-hidden="true">·</span>
+            <Link to="/terms" className="hover:text-primary transition-colors">תנאי שימוש</Link>
+            <span aria-hidden="true">·</span>
+            <Link to="/accessibility" className="hover:text-primary transition-colors">הצהרת נגישות</Link>
+          </nav>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Plane className="w-4 h-4 text-primary" />
+              <span className="tracking-wide">גולדטוס מבית אמירים טורס</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <span>© {new Date().getFullYear()} GoldTus</span>
+              <Link to="/auth" className="hover:text-primary transition-colors">
+                כניסה למערכת
+              </Link>
+            </div>
           </div>
         </div>
       </footer>
