@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteTravelRequirementsRouteImport } from './routes/_site.travel-requirements'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
+import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
 import { Route as SiteContactRouteImport } from './routes/_site.contact'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
@@ -55,6 +56,11 @@ const SiteTravelRequirementsRoute = SiteTravelRequirementsRouteImport.update({
 const SiteServicesRoute = SiteServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SitePrivacyRoute = SitePrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteInsuranceRoute = SiteInsuranceRouteImport.update({
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/telegram': typeof AppTelegramRoute
   '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
+  '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/telegram': typeof AppTelegramRoute
   '/contact': typeof SiteContactRoute
   '/insurance': typeof SiteInsuranceRoute
+  '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_app/telegram': typeof AppTelegramRoute
   '/_site/contact': typeof SiteContactRoute
   '/_site/insurance': typeof SiteInsuranceRoute
+  '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/telegram'
     | '/contact'
     | '/insurance'
+    | '/privacy'
     | '/services'
     | '/travel-requirements'
     | '/customers/$id'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/telegram'
     | '/contact'
     | '/insurance'
+    | '/privacy'
     | '/services'
     | '/travel-requirements'
     | '/customers/$id'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/_app/telegram'
     | '/_site/contact'
     | '/_site/insurance'
+    | '/_site/privacy'
     | '/_site/services'
     | '/_site/travel-requirements'
     | '/_site/'
@@ -294,6 +306,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof SiteServicesRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/privacy': {
+      id: '/_site/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof SitePrivacyRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/insurance': {
@@ -421,6 +440,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 interface SiteRouteChildren {
   SiteContactRoute: typeof SiteContactRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
+  SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
   SiteTravelRequirementsRoute: typeof SiteTravelRequirementsRoute
   SiteIndexRoute: typeof SiteIndexRoute
@@ -429,6 +449,7 @@ interface SiteRouteChildren {
 const SiteRouteChildren: SiteRouteChildren = {
   SiteContactRoute: SiteContactRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
+  SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
   SiteTravelRequirementsRoute: SiteTravelRequirementsRoute,
   SiteIndexRoute: SiteIndexRoute,
@@ -445,3 +466,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
