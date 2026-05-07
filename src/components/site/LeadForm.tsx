@@ -117,6 +117,9 @@ export function LeadForm() {
           <Button type="submit" disabled={submitting} className="w-full gradient-primary shadow-glow text-primary-foreground font-semibold h-12 text-base hover:scale-[1.02] transition-transform">
             {submitting ? "שולח..." : "שלחו פנייה"}
           </Button>
+          <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
+            בלחיצה על "שלחו פנייה" אני מאשר/ת קריאת ה<a href="/privacy" className="text-primary underline">מדיניות פרטיות</a> ו<a href="/terms" className="text-primary underline">תנאי השימוש</a>, ומסכים/ה לקבלת מענה ועדכונים בוואטסאפ/דוא"ל/SMS לפי חוק הספאם.
+          </p>
         </form>
       )}
     </Card>
