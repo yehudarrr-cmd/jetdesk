@@ -25,6 +25,7 @@ import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
 import { Route as AppLeadsRouteImport } from './routes/_app.leads'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
+import { Route as AppImportRouteImport } from './routes/_app.import'
 import { Route as AppFlightsRouteImport } from './routes/_app.flights'
 import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
@@ -110,6 +111,11 @@ const AppIntakeRoute = AppIntakeRouteImport.update({
   path: '/intake',
   getParentRoute: () => AppRoute,
 } as any)
+const AppImportRoute = AppImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFlightsRoute = AppFlightsRouteImport.update({
   id: '/flights',
   path: '/flights',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
+  '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
   '/payments': typeof AppPaymentsRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/flights': typeof AppFlightsRoute
+  '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
   '/payments': typeof AppPaymentsRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
   '/_app/flights': typeof AppFlightsRoute
+  '/_app/import': typeof AppImportRoute
   '/_app/intake': typeof AppIntakeRoute
   '/_app/leads': typeof AppLeadsRoute
   '/_app/payments': typeof AppPaymentsRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/documents'
     | '/flights'
+    | '/import'
     | '/intake'
     | '/leads'
     | '/payments'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/documents'
     | '/flights'
+    | '/import'
     | '/intake'
     | '/leads'
     | '/payments'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/documents'
     | '/_app/flights'
+    | '/_app/import'
     | '/_app/intake'
     | '/_app/leads'
     | '/_app/payments'
@@ -402,6 +414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIntakeRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/import': {
+      id: '/_app/import'
+      path: '/import'
+      fullPath: '/import'
+      preLoaderRoute: typeof AppImportRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/flights': {
       id: '/_app/flights'
       path: '/flights'
@@ -451,6 +470,7 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppDocumentsRoute: typeof AppDocumentsRoute
   AppFlightsRoute: typeof AppFlightsRoute
+  AppImportRoute: typeof AppImportRoute
   AppIntakeRoute: typeof AppIntakeRoute
   AppLeadsRoute: typeof AppLeadsRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
@@ -464,6 +484,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppDocumentsRoute: AppDocumentsRoute,
   AppFlightsRoute: AppFlightsRoute,
+  AppImportRoute: AppImportRoute,
   AppIntakeRoute: AppIntakeRoute,
   AppLeadsRoute: AppLeadsRoute,
   AppPaymentsRoute: AppPaymentsRoute,

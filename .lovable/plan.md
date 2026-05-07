@@ -1,115 +1,64 @@
-## SEO & AI Discoverability Fixes for GoldTus
+# תוכנית: ייבוא קובץ הזמנות לדשבורד
 
-Add the missing technical SEO and AI-discovery signals flagged by the scan. All changes are additive — no visual or behavioral changes to the site.
+## מטרה
+לאפשר העלאת קובץ Excel/CSV של רשימת הזמנות (כדוגמת `RESERVATION_LIST.xlsx`) מתוך הדשבורד, חילוץ אוטומטי של פרטי הנוסע והטיסה, יצירת כרטיסיית לקוח לכל רשומה, והוספת שם הנוסע גם בעברית (תעתיק) לצד האנגלית.
 
-### 1. Canonical URLs (per route)
+## מבנה הקובץ שזוהה
+גיליון אחד (`in`) עם העמודות:
+`SABRE PNR, SUP. PNR, SUPP., NAME, SYS. FARE, AGT. FARE, AGY. FARE, DEPART, DEST, TYPE, SUB TYPE, AGENCY, AGENT, CREATED, STATUS, PAX, REMARKS`
+- `NAME` באנגלית בלבד (לדוגמה `RAN RIMON`).
+- `DEPART` = תאריך יציאה, `DEST` = יעד (קוד IATA), `PAX` = מספר נוסעים.
+- שדות עם `<br/>` (כמו `SUP. PNR`, `SUPP.`, `TYPE`) = רגלי הלוך/חזור — נפרק ונשמור הראשון כ-PNR ראשי + נשמור את כולם בהערות.
 
-Add a canonical `<link>` to every `_site.*` route via `head().links`, pointing to `https://www.goldtus.com<path>`.
+## שינויים מתוכננים
 
-- `/` → `https://www.goldtus.com/`
-- `/services`, `/insurance`, `/contact`, `/travel-requirements`, `/privacy`, `/terms`, `/accessibility`
+### 1. דף ייבוא חדש בדשבורד
+- מסלול חדש: `src/routes/_app.import.tsx` ("ייבוא הזמנות").
+- הוספת פריט ניווט ב-`src/components/AppLayout.tsx` עם אייקון `Upload`.
+- UI: אזור גרירה/בחירת קובץ (`.xlsx`, `.xls`, `.csv`), כפתור "נתח קובץ", טבלת תצוגה מקדימה של הרשומות שזוהו עם עמודות: שם (EN), שם (HE), יעד, תאריך, PNR, ספק, מחיר, סטטוס, כפתור "ערוך" לכל שורה, וצ'קבוקס "ייבא". בתחתית — כפתור "צור לקוחות" (bulk).
 
-Add a `SITE_URL = "https://www.goldtus.com"` constant in `src/lib/site-constants.ts`.
+### 2. עיבוד הקובץ בצד הלקוח
+- חבילה: `xlsx` (SheetJS) לקריאת xlsx/csv בדפדפן.
+- פונקציית `parseReservationsFile(file)` ב-`src/lib/import-reservations.ts`:
+  - מזהה את שורת הכותרות (גמישה — מחפשת `NAME` ו-`DEPART`).
+  - ממפה לכל שורה אובייקט `ParsedReservation`.
+  - מפצלת שדות `<br/>` לרשימות.
 
-### 2. Organization + LocalBusiness JSON-LD (global)
+### 3. תעתיק לעברית
+- הוספת מילון יעדים נפוצים (TLV→תל אביב, LON→לונדון, NYC→ניו יורק, PFO→פאפוס, HER→הרקליון, RHO→רודוס, SKG→סלוניקי, LCA→לרנקה, TIA→טירנה...) ב-`src/lib/iata-he.ts`.
+- תעתיק שם פונטי בסיסי **בצד הלקוח** עם מפת אותיות (A→א, B→ב וכו') + יישור מקרים נפוצים (KATZAV→קצב, AVRAHAM→אברהם, KAHANA→כהנא, LEV→לב, HALFON→חלפון). מילון מקרים מיוחדים ב-`src/lib/he-translit.ts` שיחזיק overrides עבור שמות נפוצים בעברית.
+- זה ייתן תעתיק טוב במידה רבה ללא קריאת AI; המשתמש יוכל לערוך ידנית בתצוגה המקדימה לפני יצירת הלקוחות.
+- (אופציה עתידית: כפתור "שפר עם AI" שקורא לפונקציה שתשתמש ב-Lovable AI לתעתיק מדויק יותר — לא נכלול עכשיו אלא אם תבקש).
 
-In `src/routes/_site.tsx` (or root via `head().scripts`), inject a JSON-LD `<script type="application/ld+json">` describing the business:
+### 4. יצירת לקוחות + טיסות
+- לכל רשומה מאושרת:
+  - `INSERT` ל-`customers`: `name` = `"<עברית> / <אנגלית>"`, `destination` = שם יעד בעברית (אם מוכר) אחרת קוד IATA, `travel_start_date` = `DEPART`, `total_price` = `SYS. FARE`, `pnr` = `SABRE PNR`, `notes` = פרטי ספק/סוכנות/הערות.
+  - `INSERT` ל-`flights`: `customer_id`, `pnr` (Sabre), `airline` = SUPP. הראשון, `arrival_airport` = DEST, `departure_datetime` = DEPART, `notes` = רגלי הטיסה המלאים (PNR ספק + סוגים).
+  - `INSERT` ל-`timeline_events`: רשומת "יובא מקובץ".
+- שמירה ב-batch עם דיווח התקדמות ו-toast לתוצאות (X נוצרו, Y נכשלו).
+- מניעת כפילויות: לפני insert, בדיקת `pnr` קיים ב-`customers` של אותו owner; אם קיים — דילוג עם סימון בטבלה.
 
-```json
-{
-  "@context": "https://schema.org",
-  "@type": ["Organization", "TravelAgency"],
-  "name": "גולדטוס",
-  "alternateName": "GoldTus",
-  "url": "https://www.goldtus.com",
-  "logo": "https://www.goldtus.com/logo.png",
-  "telephone": "+972-55-775-6660",
-  "areaServed": "IL",
-  "parentOrganization": { "@type": "Organization", "name": "אמירים טורס" },
-  "contactPoint": [{
-    "@type": "ContactPoint",
-    "telephone": "+972-55-775-6660",
-    "contactType": "customer service",
-    "availableLanguage": ["he", "en"]
-  }],
-  "sameAs": []
-}
-```
+## פירוט טכני
 
-Use TanStack's `head().scripts` with `type: "application/ld+json"` so it renders in SSR HTML (visible to crawlers/AI).
+### קבצים חדשים
+- `src/routes/_app.import.tsx` — דף הייבוא.
+- `src/lib/import-reservations.ts` — parsing + mapping.
+- `src/lib/he-translit.ts` — תעתיק אותיות + מילון overrides.
+- `src/lib/iata-he.ts` — מילון יעדים IATA→עברית.
 
-### 3. WebSite + SearchAction JSON-LD (home page)
+### קבצים שיעודכנו
+- `src/components/AppLayout.tsx` — פריט ניווט "ייבוא".
+- `package.json` — הוספת `xlsx`.
 
-On `_site.index.tsx`, add a second JSON-LD block of type `WebSite` so Google can show a sitelinks search box and AI assistants identify the site.
+### לא בתוך ה-scope
+- שינויי סכמת DB (משתמשים בטבלאות הקיימות).
+- שינוי באתר התדמית הציבורי.
+- קריאת AI לתעתיק (אפשר בהמשך).
+- ייבוא אוטומטי של תשלומים נפרדים (רק `total_price`).
 
-### 4. FAQ JSON-LD
-
-Add an `FAQPage` JSON-LD to `_site.insurance.tsx` and `_site.services.tsx` covering the existing Q&A-style content (e.g. "מה כולל הביטוח?", "איך מקבלים הצעת מחיר?"). 4–6 Q/A pairs each. No visible UI change required (markup is invisible), but if helpful we'll also render a small visible FAQ block on the insurance page so the markup matches DOM content (Google's recommendation).
-
-### 5. BreadcrumbList JSON-LD
-
-Add breadcrumb JSON-LD on each non-home `_site.*` route: Home → {Page Title}.
-
-### 6. `llms.txt` + AI discovery link
-
-Create `public/llms.txt` (TanStack Start serves `public/` at the root) with:
-
-```
-# GoldTus / גולדטוס
-> סוכנות נסיעות פרימיום מבית אמירים טורס. טיסות, מלונות, רכב, VIP בנתב"ג, ביטוח נסיעות.
-
-## Contact
-- Phone: +972-55-775-6660
-- WhatsApp: https://wa.me/972557756660
-- Site: https://www.goldtus.com
-
-## Key pages
-- [Home](https://www.goldtus.com/)
-- [Services](https://www.goldtus.com/services)
-- [Travel Insurance](https://www.goldtus.com/insurance)
-- [Travel Requirements Tool](https://www.goldtus.com/travel-requirements)
-- [Contact](https://www.goldtus.com/contact)
-
-## Policies
-- [Privacy](https://www.goldtus.com/privacy)
-- [Terms](https://www.goldtus.com/terms)
-- [Accessibility](https://www.goldtus.com/accessibility)
-```
-
-In `__root.tsx` head().links add: `{ rel: "llms-txt", href: "/llms.txt" }` and also a regular `<link rel="alternate" type="text/markdown" href="/llms.txt">` for broader discovery.
-
-### 7. robots.txt + sitemap.xml
-
-Add `public/robots.txt`:
-```
-User-agent: *
-Allow: /
-Disallow: /auth
-Disallow: /_app/
-Sitemap: https://www.goldtus.com/sitemap.xml
-```
-
-Add a static `public/sitemap.xml` listing the 8 public routes with `lastmod` = build date. (Dynamic server-route sitemap is overkill for a fixed-page site.)
-
-### 8. HowTo JSON-LD (optional, low cost)
-
-Add a small `HowTo` JSON-LD on `_site.travel-requirements.tsx` describing the 3 steps to use the tool (choose country → view requirements → contact agent).
-
-### Files to change
-
-- `src/lib/site-constants.ts` — add `SITE_URL`
-- `src/routes/__root.tsx` — add `llms-txt` link
-- `src/routes/_site.tsx` — inject Organization JSON-LD globally
-- `src/routes/_site.index.tsx` — canonical + WebSite JSON-LD
-- `src/routes/_site.services.tsx` — canonical + Breadcrumb + FAQ JSON-LD
-- `src/routes/_site.insurance.tsx` — canonical + Breadcrumb + FAQ JSON-LD
-- `src/routes/_site.contact.tsx` — canonical + Breadcrumb JSON-LD
-- `src/routes/_site.travel-requirements.tsx` — canonical + Breadcrumb + HowTo
-- `src/routes/_site.privacy.tsx`, `_site.terms.tsx`, `_site.accessibility.tsx` — canonical + Breadcrumb
-- `public/llms.txt` (new)
-- `public/robots.txt` (new)
-- `public/sitemap.xml` (new)
-
-### Out of scope
-
-No visual/UX changes, no copy rewrites, no new pages. No changes to backend, auth, RLS, or edge functions.
+## תהליך משתמש
+1. כניסה ל-CRM → "ייבוא הזמנות" בסיידבר.
+2. גרירת `RESERVATION_LIST.xlsx`.
+3. רואים טבלה עם כל 15 הרשומות, שמות בעברית + אנגלית, יעד מתורגם.
+4. עורכים ידנית מה שצריך, מסירים סימון מרשומות שלא רוצים.
+5. לוחצים "צור לקוחות" → נוצרות כרטיסיות לקוח + טיסות מקושרות, ניתן לעבור לדף "לקוחות" ולראותן.
