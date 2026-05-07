@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_app/import")({
   component: ImportPage,
 });
 
-type Row = ParsedReservation & { selected: boolean; status?: "ok" | "skip" | "error"; message?: string };
+type Row = ParsedReservation & { selected: boolean; importStatus?: "ok" | "skip" | "error"; message?: string };
 
 function ImportPage() {
   const [rows, setRows] = useState<Row[]>([]);
@@ -73,7 +73,7 @@ function ImportPage() {
         r.supplierPnrs.length && `PNR ספק: ${r.supplierPnrs.join(" / ")}`,
         r.agency && `סוכנות: ${r.agency}`,
         r.agent && `סוכן: ${r.agent}`,
-        r.bookingStatus && `סטטוס: ${r.status}`,
+        r.bookingStatus && `סטטוס: ${r.bookingStatus}`,
         r.pax && `נוסעים: ${r.pax}`,
         r.remarks && `הערות: ${r.remarks}`,
       ].filter(Boolean).join("\n");
