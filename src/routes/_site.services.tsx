@@ -1,6 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Hotel, Car, Briefcase, BookOpen, Crown, Umbrella, ArrowLeft } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { canonical, ldScript, breadcrumbLd } from "@/lib/site-constants";
+
+const faqs = [
+  { q: "איך מקבלים הצעת מחיר מגולדטוס?", a: "ממלאים את טופס בקשת ההצעה באתר או פונים אלינו בוואטסאפ עם יעד, תאריכים ומספר נוסעים. נחזור עם הצעה אישית בתוך 24 שעות." },
+  { q: "האם תוכלו להזמין גם טיסות עסקיות ו-First Class?", a: "כן. יש לנו גישה לתעריפי Business ו-First של רוב חברות התעופה הגדולות, כולל סלוני המתנה ושדרוגים." },
+  { q: "מה כולל שירות ה-VIP בנתב\"ג?", a: "מסלול ירוק נפרד, ליווי אישי לאורך כל ההליכים, סלון VIP עם כיבוד וגישה ישירה לשער הטיסה." },
+  { q: "האם אפשר להזמין חבילה למגזר הדתי?", a: "כן. אנחנו בונים חבילות עם מלונות בקרבת בתי כנסת, אפשרות לאוכל כשר ויעדים מותאמים." },
+  { q: "האם השירות כולל גם ביטוח נסיעות?", a: "כן. ניתן לרכוש ביטוח נסיעות דיגיטלי של פספורט קארד ישירות דרך עמוד הביטוח שלנו." },
+];
 
 export const Route = createFileRoute("/_site/services")({
   head: () => ({
@@ -9,6 +18,22 @@ export const Route = createFileRoute("/_site/services")({
       { name: "description", content: "שירותי הקונסיירז' של גולדטוס: טיסות פרימיום ועסקיות, מלונות יוקרה, השכרת רכב, VIP בנתב\"ג, נסיעות למגזר הדתי וביטוח נסיעות." },
       { property: "og:title", content: "שירותי פרימיום | גולדטוס" },
       { property: "og:description", content: "כל מה שצריך לנסיעת פרימיום — תחת קורת גג אחת." },
+    ],
+    links: [{ rel: "canonical", href: canonical("/services") }],
+    scripts: [
+      ldScript(breadcrumbLd([
+        { name: "בית", path: "/" },
+        { name: "שירותים", path: "/services" },
+      ])),
+      ldScript({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }),
     ],
   }),
   component: ServicesPage,
