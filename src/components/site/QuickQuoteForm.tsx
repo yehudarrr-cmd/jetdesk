@@ -126,7 +126,7 @@ export function QuickQuoteForm() {
 
         <p className="text-[11px] text-muted-foreground text-center">
           <ShieldCheck className="w-3 h-3 inline ml-1" />
-          הפרטים שלכם מאובטחים. ללא ספאם.
+          בלחיצה על "קבלו הצעה" אתם מסכימים ל<a href="/privacy" className="text-primary underline">מדיניות הפרטיות</a> ולקבלת מענה בוואטסאפ/טלפון.
         </p>
       </form>
     </Card>
