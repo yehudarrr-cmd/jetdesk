@@ -109,7 +109,7 @@ function ImportPage() {
         const patch: Record<string, any> = {};
         if (!existingCustomer.destination && (r.destHe || r.destCode)) patch.destination = r.destHe || r.destCode;
         if (!existingCustomer.travel_start_date && r.departDate) patch.travel_start_date = r.departDate;
-        if (Object.keys(patch).length) await supabase.from("customers").update(patch).eq("id", custId);
+        if (Object.keys(patch).length) await supabase.from("customers").update(patch as any).eq("id", custId);
       } else {
         const { data: cust, error: custErr } = await supabase
           .from("customers")
