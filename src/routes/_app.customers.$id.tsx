@@ -140,27 +140,15 @@ function CustomerCardPage() {
         </TabsContent>
 
         <TabsContent value="hotels" className="mt-4">
-          <SimpleListTab title="מלונות" items={(related.data?.hotels ?? []).map((h) => ({
-            id: h.id, primary: h.hotel_name ?? "—",
-            secondary: `${h.city ?? ""} • ${formatDate(h.check_in_date)} – ${formatDate(h.check_out_date)}`,
-            badge: h.booking_status ?? undefined,
-          }))} />
+          <HotelsTab customerId={id} items={related.data?.hotels ?? []} />
         </TabsContent>
 
         <TabsContent value="cars" className="mt-4">
-          <SimpleListTab title="השכרות רכב" items={(related.data?.cars ?? []).map((r) => ({
-            id: r.id, primary: `${r.company_name ?? "—"} • ${r.car_type ?? ""}`,
-            secondary: `${formatDateTime(r.pickup_datetime)} → ${formatDateTime(r.return_datetime)}`,
-            badge: r.booking_status ?? undefined,
-          }))} />
+          <CarsTab customerId={id} items={related.data?.cars ?? []} />
         </TabsContent>
 
         <TabsContent value="transfers" className="mt-4">
-          <SimpleListTab title="העברות" items={(related.data?.transfers ?? []).map((t) => ({
-            id: t.id, primary: `${t.transfer_type ?? "—"}: ${t.pickup_location ?? ""} → ${t.destination ?? ""}`,
-            secondary: formatDateTime(t.datetime),
-            badge: t.status ?? undefined,
-          }))} />
+          <TransfersTab customerId={id} items={related.data?.transfers ?? []} />
         </TabsContent>
 
         <TabsContent value="documents" className="mt-4">
@@ -187,19 +175,7 @@ function CustomerCardPage() {
         </TabsContent>
 
         <TabsContent value="timeline" className="mt-4">
-          <Card className="p-6 space-y-3">
-            {(related.data?.timeline ?? []).map((t) => (
-              <div key={t.id} className="flex gap-3 pb-3 border-b border-border last:border-0">
-                <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
-                <div className="flex-1">
-                  <div className="font-medium">{t.title}</div>
-                  {t.description && <div className="text-sm text-muted-foreground mt-0.5">{t.description}</div>}
-                  <div className="text-xs text-muted-foreground mt-1">{formatDateTime(t.created_at)}</div>
-                </div>
-              </div>
-            ))}
-            {(related.data?.timeline ?? []).length === 0 && <div className="text-muted-foreground text-center py-6">אין אירועים בציר הזמן</div>}
-          </Card>
+          <TimelineTab customerId={id} items={related.data?.timeline ?? []} />
         </TabsContent>
       </Tabs>
     </div>
