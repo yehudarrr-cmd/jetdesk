@@ -473,20 +473,235 @@ function DocumentsTab({ customerId, items }: { customerId: string; items: any[] 
   );
 }
 
-function SimpleListTab({ title, items }: { title: string; items: { id: string; primary: string; secondary: string; badge?: string }[] }) {
+function HotelsTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ hotel_name: "", city: "", check_in_date: "", check_out_date: "", room_type: "", number_of_guests: 1, booking_status: "pending", notes: "" });
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { if (v !== "" && v !== null) payload[k] = v; });
+    const { error } = await supabase.from("hotels").insert(payload);
+    if (error) { toast.error(error.message); return; }
+    toast.success("מלון נוסף");
+    qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+    setOpen(false);
+    setForm({ hotel_name: "", city: "", check_in_date: "", check_out_date: "", room_type: "", number_of_guests: 1, booking_status: "pending", notes: "" });
+  };
   return (
-    <Card className="p-6 space-y-3">
-      <h3 className="font-semibold">{title}</h3>
-      {items.map((it) => (
-        <div key={it.id} className="border border-border rounded p-3 flex items-center justify-between">
-          <div>
-            <div className="font-medium">{it.primary}</div>
-            <div className="text-sm text-muted-foreground">{it.secondary}</div>
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold">מלונות ({items.length})</h3>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild><Button size="sm" className="gap-1"><Plus className="h-4 w-4" /> הוסף מלון</Button></DialogTrigger>
+          <DialogContent dir="rtl">
+            <DialogHeader><DialogTitle>מלון חדש</DialogTitle></DialogHeader>
+            <form onSubmit={add} className="grid grid-cols-2 gap-3">
+              <Field label="שם המלון"><Input required value={form.hotel_name} onChange={(e) => setForm({ ...form, hotel_name: e.target.value })} /></Field>
+              <Field label="עיר"><Input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} /></Field>
+              <Field label="צ׳ק-אין"><Input type="date" value={form.check_in_date} onChange={(e) => setForm({ ...form, check_in_date: e.target.value })} /></Field>
+              <Field label="צ׳ק-אאוט"><Input type="date" value={form.check_out_date} onChange={(e) => setForm({ ...form, check_out_date: e.target.value })} /></Field>
+              <Field label="סוג חדר"><Input value={form.room_type} onChange={(e) => setForm({ ...form, room_type: e.target.value })} /></Field>
+              <Field label="מספר אורחים"><Input type="number" min={1} value={form.number_of_guests} onChange={(e) => setForm({ ...form, number_of_guests: Number(e.target.value) })} /></Field>
+              <Field label="סטטוס">
+                <Select value={form.booking_status} onValueChange={(v) => setForm({ ...form, booking_status: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">ממתין</SelectItem>
+                    <SelectItem value="confirmed">מאושר</SelectItem>
+                    <SelectItem value="cancelled">בוטל</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+              <div className="col-span-2"><Field label="הערות"><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+              <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="space-y-2">
+        {items.map((h) => (
+          <div key={h.id} className="border border-border rounded p-3 flex items-center justify-between">
+            <div>
+              <div className="font-medium">{h.hotel_name ?? "—"}</div>
+              <div className="text-sm text-muted-foreground">{h.city ?? ""} • {formatDate(h.check_in_date)} – {formatDate(h.check_out_date)}</div>
+            </div>
+            {h.booking_status && <Badge variant="secondary">{h.booking_status}</Badge>}
           </div>
-          {it.badge && <Badge variant="secondary">{it.badge}</Badge>}
-        </div>
-      ))}
-      {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין רשומות</div>}
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין מלונות עדיין</div>}
+      </div>
+    </Card>
+  );
+}
+
+function CarsTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ company_name: "", car_type: "", pickup_location: "", return_location: "", pickup_datetime: "", return_datetime: "", booking_status: "pending", notes: "" });
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { if (v !== "" && v !== null) payload[k] = v; });
+    const { error } = await supabase.from("car_rentals").insert(payload);
+    if (error) { toast.error(error.message); return; }
+    toast.success("השכרת רכב נוספה");
+    qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+    setOpen(false);
+    setForm({ company_name: "", car_type: "", pickup_location: "", return_location: "", pickup_datetime: "", return_datetime: "", booking_status: "pending", notes: "" });
+  };
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold">השכרות רכב ({items.length})</h3>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild><Button size="sm" className="gap-1"><Plus className="h-4 w-4" /> הוסף רכב</Button></DialogTrigger>
+          <DialogContent dir="rtl">
+            <DialogHeader><DialogTitle>השכרת רכב חדשה</DialogTitle></DialogHeader>
+            <form onSubmit={add} className="grid grid-cols-2 gap-3">
+              <Field label="חברה"><Input value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} /></Field>
+              <Field label="סוג רכב"><Input value={form.car_type} onChange={(e) => setForm({ ...form, car_type: e.target.value })} /></Field>
+              <Field label="מקום איסוף"><Input value={form.pickup_location} onChange={(e) => setForm({ ...form, pickup_location: e.target.value })} /></Field>
+              <Field label="מקום החזרה"><Input value={form.return_location} onChange={(e) => setForm({ ...form, return_location: e.target.value })} /></Field>
+              <Field label="איסוף"><Input type="datetime-local" value={form.pickup_datetime} onChange={(e) => setForm({ ...form, pickup_datetime: e.target.value })} /></Field>
+              <Field label="החזרה"><Input type="datetime-local" value={form.return_datetime} onChange={(e) => setForm({ ...form, return_datetime: e.target.value })} /></Field>
+              <Field label="סטטוס">
+                <Select value={form.booking_status} onValueChange={(v) => setForm({ ...form, booking_status: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">ממתין</SelectItem>
+                    <SelectItem value="confirmed">מאושר</SelectItem>
+                    <SelectItem value="cancelled">בוטל</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+              <div className="col-span-2"><Field label="הערות"><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+              <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="space-y-2">
+        {items.map((r) => (
+          <div key={r.id} className="border border-border rounded p-3 flex items-center justify-between">
+            <div>
+              <div className="font-medium">{r.company_name ?? "—"} • {r.car_type ?? ""}</div>
+              <div className="text-sm text-muted-foreground">{formatDateTime(r.pickup_datetime)} → {formatDateTime(r.return_datetime)}</div>
+            </div>
+            {r.booking_status && <Badge variant="secondary">{r.booking_status}</Badge>}
+          </div>
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין השכרות עדיין</div>}
+      </div>
+    </Card>
+  );
+}
+
+function TransfersTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ transfer_type: "", pickup_location: "", destination: "", datetime: "", number_of_passengers: 1, supplier: "", status: "pending", notes: "" });
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { if (v !== "" && v !== null) payload[k] = v; });
+    const { error } = await supabase.from("transfers").insert(payload);
+    if (error) { toast.error(error.message); return; }
+    toast.success("העברה נוספה");
+    qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+    setOpen(false);
+    setForm({ transfer_type: "", pickup_location: "", destination: "", datetime: "", number_of_passengers: 1, supplier: "", status: "pending", notes: "" });
+  };
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold">העברות ({items.length})</h3>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild><Button size="sm" className="gap-1"><Plus className="h-4 w-4" /> הוסף העברה</Button></DialogTrigger>
+          <DialogContent dir="rtl">
+            <DialogHeader><DialogTitle>העברה חדשה</DialogTitle></DialogHeader>
+            <form onSubmit={add} className="grid grid-cols-2 gap-3">
+              <Field label="סוג"><Input placeholder="VIP / מונית / שאטל" value={form.transfer_type} onChange={(e) => setForm({ ...form, transfer_type: e.target.value })} /></Field>
+              <Field label="ספק"><Input value={form.supplier} onChange={(e) => setForm({ ...form, supplier: e.target.value })} /></Field>
+              <Field label="מקום איסוף"><Input value={form.pickup_location} onChange={(e) => setForm({ ...form, pickup_location: e.target.value })} /></Field>
+              <Field label="יעד"><Input value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} /></Field>
+              <Field label="תאריך / שעה"><Input type="datetime-local" value={form.datetime} onChange={(e) => setForm({ ...form, datetime: e.target.value })} /></Field>
+              <Field label="מספר נוסעים"><Input type="number" min={1} value={form.number_of_passengers} onChange={(e) => setForm({ ...form, number_of_passengers: Number(e.target.value) })} /></Field>
+              <Field label="סטטוס">
+                <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">ממתין</SelectItem>
+                    <SelectItem value="confirmed">מאושר</SelectItem>
+                    <SelectItem value="cancelled">בוטל</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+              <div className="col-span-2"><Field label="הערות"><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+              <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="space-y-2">
+        {items.map((t) => (
+          <div key={t.id} className="border border-border rounded p-3 flex items-center justify-between">
+            <div>
+              <div className="font-medium">{t.transfer_type ?? "—"}: {t.pickup_location ?? ""} → {t.destination ?? ""}</div>
+              <div className="text-sm text-muted-foreground">{formatDateTime(t.datetime)}</div>
+            </div>
+            {t.status && <Badge variant="secondary">{t.status}</Badge>}
+          </div>
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין העברות עדיין</div>}
+      </div>
+    </Card>
+  );
+}
+
+function TimelineTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ title: "", description: "", type: "note" });
+  const add = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.from("timeline_events").insert({ customer_id: customerId, ...form });
+    if (error) { toast.error(error.message); return; }
+    toast.success("נוסף לציר זמן");
+    qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+    setOpen(false);
+    setForm({ title: "", description: "", type: "note" });
+  };
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold">ציר זמן ({items.length})</h3>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild><Button size="sm" className="gap-1"><Plus className="h-4 w-4" /> הוסף אירוע</Button></DialogTrigger>
+          <DialogContent dir="rtl">
+            <DialogHeader><DialogTitle>אירוע חדש</DialogTitle></DialogHeader>
+            <form onSubmit={add} className="space-y-3">
+              <Field label="כותרת"><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></Field>
+              <Field label="סוג"><Input value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} placeholder="note / call / meeting" /></Field>
+              <Field label="תיאור"><Textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></Field>
+              <DialogFooter><Button type="submit">שמור</Button></DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className="space-y-3">
+        {items.map((t) => (
+          <div key={t.id} className="flex gap-3 pb-3 border-b border-border last:border-0">
+            <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
+            <div className="flex-1">
+              <div className="font-medium">{t.title}</div>
+              {t.description && <div className="text-sm text-muted-foreground mt-0.5">{t.description}</div>}
+              <div className="text-xs text-muted-foreground mt-1">{formatDateTime(t.created_at)}</div>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין אירועים בציר הזמן</div>}
+      </div>
     </Card>
   );
 }
