@@ -15,7 +15,16 @@ export const Route = createFileRoute("/_app/import")({
   component: ImportPage,
 });
 
-type Row = ParsedReservation & { selected: boolean; importStatus?: "ok" | "skip" | "error"; message?: string };
+type Row = ParsedReservation & {
+  selected: boolean;
+  importStatus?: "ok" | "skip" | "error" | "merged";
+  message?: string;
+  phone?: string;
+};
+
+function normalizeName(s: string) {
+  return (s || "").toUpperCase().replace(/[^A-Z0-9א-ת]/g, "");
+}
 
 function ImportPage() {
   const [rows, setRows] = useState<Row[]>([]);
@@ -45,7 +54,7 @@ function ImportPage() {
 
   const importRows = async () => {
     setImporting(true);
-    let ok = 0, fail = 0, skipped = 0;
+    let ok = 0, fail = 0, skipped = 0, merged = 0;
     const next = [...rows];
 
     const { data: userData } = await supabase.auth.getUser();
@@ -56,14 +65,27 @@ function ImportPage() {
       const r = next[i];
       if (!r.selected) continue;
 
-      // Dedup by PNR
+      // Find existing customer: PNR -> normalized name -> phone
+      let existingCustomer: { id: string; name: string | null; phone: string | null; destination: string | null; travel_start_date: string | null } | null = null;
+
       if (r.sabrePnr) {
-        const { data: existing } = await supabase.from("customers").select("id").eq("pnr", r.sabrePnr).maybeSingle();
-        if (existing) {
-          next[i] = { ...r, importStatus: "skip", message: "PNR כבר קיים" };
-          skipped++;
-          continue;
-        }
+        const { data } = await supabase.from("customers").select("id, name, phone, destination, travel_start_date").eq("pnr", r.sabrePnr).maybeSingle();
+        if (data) existingCustomer = data;
+      }
+
+      if (!existingCustomer && r.nameEn) {
+        const target = normalizeName(r.nameEn);
+        const { data: candidates } = await supabase
+          .from("customers")
+          .select("id, name, phone, destination, travel_start_date")
+          .ilike("name", `%${r.nameEn.split(" ")[0]}%`)
+          .limit(50);
+        existingCustomer = (candidates ?? []).find((c) => normalizeName(c.name ?? "").includes(target) || target.includes(normalizeName(c.name ?? ""))) ?? null;
+      }
+
+      if (!existingCustomer && r.phone) {
+        const { data } = await supabase.from("customers").select("id, name, phone, destination, travel_start_date").eq("phone", r.phone).maybeSingle();
+        if (data) existingCustomer = data;
       }
 
       const displayName = r.nameHe ? `${r.nameHe} / ${r.nameEn}` : r.nameEn;
@@ -78,30 +100,64 @@ function ImportPage() {
         r.remarks && `הערות: ${r.remarks}`,
       ].filter(Boolean).join("\n");
 
-      const { data: cust, error: custErr } = await supabase
-        .from("customers")
-        .insert({
-          owner_id: ownerId,
-          name: displayName,
-          destination: r.destHe || r.destCode || null,
-          travel_start_date: r.departDate,
-          total_price: r.fare ?? 0,
-          pnr: r.sabrePnr || null,
-          notes: notesParts || null,
-        })
-        .select()
-        .single();
+      let custId: string;
+      let isNewCustomer = false;
 
-      if (custErr || !cust) {
-        next[i] = { ...r, importStatus: "error", message: custErr?.message ?? "שגיאה" };
-        fail++;
+      if (existingCustomer) {
+        custId = existingCustomer.id;
+        // Fill empty fields only — never overwrite
+        const patch: Record<string, any> = {};
+        if (!existingCustomer.destination && (r.destHe || r.destCode)) patch.destination = r.destHe || r.destCode;
+        if (!existingCustomer.travel_start_date && r.departDate) patch.travel_start_date = r.departDate;
+        if (Object.keys(patch).length) await supabase.from("customers").update(patch as any).eq("id", custId);
+      } else {
+        const { data: cust, error: custErr } = await supabase
+          .from("customers")
+          .insert({
+            owner_id: ownerId,
+            name: displayName,
+            destination: r.destHe || r.destCode || null,
+            travel_start_date: r.departDate,
+            total_price: r.fare ?? 0,
+            pnr: r.sabrePnr || null,
+            notes: notesParts || null,
+          })
+          .select()
+          .single();
+        if (custErr || !cust) {
+          next[i] = { ...r, importStatus: "error", message: custErr?.message ?? "שגיאה" };
+          fail++;
+          continue;
+        }
+        custId = cust.id;
+        isNewCustomer = true;
+      }
+
+      // Dedup flight: same customer + PNR (or same departure + destination)
+      let flightExists = false;
+      if (r.sabrePnr) {
+        const { data: f } = await supabase.from("flights").select("id").eq("customer_id", custId).eq("pnr", r.sabrePnr).maybeSingle();
+        if (f) flightExists = true;
+      }
+      if (!flightExists && r.departDate && r.destCode) {
+        const { data: fs } = await supabase
+          .from("flights")
+          .select("id, departure_datetime, arrival_airport")
+          .eq("customer_id", custId)
+          .eq("arrival_airport", r.destCode);
+        if ((fs ?? []).some((f) => (f.departure_datetime ?? "").startsWith(r.departDate!))) flightExists = true;
+      }
+
+      if (flightExists) {
+        next[i] = { ...r, importStatus: "skip", message: "טיסה כבר קיימת" };
+        skipped++;
         continue;
       }
 
       const departIso = r.departDate ? `${r.departDate}T00:00:00` : null;
       await supabase.from("flights").insert({
         owner_id: ownerId,
-        customer_id: cust.id,
+        customer_id: custId,
         pnr: r.sabrePnr || null,
         airline: r.suppliers[0] || null,
         arrival_airport: r.destCode || null,
@@ -112,20 +168,20 @@ function ImportPage() {
 
       await supabase.from("timeline_events").insert({
         owner_id: ownerId,
-        customer_id: cust.id,
+        customer_id: custId,
         type: "import",
-        title: "יובא מקובץ הזמנות",
+        title: isNewCustomer ? "יובא מקובץ הזמנות" : "טיסה נוספת יובאה מקובץ",
         description: fileName,
       });
 
-      next[i] = { ...r, importStatus: "ok" };
-      ok++;
+      if (isNewCustomer) { next[i] = { ...r, importStatus: "ok" }; ok++; }
+      else { next[i] = { ...r, importStatus: "merged", message: "נוספה טיסה ללקוח קיים" }; merged++; }
     }
 
     setRows(next);
     setImporting(false);
     qc.invalidateQueries();
-    toast.success(`הסתיים: ${ok} נוצרו, ${skipped} דולגו, ${fail} נכשלו`);
+    toast.success(`הסתיים: ${ok} חדשים, ${merged} צורפו ללקוח קיים, ${skipped} דולגו, ${fail} נכשלו`);
   };
 
   return (
@@ -206,6 +262,7 @@ function ImportPage() {
                     <td className="px-3 py-2">{r.fare ?? "—"}</td>
                     <td className="px-3 py-2">
                       {r.importStatus === "ok" && <Badge className="bg-green-600">נוצר</Badge>}
+                      {r.importStatus === "merged" && <Badge className="bg-blue-600" title={r.message}>צורף</Badge>}
                       {r.importStatus === "skip" && <Badge variant="secondary">דולג</Badge>}
                       {r.importStatus === "error" && <Badge variant="destructive" title={r.message}>שגיאה</Badge>}
                     </td>
