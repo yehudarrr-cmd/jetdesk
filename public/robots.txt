@@ -1,6 +1,16 @@
 User-agent: *
 Allow: /
 Disallow: /auth
+Disallow: /dashboard
+Disallow: /customers
+Disallow: /leads
+Disallow: /tasks
+Disallow: /payments
+Disallow: /flights
+Disallow: /documents
+Disallow: /import
+Disallow: /intake
+Disallow: /telegram
 Disallow: /_app/
 
-Sitemap: https://www.goldtus.com/sitemap.xml
+Sitemap: https://goldtus.com/sitemap.xml
