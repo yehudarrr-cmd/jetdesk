@@ -53,6 +53,8 @@ function HomePage() {
             alt="חלון מטוס פרטי עם נוף עננים בשקיעת זהב"
             width={1920}
             height={1080}
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/60" />
@@ -68,11 +70,11 @@ function HomePage() {
                   פרימיום בהתאמה אישית
                 </span>
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-foreground/85 leading-relaxed max-w-lg mx-auto lg:mx-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+              <p className="text-sm sm:text-base lg:text-lg text-foreground leading-relaxed max-w-lg mx-auto lg:mx-0 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
                 שלחו יעד, תאריכים ומספר נוסעים — ונמצא לכם דיל מדויק בלי כאב ראש. שקט נפשי, ניהול מא׳ ועד ת׳.
               </p>
 
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/80 justify-center lg:justify-start pt-1">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground justify-center lg:justify-start pt-1">
                 <span className="flex items-center gap-1.5"><Plane className="w-4 h-4 text-primary" strokeWidth={1.5} /> טיסות פרימיום</span>
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-primary" strokeWidth={1.5} /> שירות אישי</span>
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-primary" strokeWidth={1.5} /> VIP בנתב"ג</span>
