@@ -123,17 +123,19 @@ function transliterateWord(word: string): string {
 function splitConcatenated(word: string): string[] {
   const upper = word.toUpperCase().replace(/[^A-Z]/g, "");
   if (upper.length <= 6) return [upper];
+  // If the whole word is a known name, keep it.
+  if (NAME_OVERRIDES[upper]) return [upper];
 
   // Try known prefix
   for (const key of OVERRIDE_KEYS) {
-    if (key.length >= 3 && upper.startsWith(key) && upper.length > key.length + 2) {
+    if (key.length >= 4 && upper.startsWith(key) && upper.length > key.length + 2) {
       const rest = upper.slice(key.length);
       return [key, ...splitConcatenated(rest)];
     }
   }
   // Try known suffix
   for (const key of OVERRIDE_KEYS) {
-    if (key.length >= 3 && upper.endsWith(key) && upper.length > key.length + 2) {
+    if (key.length >= 4 && upper.endsWith(key) && upper.length > key.length + 2) {
       const head = upper.slice(0, upper.length - key.length);
       return [...splitConcatenated(head), key];
     }
