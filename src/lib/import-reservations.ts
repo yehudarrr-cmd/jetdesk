@@ -1,5 +1,5 @@
 import * as XLSX from "xlsx";
-import { nameToHebrew } from "./he-translit";
+import { passengerToHebrew, parsePassengerName } from "./he-translit";
 import { destinationHe } from "./iata-he";
 
 export type ParsedReservation = {
@@ -62,7 +62,9 @@ function pick(r: Record<string, unknown>, ...keys: string[]): unknown {
 }
 
 function mapRow(r: Record<string, unknown>, i: number): ParsedReservation {
-  const nameEn = String(pick(r, "NAME") ?? "").trim();
+  const rawName = String(pick(r, "NAME") ?? "").trim();
+  const parsed = parsePassengerName(rawName);
+  const nameEn = parsed.cleaned || rawName;
   const supPnrs = splitBr(pick(r, "SUP. PNR", "SUP PNR", "SUPP PNR"));
   const suppliers = splitBr(pick(r, "SUPP.", "SUPP", "SUPPLIER"));
   const destCode = String(pick(r, "DEST") ?? "").trim().toUpperCase();
@@ -72,7 +74,7 @@ function mapRow(r: Record<string, unknown>, i: number): ParsedReservation {
     supplierPnrs: supPnrs,
     suppliers,
     nameEn,
-    nameHe: nameToHebrew(nameEn),
+    nameHe: passengerToHebrew(rawName),
     fare: num(pick(r, "SYS. FARE", "SYS FARE", "FARE")),
     departDate: toIso(pick(r, "DEPART", "DEPARTURE")),
     destCode,
