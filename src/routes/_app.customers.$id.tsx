@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, Phone, MessageCircle, Plus } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
 import { toast } from "sonner";
@@ -23,6 +24,9 @@ export const Route = createFileRoute("/_app/customers/$id")({
 function CustomerCardPage() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [newName, setNewName] = useState("");
 
   const customer = useQuery({
     queryKey: ["customer", id],
@@ -67,6 +71,25 @@ function CustomerCardPage() {
     qc.invalidateQueries({ queryKey: ["customer", id] });
   };
 
+  const deleteCustomer = async () => {
+    const { error } = await supabase.from("customers").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("הלקוח נמחק");
+    qc.invalidateQueries({ queryKey: ["customers"] });
+    navigate({ to: "/customers" });
+  };
+
+  const renameCustomer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName.trim()) return;
+    const { error } = await supabase.from("customers").update({ name: newName.trim() }).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("השם עודכן");
+    qc.invalidateQueries({ queryKey: ["customer", id] });
+    qc.invalidateQueries({ queryKey: ["customers"] });
+    setRenameOpen(false);
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <Link to="/customers" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
@@ -76,7 +99,12 @@ function CustomerCardPage() {
       <Card className="p-6 gradient-surface shadow-elegant">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold">{c.name}</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-bold">{c.name}</h1>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setNewName(c.name); setRenameOpen(true); }} title="שנה שם">
+                <Pencil className="h-4 w-4" />
+              </Button>
+            </div>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
               {c.phone && <span className="inline-flex items-center gap-1" dir="ltr"><Phone className="h-3.5 w-3.5" />{c.phone}</span>}
               {c.destination && <Badge variant="secondary">{c.destination}</Badge>}
@@ -91,6 +119,23 @@ function CustomerCardPage() {
                 </a>
               </Button>
             )}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm" className="gap-1"><Trash2 className="h-4 w-4" /> מחק לקוח</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent dir="rtl">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>למחוק את {c.name}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    פעולה זו תמחק את הלקוח לצמיתות. נתונים מקושרים (טיסות, מלונות, תשלומים וכו׳) עלולים להישאר ללא לקוח.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>ביטול</AlertDialogCancel>
+                  <AlertDialogAction onClick={deleteCustomer} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">מחק</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -178,6 +223,16 @@ function CustomerCardPage() {
           <TimelineTab customerId={id} items={related.data?.timeline ?? []} />
         </TabsContent>
       </Tabs>
+
+      <Dialog open={renameOpen} onOpenChange={setRenameOpen}>
+        <DialogContent dir="rtl">
+          <DialogHeader><DialogTitle>שינוי שם לקוח</DialogTitle></DialogHeader>
+          <form onSubmit={renameCustomer} className="space-y-4">
+            <Field label="שם מלא"><Input required value={newName} onChange={(e) => setNewName(e.target.value)} /></Field>
+            <DialogFooter><Button type="submit">שמור</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

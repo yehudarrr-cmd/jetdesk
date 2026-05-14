@@ -22,7 +22,7 @@ import type { Session } from "@supabase/supabase-js";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 const NAV = [
-  { to: "/", label: "לוח בקרה", icon: LayoutDashboard },
+  { to: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
   { to: "/leads", label: "לידים מהאתר", icon: Sprout },
   { to: "/customers", label: "לקוחות", icon: Users },
   { to: "/import", label: "ייבוא הזמנות", icon: Upload },
@@ -74,7 +74,7 @@ export function AppLayout() {
     <nav className="flex-1 px-3 py-4 space-y-1">
       {NAV.map((n) => {
         const active = location.pathname === n.to ||
-          (n.to !== "/" && location.pathname.startsWith(n.to));
+          location.pathname.startsWith(n.to);
         const Icon = n.icon;
         return (
           <Link

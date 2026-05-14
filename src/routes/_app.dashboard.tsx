@@ -64,7 +64,7 @@ function DashboardPage() {
         <StatCard icon={<Wallet className="h-5 w-5" />} label="סך הכנסות" value={formatCurrency(stats.data?.totalRevenue ?? 0)} accent="primary" />
         <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="יתרות חוב" value={formatCurrency(stats.data?.balances ?? 0)} accent="warning" />
         <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="משימות דחופות" value={String(stats.data?.urgentTasks ?? 0)} accent="destructive" />
-        <StatCard icon={<Plane className="h-5 w-5" />} label="טיסות עם פערים" value={String(stats.data?.missingDocs ?? 0)} accent="accent" />
+        <StatCard icon={<Plane className="h-5 w-5" />} label="טיסות עם פעולות פתוחות" value={String(stats.data?.missingDocs ?? 0)} accent="accent" hint="טיסות שיש בהן צ׳ק-אין / ביטוח / כרטיס במצב 'ממתין'" />
       </div>
 
       <Card className="overflow-hidden">
@@ -139,7 +139,7 @@ function DashboardPage() {
   );
 }
 
-function StatCard({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent: "primary" | "warning" | "destructive" | "accent" }) {
+function StatCard({ icon, label, value, accent, hint }: { icon: React.ReactNode; label: string; value: string; accent: "primary" | "warning" | "destructive" | "accent"; hint?: string }) {
   const colors: Record<string, string> = {
     primary: "text-primary bg-primary/10",
     warning: "text-warning bg-warning/10",
@@ -152,7 +152,8 @@ function StatCard({ icon, label, value, accent }: { icon: React.ReactNode; label
         <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colors[accent]}`}>{icon}</div>
       </div>
       <div className="text-2xl font-bold">{value}</div>
-      <div className="text-sm text-muted-foreground mt-1">{label}</div>
+      <div className="text-sm text-muted-foreground mt-1" title={hint}>{label}</div>
+      {hint && <div className="text-[10px] text-muted-foreground/70 mt-1 leading-tight">{hint}</div>}
     </Card>
   );
 }
