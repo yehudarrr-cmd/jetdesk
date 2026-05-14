@@ -74,7 +74,7 @@ export function AppLayout() {
     <nav className="flex-1 px-3 py-4 space-y-1">
       {NAV.map((n) => {
         const active = location.pathname === n.to ||
-          (n.to !== "/" && location.pathname.startsWith(n.to));
+          location.pathname.startsWith(n.to);
         const Icon = n.icon;
         return (
           <Link
