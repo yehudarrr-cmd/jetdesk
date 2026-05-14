@@ -22,7 +22,7 @@ import type { Session } from "@supabase/supabase-js";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 const NAV = [
-  { to: "/", label: "לוח בקרה", icon: LayoutDashboard },
+  { to: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
   { to: "/leads", label: "לידים מהאתר", icon: Sprout },
   { to: "/customers", label: "לקוחות", icon: Users },
   { to: "/import", label: "ייבוא הזמנות", icon: Upload },
