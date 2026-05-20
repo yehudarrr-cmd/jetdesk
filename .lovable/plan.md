@@ -1,50 +1,36 @@
-## הבעיה
+## המטרה
+בכל לשונית בכרטיס הלקוח (טיסות, מלונות, רכב, העברות, מסמכים, תשלומים, משימות, שיחות) — לאפשר **עריכה** ו**מחיקה** של כל פריט קיים, לא רק הוספה.
 
-בקובץ הנתונים שמות הנוסעים מגיעים בפורמט של מערכות טיסה:
-`LASTNAME/FIRSTNAME [קוד הזמנה]`
+היום: רק הוספה ועדכון שדה בודד (למשל סטטוסים בטיסה). אין כפתור עריכה/מחיקה לכל רשומה.
 
-לדוגמה:
-- `EYAL/ADAMCLIFF` → היום מתורגם `יאלאדאמקליפף` (הכל מודבק יחד)
-- `GOLDMAN/ELIEZERLIPMAN 13227874` → `גולדמן ליזרליפמאן` (הקוד הספרתי לא מסונן, השמות לא מופרדים)
-- `KAHANA/ELIMELECH 13104374` → `כהנא אלימלך` (במקרה הזה יצא בסדר, אבל הסדר הפוך)
-- `MAMOU/TOMERMORDECHAI FSULNA` → `מאמוטומרמורדחאי פסולנא` (מודבק)
+## מה ייווסף לכל פריט
 
-## שורש הבעיה
+לכל שורה בכל לשונית — שני כפתורי איקון בפינה:
+- ✏️ **עריכה** → פותח דיאלוג זהה לדיאלוג ההוספה, אבל ממולא בערכים הקיימים. שמירה → `update` באותה טבלה.
+- 🗑️ **מחיקה** → `AlertDialog` לאישור → `delete` באותה טבלה.
 
-בקובץ `src/lib/he-translit.ts` הפונקציה `nameToHebrew` רק מחליפה רווחים, אבל:
-1. **לא מטפלת ב־`/`** שמפריד שם משפחה משם פרטי
-2. **לא מסירה קודי הזמנה ספרתיים** בסוף השם
-3. **לא הופכת את הסדר** מ־`משפחה/פרטי` ל־`פרטי משפחה` (כפי שמקובל בעברית)
-4. **לא מפרקת שמות מודבקים** מספיק טוב — `splitConcatenated` עובד רק אם תחילית השם נמצאת ב־`NAME_OVERRIDES`, אז `EYALADAM`, `ELIEZERLIPMAN`, `TOMERMORDECHAI` נשארים מודבקים
-5. **קודי שדה כמו `FSULNA`/`CENFMT`** (קודי תעודת זהות / סוג נוסע של Sabre) מתורגמים כאילו הם שם
+לאחר כל פעולה: `toast` + `invalidateQueries(["customer-related", customerId])`. בתשלום שנמחק/עודכן — לעדכן גם את `amount_paid` בלקוח ולרענן `["customer", id]`.
 
-## מה לתקן
+## טבלאות וטפסים
 
-### 1. ניתוח השם לפני תרגום (`src/lib/import-reservations.ts`)
-להוסיף פונקציה `parsePassengerName(raw)` שתחזיר `{ last, first }`:
-- לפצל לפי `/` הראשון → צד שמאל = משפחה, צד ימין = פרטי
-- להסיר מהסוף: רצף של 6+ ספרות (קוד הזמנה), וטוקנים ידועים של Sabre כמו `MR`, `MRS`, `MS`, `MSTR`, `CHD`, `INF`, `CENFMT`, `FSULNA` וכל מילה שמסתיימת ב־`MR`/`MRS`/`CHD` בסוף
-- לפצל את שם הפרטי לפי רווח/`-` ולהעביר כל מילה דרך `splitConcatenated`
+| לשונית | טבלה | שדות לעריכה (זהים לטופס ההוספה) |
+|---|---|---|
+| טיסות | `flights` | airline, flight_number, departure/arrival_airport, departure/arrival_datetime, pnr |
+| מלונות | `hotels` | hotel_name, city, check_in/out_date, room_type, number_of_guests, booking_status, notes |
+| רכב | `car_rentals` | company_name, car_type, pickup/return_location, pickup/return_datetime, booking_status, notes |
+| העברות | `transfers` | (לפי הטופס הקיים ב־TransfersTab) |
+| מסמכים | `documents` | file_name, file_url, category |
+| תשלומים | `payments` | amount, payment_type, method (ובמחיקה/שינוי סכום — לעדכן `customers.amount_paid`) |
+| משימות | `tasks` | title, due_date, priority, status |
+| שיחות | `conversations` | content, source |
 
-### 2. שיפור `splitConcatenated` (`src/lib/he-translit.ts`)
-- הרחבת `NAME_OVERRIDES` עם שמות נפוצים נוספים: `ADAM`, `LIPMAN`, `LIRAN`, `TOMER`, `MORDECHAI`, `EYAL`, `YANIV`, `LEVI`, `COHEN`, `KAHANA` וכו'
-- כשלא מזוהה תחילית מוכרת — לפצל ב־heuristic (CamelCase לפי מעברי תנועה→עיצור, או כל 4–6 אותיות), כדי שלא נישאר עם בלוק ענק כמו `EYALADAMCLIFF`
-- לתקן `LETTERS["E"] = ""` שגורם להעלמה מוזרה — צריך לתת `"א"`/`"ע"` לפי הקשר (לפחות `"א"` כברירת מחדל)
+## ארכיטקטורה
+- כדי לא לשכפל קוד, הופכים את כל טפסי ה־Dialog הקיימים לקבל `initialValues` ו־`mode: "add" \| "edit"`. אם `edit` — קוראים `update().eq("id", item.id)` במקום `insert`.
+- מוסיפים `<ItemActions onEdit onDelete />` קטן — שני כפתורי `ghost`/`icon` שמופיעים בכל שורה (תואם לסגנון `Pencil` ו־`Trash2` שכבר בשימוש בכותרת הכרטיס).
 
-### 3. הרכבה לעברית
-- בעברית להחזיר בסדר `פרטי משפחה` (לא `משפחה פרטי` כפי שיוצא היום)
-- לשמור גם את האנגלית המקורית (כפי שכבר נשמרת ב־`displayName`)
-
-### 4. תצוגה מקדימה לעריכה ידנית
-התא של "שם (עברית)" ב־`_app.import.tsx` כבר ניתן לעריכה — משאירים כך, רק שעכשיו ערך הברירת־מחדל יהיה הרבה יותר קרוב לנכון.
-
-## קבצים שישתנו
-
-- `src/lib/he-translit.ts` — הרחבת מילון, תיקון `E`, שיפור `splitConcatenated`
-- `src/lib/import-reservations.ts` — `parsePassengerName` חדשה + שימוש בה ב־`mapRow`
-- `src/routes/_app.import.tsx` — ללא שינוי לוגי (רק יציג את הערכים החדשים)
+## קובץ שישתנה
+- `src/routes/_app.customers.$id.tsx` בלבד.
 
 ## מחוץ לטווח
-
-- תרגום מושלם של כל שם אפשרי (תרגום מאנגלית לעברית בשמות הוא תמיד הערכה — לכן השדה נשאר ניתן לעריכה ידנית).
-- שינוי סכמת DB.
+- שינויי סכמה.
+- עריכת רשומות מתוך לשוניות גלובליות אחרות (למשל `/flights`, `/payments`) — הבקשה היא לכרטיס הלקוח.
