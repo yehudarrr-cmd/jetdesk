@@ -736,21 +736,36 @@ function ConversationsTab({ customerId, items }: { customerId: string; items: an
 
 function DocumentsTab({ customerId, items }: { customerId: string; items: any[] }) {
   const qc = useQueryClient();
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
   const [category, setCategory] = useState("other");
+  const [uploading, setUploading] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [editForm, setEditForm] = useState({ file_name: "", file_url: "", category: "other" });
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
 
-  const add = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { error } = await supabase.from("documents").insert({ customer_id: customerId, file_name: name, file_url: url, category: category as any });
-    if (error) { toast.error(error.message); return; }
-    refresh();
-    setName(""); setUrl("");
+  const onFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("יש להתחבר"); return; }
+      for (const file of Array.from(files)) {
+        const safe = file.name.replace(/[^\w.\-]+/g, "_");
+        const path = `${user.id}/${customerId}/${Date.now()}-${safe}`;
+        const { error: upErr } = await supabase.storage.from("customer-files").upload(path, file, { contentType: file.type });
+        if (upErr) { toast.error(upErr.message); continue; }
+        const { data: signed } = await supabase.storage.from("customer-files").createSignedUrl(path, 60 * 60 * 24 * 365);
+        const { error } = await supabase.from("documents").insert({
+          customer_id: customerId, file_name: file.name,
+          file_url: signed?.signedUrl ?? path, file_type: file.type,
+          category: category as any,
+        });
+        if (error) toast.error(error.message);
+      }
+      toast.success("הקבצים הועלו");
+      refresh();
+    } finally { setUploading(false); }
   };
   const openEdit = (d: any) => {
     setEditing(d);
@@ -793,12 +808,20 @@ function DocumentsTab({ customerId, items }: { customerId: string; items: any[] 
 
   return (
     <Card className="p-6 space-y-4">
-      <form onSubmit={add} className="grid md:grid-cols-4 gap-2">
-        <Input placeholder="שם קובץ" value={name} onChange={(e) => setName(e.target.value)} required />
-        <Input placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} required dir="ltr" />
-        <CategorySelect value={category} onChange={setCategory} />
-        <Button type="submit">הוסף</Button>
-      </form>
+      <div className="grid md:grid-cols-[1fr_auto] gap-3 items-end">
+        <div className="grid sm:grid-cols-2 gap-2">
+          <div>
+            <Label className="mb-1.5 block">קטגוריה</Label>
+            <CategorySelect value={category} onChange={setCategory} />
+          </div>
+          <div>
+            <Label className="mb-1.5 block">קובץ (PDF, תמונה וכו׳)</Label>
+            <Input type="file" multiple accept="image/*,application/pdf,.doc,.docx" disabled={uploading}
+              onChange={(e) => { onFiles(e.target.files); e.currentTarget.value = ""; }} />
+          </div>
+        </div>
+        {uploading && <div className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> מעלה...</div>}
+      </div>
       <div className="space-y-2">
         {items.map((d) => (
           <div key={d.id} className="flex items-center justify-between border border-border rounded p-3 hover:bg-muted/30">
