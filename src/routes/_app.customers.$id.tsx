@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, Loader2, FileText, ScanLine, User } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
