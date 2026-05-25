@@ -51,10 +51,12 @@ function CustomerCardPage() {
         supabase.from("conversations").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
         supabase.from("timeline_events").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
       ]);
+      const passports = await supabase.from("passports").select("*").eq("customer_id", id).order("created_at", { ascending: false });
       return {
         flights: flights.data ?? [], hotels: hotels.data ?? [], cars: cars.data ?? [],
         transfers: transfers.data ?? [], docs: docs.data ?? [], payments: payments.data ?? [],
         tasks: tasks.data ?? [], notes: notes.data ?? [], timeline: timeline.data ?? [],
+        passports: passports.data ?? [],
       };
     },
   });
