@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, Loader2, FileText, ScanLine, User } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
@@ -51,10 +51,12 @@ function CustomerCardPage() {
         supabase.from("conversations").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
         supabase.from("timeline_events").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
       ]);
+      const passports = await supabase.from("passports").select("*").eq("customer_id", id).order("created_at", { ascending: false });
       return {
         flights: flights.data ?? [], hotels: hotels.data ?? [], cars: cars.data ?? [],
         transfers: transfers.data ?? [], docs: docs.data ?? [], payments: payments.data ?? [],
         tasks: tasks.data ?? [], notes: notes.data ?? [], timeline: timeline.data ?? [],
+        passports: passports.data ?? [],
       };
     },
   });
@@ -150,6 +152,7 @@ function CustomerCardPage() {
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="overview">סקירה</TabsTrigger>
           <TabsTrigger value="conversations">שיחות</TabsTrigger>
+          <TabsTrigger value="passports">דרכונים</TabsTrigger>
           <TabsTrigger value="flights">טיסות</TabsTrigger>
           <TabsTrigger value="hotels">מלונות</TabsTrigger>
           <TabsTrigger value="cars">רכב</TabsTrigger>
@@ -178,6 +181,10 @@ function CustomerCardPage() {
 
         <TabsContent value="conversations" className="mt-4">
           <ConversationsTab customerId={id} items={related.data?.notes ?? []} />
+        </TabsContent>
+
+        <TabsContent value="passports" className="mt-4">
+          <PassportsTab customerId={id} items={related.data?.passports ?? []} />
         </TabsContent>
 
         <TabsContent value="flights" className="mt-4">
@@ -729,21 +736,36 @@ function ConversationsTab({ customerId, items }: { customerId: string; items: an
 
 function DocumentsTab({ customerId, items }: { customerId: string; items: any[] }) {
   const qc = useQueryClient();
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
   const [category, setCategory] = useState("other");
+  const [uploading, setUploading] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [editForm, setEditForm] = useState({ file_name: "", file_url: "", category: "other" });
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
 
-  const add = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { error } = await supabase.from("documents").insert({ customer_id: customerId, file_name: name, file_url: url, category: category as any });
-    if (error) { toast.error(error.message); return; }
-    refresh();
-    setName(""); setUrl("");
+  const onFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("יש להתחבר"); return; }
+      for (const file of Array.from(files)) {
+        const safe = file.name.replace(/[^\w.\-]+/g, "_");
+        const path = `${user.id}/${customerId}/${Date.now()}-${safe}`;
+        const { error: upErr } = await supabase.storage.from("customer-files").upload(path, file, { contentType: file.type });
+        if (upErr) { toast.error(upErr.message); continue; }
+        const { data: signed } = await supabase.storage.from("customer-files").createSignedUrl(path, 60 * 60 * 24 * 365);
+        const { error } = await supabase.from("documents").insert({
+          customer_id: customerId, file_name: file.name,
+          file_url: signed?.signedUrl ?? path, file_type: file.type,
+          category: category as any,
+        });
+        if (error) toast.error(error.message);
+      }
+      toast.success("הקבצים הועלו");
+      refresh();
+    } finally { setUploading(false); }
   };
   const openEdit = (d: any) => {
     setEditing(d);
@@ -786,12 +808,20 @@ function DocumentsTab({ customerId, items }: { customerId: string; items: any[] 
 
   return (
     <Card className="p-6 space-y-4">
-      <form onSubmit={add} className="grid md:grid-cols-4 gap-2">
-        <Input placeholder="שם קובץ" value={name} onChange={(e) => setName(e.target.value)} required />
-        <Input placeholder="URL" value={url} onChange={(e) => setUrl(e.target.value)} required dir="ltr" />
-        <CategorySelect value={category} onChange={setCategory} />
-        <Button type="submit">הוסף</Button>
-      </form>
+      <div className="grid md:grid-cols-[1fr_auto] gap-3 items-end">
+        <div className="grid sm:grid-cols-2 gap-2">
+          <div>
+            <Label className="mb-1.5 block">קטגוריה</Label>
+            <CategorySelect value={category} onChange={setCategory} />
+          </div>
+          <div>
+            <Label className="mb-1.5 block">קובץ (PDF, תמונה וכו׳)</Label>
+            <Input type="file" multiple accept="image/*,application/pdf,.doc,.docx" disabled={uploading}
+              onChange={(e) => { onFiles(e.target.files); e.currentTarget.value = ""; }} />
+          </div>
+        </div>
+        {uploading && <div className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> מעלה...</div>}
+      </div>
       <div className="space-y-2">
         {items.map((d) => (
           <div key={d.id} className="flex items-center justify-between border border-border rounded p-3 hover:bg-muted/30">
@@ -1154,6 +1184,162 @@ function TimelineTab({ customerId, items }: { customerId: string; items: any[] }
           </div>
         ))}
         {items.length === 0 && <div className="text-muted-foreground text-center py-6">אין אירועים בציר הזמן</div>}
+      </div>
+    </Card>
+  );
+}
+
+function CopyField({ label, value, icon, dir = "ltr" }: { label: string; value: string | null | undefined; icon?: React.ReactNode; dir?: "ltr" | "rtl" }) {
+  const v = value ?? "";
+  const copy = async () => {
+    if (!v) return;
+    try { await navigator.clipboard.writeText(v); toast.success("הועתק"); } catch { toast.error("שגיאה בהעתקה"); }
+  };
+  return (
+    <div>
+      <Label className="mb-1.5 flex items-center gap-1.5 text-xs text-muted-foreground justify-end">
+        {label}
+        {icon}
+      </Label>
+      <div className="flex items-stretch gap-1">
+        <Button type="button" variant="outline" size="icon" className="h-9 w-9 shrink-0" onClick={copy} disabled={!v} title="העתק">
+          <Copy className="h-4 w-4" />
+        </Button>
+        <Input dir={dir} readOnly value={v} className="bg-muted/40 text-center font-medium" />
+      </div>
+    </div>
+  );
+}
+
+function PassportsTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const [uploading, setUploading] = useState(false);
+  const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { toast.error("יש להתחבר"); return; }
+      // 1. upload to storage
+      const safe = file.name.replace(/[^\w.\-]+/g, "_");
+      const path = `${user.id}/${customerId}/${Date.now()}-${safe}`;
+      const { error: upErr } = await supabase.storage.from("passports").upload(path, file, { contentType: file.type });
+      if (upErr) { toast.error(upErr.message); return; }
+      const { data: signed } = await supabase.storage.from("passports").createSignedUrl(path, 60 * 60 * 24 * 365);
+      const imageUrl = signed?.signedUrl ?? null;
+
+      // 2. read as base64 and call extract function
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => {
+          const s = String(r.result);
+          const idx = s.indexOf(",");
+          resolve(idx >= 0 ? s.slice(idx + 1) : s);
+        };
+        r.onerror = () => reject(r.error);
+        r.readAsDataURL(file);
+      });
+
+      toast.info("מנתח את הדרכון...");
+      const { data, error } = await supabase.functions.invoke("extract-passport", {
+        body: { image_base64: base64, mime_type: file.type },
+      });
+      if (error) { toast.error(error.message); return; }
+      const ex = (data as any)?.extracted ?? {};
+
+      const { error: insErr } = await supabase.from("passports").insert({
+        customer_id: customerId,
+        image_url: imageUrl,
+        first_name: ex.first_name ?? null,
+        last_name: ex.last_name ?? null,
+        passport_number: ex.passport_number ?? null,
+        date_of_birth: ex.date_of_birth ?? null,
+        issue_date: ex.issue_date ?? null,
+        expiry_date: ex.expiry_date ?? null,
+        nationality: ex.nationality ?? null,
+        sex: ex.sex ?? null,
+        place_of_birth: ex.place_of_birth ?? null,
+        issuing_country: ex.issuing_country ?? null,
+        raw_extracted: ex,
+      });
+      if (insErr) { toast.error(insErr.message); return; }
+      toast.success("הדרכון נוסף וחולץ");
+      refresh();
+    } finally { setUploading(false); }
+  };
+
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("passports").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("הדרכון נמחק");
+    refresh();
+  };
+
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h3 className="font-semibold flex items-center gap-2"><ScanLine className="h-4 w-4" /> דרכונים ({items.length})</h3>
+          <p className="text-xs text-muted-foreground mt-1">העלה תמונה / סריקה של דרכון או ת״ז — הנתונים יחולצו אוטומטית</p>
+        </div>
+        <label className="inline-flex">
+          <input type="file" className="hidden" accept="image/*,application/pdf" disabled={uploading}
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.currentTarget.value = ""; }} />
+          <Button asChild size="sm" className="gap-1" disabled={uploading}>
+            <span>{uploading ? <><Loader2 className="h-4 w-4 animate-spin" /> מעבד...</> : <><Upload className="h-4 w-4" /> העלה דרכון</>}</span>
+          </Button>
+        </label>
+      </div>
+
+      <div className="space-y-4">
+        {items.map((p) => (
+          <Card key={p.id} className="p-5 bg-muted/20" dir="rtl">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+              <div>
+                <div className="font-bold text-lg">{[p.first_name, p.last_name].filter(Boolean).join(" ") || "—"}</div>
+                <div className="text-xs text-muted-foreground mt-1 flex items-center gap-3 flex-wrap" dir="ltr">
+                  {p.passport_number && <span>📄 {p.passport_number}</span>}
+                  {p.date_of_birth && <span>🎂 {p.date_of_birth}</span>}
+                  {p.expiry_date && <span>⏳ {p.expiry_date}</span>}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {p.image_url && (
+                  <a href={p.image_url} target="_blank" rel="noreferrer" className="shrink-0">
+                    <img src={p.image_url} alt="passport" className="h-16 w-24 object-cover rounded border border-border" />
+                  </a>
+                )}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent dir="rtl">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>מחיקת דרכון</AlertDialogTitle>
+                      <AlertDialogDescription>למחוק את הדרכון של {[p.first_name, p.last_name].filter(Boolean).join(" ") || "הלקוח"}?</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>ביטול</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => remove(p.id)} className="bg-destructive text-destructive-foreground">מחק</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <CopyField label="שם פרטי" value={p.first_name} icon={<User className="h-3 w-3" />} />
+              <CopyField label="שם משפחה" value={p.last_name} icon={<User className="h-3 w-3" />} />
+              <CopyField label="ת. לידה" value={p.date_of_birth} />
+              <CopyField label="מס׳ דרכון" value={p.passport_number} />
+              <CopyField label="תוקף" value={p.expiry_date} />
+              <CopyField label="הנפקה" value={p.issue_date} />
+              <CopyField label="לאום" value={p.nationality} />
+              <CopyField label="מין" value={p.sex} />
+            </div>
+          </Card>
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-8 border border-dashed border-border rounded-lg">אין דרכונים. העלה תמונה כדי להתחיל.</div>}
       </div>
     </Card>
   );

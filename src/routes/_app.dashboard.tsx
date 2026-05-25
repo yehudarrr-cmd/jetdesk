@@ -1,18 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDateTime, hoursUntil } from "@/lib/format";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
-import { Plane, Wallet, AlertTriangle, CheckCircle2, MessageCircle, Clock } from "lucide-react";
+import { Plane, Wallet, AlertTriangle, CheckCircle2, MessageCircle, Clock, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/_app/dashboard")({
   component: DashboardPage,
 });
 
 function DashboardPage() {
+  const [openPanel, setOpenPanel] = useState<null | "flights" | "balances">(null);
   const stats = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
@@ -53,6 +55,37 @@ function DashboardPage() {
     },
   });
 
+  const openFlights = useQuery({
+    queryKey: ["dashboard-open-flights"],
+    enabled: openPanel === "flights",
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("flights")
+        .select("*, customers(id, name, phone, destination)")
+        .gte("departure_datetime", new Date().toISOString())
+        .or("check_in_status.eq.pending,insurance_status.eq.pending,ticket_status.eq.pending")
+        .order("departure_datetime", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const debtors = useQuery({
+    queryKey: ["dashboard-debtors"],
+    enabled: openPanel === "balances",
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("customers")
+        .select("id,name,phone,destination,total_price,amount_paid")
+        .order("name");
+      if (error) throw error;
+      return (data ?? [])
+        .map((c) => ({ ...c, balance: Number(c.total_price ?? 0) - Number(c.amount_paid ?? 0) }))
+        .filter((c) => c.balance > 0)
+        .sort((a, b) => b.balance - a.balance);
+    },
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div>
@@ -62,10 +95,90 @@ function DashboardPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard icon={<Wallet className="h-5 w-5" />} label="סך הכנסות" value={formatCurrency(stats.data?.totalRevenue ?? 0)} accent="primary" />
-        <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="יתרות חוב" value={formatCurrency(stats.data?.balances ?? 0)} accent="warning" />
+        <StatCard icon={<AlertTriangle className="h-5 w-5" />} label="יתרות חוב" value={formatCurrency(stats.data?.balances ?? 0)} accent="warning"
+          active={openPanel === "balances"} onClick={() => setOpenPanel(openPanel === "balances" ? null : "balances")} />
         <StatCard icon={<CheckCircle2 className="h-5 w-5" />} label="משימות דחופות" value={String(stats.data?.urgentTasks ?? 0)} accent="destructive" />
-        <StatCard icon={<Plane className="h-5 w-5" />} label="טיסות עם פעולות פתוחות" value={String(stats.data?.missingDocs ?? 0)} accent="accent" hint="טיסות שיש בהן צ׳ק-אין / ביטוח / כרטיס במצב 'ממתין'" />
+        <StatCard icon={<Plane className="h-5 w-5" />} label="טיסות עם פעולות פתוחות" value={String(stats.data?.missingDocs ?? 0)} accent="accent"
+          hint="טיסות שיש בהן צ׳ק-אין / ביטוח / כרטיס במצב 'ממתין'"
+          active={openPanel === "flights"} onClick={() => setOpenPanel(openPanel === "flights" ? null : "flights")} />
       </div>
+
+      {openPanel === "balances" && (
+        <Card className="overflow-hidden">
+          <div className="p-5 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-warning" /><h2 className="text-lg font-semibold">לקוחות עם יתרת חוב</h2></div>
+            <Badge variant="secondary">{debtors.data?.length ?? 0}</Badge>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/40"><tr className="text-right text-muted-foreground">
+                <th className="px-4 py-3 font-medium">לקוח</th>
+                <th className="px-4 py-3 font-medium">טלפון</th>
+                <th className="px-4 py-3 font-medium">יעד</th>
+                <th className="px-4 py-3 font-medium">מחיר כולל</th>
+                <th className="px-4 py-3 font-medium">שולם</th>
+                <th className="px-4 py-3 font-medium">יתרה</th>
+              </tr></thead>
+              <tbody>
+                {(debtors.data ?? []).map((c: any) => (
+                  <tr key={c.id} className="border-t border-border hover:bg-muted/20">
+                    <td className="px-4 py-3"><Link to="/customers/$id" params={{ id: c.id }} className="text-primary hover:underline font-medium">{c.name}</Link></td>
+                    <td className="px-4 py-3 text-muted-foreground" dir="ltr">{c.phone ?? "—"}</td>
+                    <td className="px-4 py-3">{c.destination ?? "—"}</td>
+                    <td className="px-4 py-3">{formatCurrency(c.total_price)}</td>
+                    <td className="px-4 py-3">{formatCurrency(c.amount_paid)}</td>
+                    <td className="px-4 py-3 font-semibold text-warning">{formatCurrency(c.balance)}</td>
+                  </tr>
+                ))}
+                {(debtors.data ?? []).length === 0 && <tr><td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">{debtors.isLoading ? "טוען..." : "אין יתרות חוב פתוחות"}</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+
+      {openPanel === "flights" && (
+        <Card className="overflow-hidden">
+          <div className="p-5 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-2"><Plane className="h-5 w-5 text-accent" /><h2 className="text-lg font-semibold">טיסות עם פעולות פתוחות</h2></div>
+            <Badge variant="secondary">{openFlights.data?.length ?? 0}</Badge>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/40"><tr className="text-right text-muted-foreground">
+                <th className="px-4 py-3 font-medium">לקוח</th>
+                <th className="px-4 py-3 font-medium">טלפון</th>
+                <th className="px-4 py-3 font-medium">חברה / טיסה</th>
+                <th className="px-4 py-3 font-medium">מסלול</th>
+                <th className="px-4 py-3 font-medium">המראה</th>
+                <th className="px-4 py-3 font-medium">PNR</th>
+                <th className="px-4 py-3 font-medium">צ׳ק-אין</th>
+                <th className="px-4 py-3 font-medium">ביטוח</th>
+                <th className="px-4 py-3 font-medium">כרטיס</th>
+              </tr></thead>
+              <tbody>
+                {(openFlights.data ?? []).map((f: any) => {
+                  const c = f.customers;
+                  return (
+                    <tr key={f.id} className="border-t border-border hover:bg-muted/20">
+                      <td className="px-4 py-3"><Link to="/customers/$id" params={{ id: c?.id }} className="text-primary hover:underline font-medium">{c?.name}</Link></td>
+                      <td className="px-4 py-3 text-muted-foreground" dir="ltr">{c?.phone ?? "—"}</td>
+                      <td className="px-4 py-3">{f.airline ?? "—"} {f.flight_number ?? ""}</td>
+                      <td className="px-4 py-3 text-muted-foreground" dir="ltr">{f.departure_airport ?? "?"} → {f.arrival_airport ?? "?"}</td>
+                      <td className="px-4 py-3">{formatDateTime(f.departure_datetime)}</td>
+                      <td className="px-4 py-3" dir="ltr">{f.pnr ?? "—"}</td>
+                      <td className="px-4 py-3"><StatusDot status={f.check_in_status} /></td>
+                      <td className="px-4 py-3"><StatusDot status={f.insurance_status} /></td>
+                      <td className="px-4 py-3"><StatusDot status={f.ticket_status} /></td>
+                    </tr>
+                  );
+                })}
+                {(openFlights.data ?? []).length === 0 && <tr><td colSpan={9} className="px-4 py-12 text-center text-muted-foreground">{openFlights.isLoading ? "טוען..." : "אין טיסות עם פעולות פתוחות"}</td></tr>}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
 
       <Card className="overflow-hidden">
         <div className="p-5 border-b border-border flex items-center justify-between">
@@ -139,17 +252,19 @@ function DashboardPage() {
   );
 }
 
-function StatCard({ icon, label, value, accent, hint }: { icon: React.ReactNode; label: string; value: string; accent: "primary" | "warning" | "destructive" | "accent"; hint?: string }) {
+function StatCard({ icon, label, value, accent, hint, onClick, active }: { icon: React.ReactNode; label: string; value: string; accent: "primary" | "warning" | "destructive" | "accent"; hint?: string; onClick?: () => void; active?: boolean }) {
   const colors: Record<string, string> = {
     primary: "text-primary bg-primary/10",
     warning: "text-warning bg-warning/10",
     destructive: "text-destructive bg-destructive/10",
     accent: "text-accent bg-accent/10",
   };
+  const clickable = !!onClick;
   return (
-    <Card className="p-5">
+    <Card className={`p-5 ${clickable ? "cursor-pointer transition-all hover:shadow-elegant hover:-translate-y-0.5" : ""} ${active ? "ring-2 ring-primary/50" : ""}`} onClick={onClick}>
       <div className="flex items-center justify-between mb-3">
         <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colors[accent]}`}>{icon}</div>
+        {clickable && <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${active ? "rotate-180" : ""}`} />}
       </div>
       <div className="text-2xl font-bold">{value}</div>
       <div className="text-sm text-muted-foreground mt-1" title={hint}>{label}</div>

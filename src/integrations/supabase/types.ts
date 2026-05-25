@@ -366,6 +366,66 @@ export type Database = {
         }
         Relationships: []
       }
+      passports: {
+        Row: {
+          created_at: string
+          customer_id: string
+          date_of_birth: string | null
+          expiry_date: string | null
+          first_name: string | null
+          id: string
+          image_url: string | null
+          issue_date: string | null
+          issuing_country: string | null
+          last_name: string | null
+          nationality: string | null
+          owner_id: string
+          passport_number: string | null
+          place_of_birth: string | null
+          raw_extracted: Json | null
+          sex: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          date_of_birth?: string | null
+          expiry_date?: string | null
+          first_name?: string | null
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuing_country?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          owner_id?: string
+          passport_number?: string | null
+          place_of_birth?: string | null
+          raw_extracted?: Json | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          date_of_birth?: string | null
+          expiry_date?: string | null
+          first_name?: string | null
+          id?: string
+          image_url?: string | null
+          issue_date?: string | null
+          issuing_country?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          owner_id?: string
+          passport_number?: string | null
+          place_of_birth?: string | null
+          raw_extracted?: Json | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
