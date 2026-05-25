@@ -152,6 +152,7 @@ function CustomerCardPage() {
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="overview">סקירה</TabsTrigger>
           <TabsTrigger value="conversations">שיחות</TabsTrigger>
+          <TabsTrigger value="passports">דרכונים</TabsTrigger>
           <TabsTrigger value="flights">טיסות</TabsTrigger>
           <TabsTrigger value="hotels">מלונות</TabsTrigger>
           <TabsTrigger value="cars">רכב</TabsTrigger>
@@ -180,6 +181,10 @@ function CustomerCardPage() {
 
         <TabsContent value="conversations" className="mt-4">
           <ConversationsTab customerId={id} items={related.data?.notes ?? []} />
+        </TabsContent>
+
+        <TabsContent value="passports" className="mt-4">
+          <PassportsTab customerId={id} items={related.data?.passports ?? []} />
         </TabsContent>
 
         <TabsContent value="flights" className="mt-4">
