@@ -4,8 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Sprout, Phone, Mail, MapPin, Users, Calendar, MessageSquare, ExternalLink } from "lucide-react";
+import { Sprout, Phone, Mail, MapPin, Users, Calendar, MessageSquare, ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_app/leads")({
   component: LeadsPage,
@@ -82,6 +83,13 @@ function LeadsPage() {
 
     await supabase.from("landing_leads").update({ status: "converted" }).eq("id", lead.id);
     toast.success("הליד הומר ללקוח בהצלחה!");
+    refetch();
+  };
+
+  const deleteLead = async (lead: Lead) => {
+    const { error } = await supabase.from("landing_leads").delete().eq("id", lead.id);
+    if (error) { toast.error("שגיאה במחיקה: " + error.message); return; }
+    toast.success("הליד נמחק");
     refetch();
   };
 
@@ -207,6 +215,23 @@ function LeadsPage() {
                         סמן כ"נוצר קשר"
                       </Button>
                     )}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive gap-1.5">
+                          <Trash2 className="w-3.5 h-3.5" /> מחק
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent dir="rtl">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>למחוק את הליד?</AlertDialogTitle>
+                          <AlertDialogDescription>הפעולה תמחק את הליד של {lead.name} לצמיתות.</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>ביטול</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => deleteLead(lead)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">מחק</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </Card>
