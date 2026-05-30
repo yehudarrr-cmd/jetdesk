@@ -27,6 +27,7 @@ import { Route as AppLeadsRouteImport } from './routes/_app.leads'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppImportRouteImport } from './routes/_app.import'
 import { Route as AppFlightsRouteImport } from './routes/_app.flights'
+import { Route as AppEmailIngestRouteImport } from './routes/_app.email-ingest'
 import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
@@ -121,6 +122,11 @@ const AppFlightsRoute = AppFlightsRouteImport.update({
   path: '/flights',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEmailIngestRoute = AppEmailIngestRouteImport.update({
+  id: '/email-ingest',
+  path: '/email-ingest',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDocumentsRoute = AppDocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
+  '/email-ingest': typeof AppEmailIngestRoute
   '/flights': typeof AppFlightsRoute
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
+  '/email-ingest': typeof AppEmailIngestRoute
   '/flights': typeof AppFlightsRoute
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
+  '/_app/email-ingest': typeof AppEmailIngestRoute
   '/_app/flights': typeof AppFlightsRoute
   '/_app/import': typeof AppImportRoute
   '/_app/intake': typeof AppIntakeRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/documents'
+    | '/email-ingest'
     | '/flights'
     | '/import'
     | '/intake'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/documents'
+    | '/email-ingest'
     | '/flights'
     | '/import'
     | '/intake'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_app/dashboard'
     | '/_app/documents'
+    | '/_app/email-ingest'
     | '/_app/flights'
     | '/_app/import'
     | '/_app/intake'
@@ -428,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFlightsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/email-ingest': {
+      id: '/_app/email-ingest'
+      path: '/email-ingest'
+      fullPath: '/email-ingest'
+      preLoaderRoute: typeof AppEmailIngestRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/documents': {
       id: '/_app/documents'
       path: '/documents'
@@ -469,6 +488,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppDocumentsRoute: typeof AppDocumentsRoute
+  AppEmailIngestRoute: typeof AppEmailIngestRoute
   AppFlightsRoute: typeof AppFlightsRoute
   AppImportRoute: typeof AppImportRoute
   AppIntakeRoute: typeof AppIntakeRoute
@@ -483,6 +503,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppDocumentsRoute: AppDocumentsRoute,
+  AppEmailIngestRoute: AppEmailIngestRoute,
   AppFlightsRoute: AppFlightsRoute,
   AppImportRoute: AppImportRoute,
   AppIntakeRoute: AppIntakeRoute,
