@@ -200,6 +200,87 @@ export type Database = {
           },
         ]
       }
+      email_ingest_log: {
+        Row: {
+          created_at: string
+          error: string | null
+          extracted_data: Json | null
+          from_email: string | null
+          gmail_message_id: string
+          id: string
+          matched_customer_id: string | null
+          matched_flight_ids: string[] | null
+          owner_id: string
+          passenger_names: string[] | null
+          pnr: string | null
+          received_at: string | null
+          status: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          extracted_data?: Json | null
+          from_email?: string | null
+          gmail_message_id: string
+          id?: string
+          matched_customer_id?: string | null
+          matched_flight_ids?: string[] | null
+          owner_id?: string
+          passenger_names?: string[] | null
+          pnr?: string | null
+          received_at?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          extracted_data?: Json | null
+          from_email?: string | null
+          gmail_message_id?: string
+          id?: string
+          matched_customer_id?: string | null
+          matched_flight_ids?: string[] | null
+          owner_id?: string
+          passenger_names?: string[] | null
+          pnr?: string | null
+          received_at?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_ingest_state: {
+        Row: {
+          created_at: string
+          id: string
+          last_history_id: string | null
+          last_synced_at: string | null
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_history_id?: string | null
+          last_synced_at?: string | null
+          owner_id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_history_id?: string | null
+          last_synced_at?: string | null
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       flights: {
         Row: {
           airline: string | null
@@ -216,6 +297,8 @@ export type Database = {
           notes: string | null
           owner_id: string
           pnr: string | null
+          source: string | null
+          source_email_id: string | null
           ticket_status: Database["public"]["Enums"]["check_status"] | null
           updated_at: string
         }
@@ -234,6 +317,8 @@ export type Database = {
           notes?: string | null
           owner_id?: string
           pnr?: string | null
+          source?: string | null
+          source_email_id?: string | null
           ticket_status?: Database["public"]["Enums"]["check_status"] | null
           updated_at?: string
         }
@@ -252,6 +337,8 @@ export type Database = {
           notes?: string | null
           owner_id?: string
           pnr?: string | null
+          source?: string | null
+          source_email_id?: string | null
           ticket_status?: Database["public"]["Enums"]["check_status"] | null
           updated_at?: string
         }

@@ -15,6 +15,7 @@ import {
   Menu,
   Sprout,
   Upload,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -27,6 +28,7 @@ const NAV = [
   { to: "/customers", label: "לקוחות", icon: Users },
   { to: "/import", label: "ייבוא הזמנות", icon: Upload },
   { to: "/intake", label: "תיבת קליטה", icon: Inbox },
+  { to: "/email-ingest", label: "סריקת מיילים", icon: Mail },
   { to: "/flights", label: "טיסות", icon: Plane },
   { to: "/tasks", label: "משימות", icon: CheckSquare },
   { to: "/payments", label: "תשלומים", icon: CreditCard },
