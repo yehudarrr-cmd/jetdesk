@@ -14,8 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          amount_paid: number | null
+          booking_number: string | null
+          created_at: string
+          customer_id: string
+          departure_date: string | null
+          destination: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          profit: number | null
+          return_date: string | null
+          status: Database["public"]["Enums"]["booking_trip_status"]
+          title: string | null
+          total_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number | null
+          booking_number?: string | null
+          created_at?: string
+          customer_id: string
+          departure_date?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          profit?: number | null
+          return_date?: string | null
+          status?: Database["public"]["Enums"]["booking_trip_status"]
+          title?: string | null
+          total_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number | null
+          booking_number?: string | null
+          created_at?: string
+          customer_id?: string
+          departure_date?: string | null
+          destination?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          profit?: number | null
+          return_date?: string | null
+          status?: Database["public"]["Enums"]["booking_trip_status"]
+          title?: string | null
+          total_price?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       car_rentals: {
         Row: {
+          booking_id: string | null
           booking_status: Database["public"]["Enums"]["booking_status"] | null
           car_type: string | null
           company_name: string | null
@@ -30,6 +85,7 @@ export type Database = {
           return_location: string | null
         }
         Insert: {
+          booking_id?: string | null
           booking_status?: Database["public"]["Enums"]["booking_status"] | null
           car_type?: string | null
           company_name?: string | null
@@ -44,6 +100,7 @@ export type Database = {
           return_location?: string | null
         }
         Update: {
+          booking_id?: string | null
           booking_status?: Database["public"]["Enums"]["booking_status"] | null
           car_type?: string | null
           company_name?: string | null
@@ -66,6 +123,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      companion_travelers: {
+        Row: {
+          created_at: string
+          customer_id: string
+          date_of_birth: string | null
+          full_name: string
+          id: string
+          nationality: string | null
+          notes: string | null
+          owner_id: string
+          passport_expiry: string | null
+          passport_number: string | null
+          relation: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          date_of_birth?: string | null
+          full_name: string
+          id?: string
+          nationality?: string | null
+          notes?: string | null
+          owner_id?: string
+          passport_expiry?: string | null
+          passport_number?: string | null
+          relation?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          date_of_birth?: string | null
+          full_name?: string
+          id?: string
+          nationality?: string | null
+          notes?: string | null
+          owner_id?: string
+          passport_expiry?: string | null
+          passport_number?: string | null
+          relation?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       conversations: {
         Row: {
@@ -104,11 +206,15 @@ export type Database = {
       }
       customers: {
         Row: {
+          address: string | null
           amount_paid: number | null
           created_at: string
+          date_of_birth: string | null
           destination: string | null
           email: string | null
           id: string
+          id_number: string | null
+          last_contact_at: string | null
           name: string
           notes: string | null
           owner_id: string
@@ -122,11 +228,15 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          address?: string | null
           amount_paid?: number | null
           created_at?: string
+          date_of_birth?: string | null
           destination?: string | null
           email?: string | null
           id?: string
+          id_number?: string | null
+          last_contact_at?: string | null
           name: string
           notes?: string | null
           owner_id?: string
@@ -140,11 +250,15 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          address?: string | null
           amount_paid?: number | null
           created_at?: string
+          date_of_birth?: string | null
           destination?: string | null
           email?: string | null
           id?: string
+          id_number?: string | null
+          last_contact_at?: string | null
           name?: string
           notes?: string | null
           owner_id?: string
@@ -286,6 +400,7 @@ export type Database = {
           airline: string | null
           arrival_airport: string | null
           arrival_datetime: string | null
+          booking_id: string | null
           check_in_status: Database["public"]["Enums"]["check_status"] | null
           created_at: string
           customer_id: string
@@ -306,6 +421,7 @@ export type Database = {
           airline?: string | null
           arrival_airport?: string | null
           arrival_datetime?: string | null
+          booking_id?: string | null
           check_in_status?: Database["public"]["Enums"]["check_status"] | null
           created_at?: string
           customer_id: string
@@ -326,6 +442,7 @@ export type Database = {
           airline?: string | null
           arrival_airport?: string | null
           arrival_datetime?: string | null
+          booking_id?: string | null
           check_in_status?: Database["public"]["Enums"]["check_status"] | null
           created_at?: string
           customer_id?: string
@@ -352,8 +469,48 @@ export type Database = {
           },
         ]
       }
+      frequent_flyer_programs: {
+        Row: {
+          airline: string
+          created_at: string
+          customer_id: string
+          id: string
+          member_number: string | null
+          notes: string | null
+          owner_id: string
+          program_name: string | null
+          tier: string | null
+          updated_at: string
+        }
+        Insert: {
+          airline: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          member_number?: string | null
+          notes?: string | null
+          owner_id?: string
+          program_name?: string | null
+          tier?: string | null
+          updated_at?: string
+        }
+        Update: {
+          airline?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          member_number?: string | null
+          notes?: string | null
+          owner_id?: string
+          program_name?: string | null
+          tier?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hotels: {
         Row: {
+          booking_id: string | null
           booking_status: Database["public"]["Enums"]["booking_status"] | null
           check_in_date: string | null
           check_out_date: string | null
@@ -368,6 +525,7 @@ export type Database = {
           room_type: string | null
         }
         Insert: {
+          booking_id?: string | null
           booking_status?: Database["public"]["Enums"]["booking_status"] | null
           check_in_date?: string | null
           check_out_date?: string | null
@@ -382,6 +540,7 @@ export type Database = {
           room_type?: string | null
         }
         Update: {
+          booking_id?: string | null
           booking_status?: Database["public"]["Enums"]["booking_status"] | null
           check_in_date?: string | null
           check_out_date?: string | null
@@ -516,6 +675,7 @@ export type Database = {
       payments: {
         Row: {
           amount: number
+          booking_id: string | null
           created_at: string
           customer_id: string
           id: string
@@ -527,6 +687,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          booking_id?: string | null
           created_at?: string
           customer_id: string
           id?: string
@@ -538,6 +699,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          booking_id?: string | null
           created_at?: string
           customer_id?: string
           id?: string
@@ -793,6 +955,7 @@ export type Database = {
       }
       transfers: {
         Row: {
+          booking_id: string | null
           created_at: string
           customer_id: string
           datetime: string | null
@@ -807,6 +970,7 @@ export type Database = {
           transfer_type: string | null
         }
         Insert: {
+          booking_id?: string | null
           created_at?: string
           customer_id: string
           datetime?: string | null
@@ -821,6 +985,7 @@ export type Database = {
           transfer_type?: string | null
         }
         Update: {
+          booking_id?: string | null
           created_at?: string
           customer_id?: string
           datetime?: string | null
@@ -881,6 +1046,12 @@ export type Database = {
     Enums: {
       app_role: "admin" | "user"
       booking_status: "pending" | "confirmed" | "cancelled"
+      booking_trip_status:
+        | "draft"
+        | "quoted"
+        | "confirmed"
+        | "completed"
+        | "cancelled"
       check_status: "pending" | "done" | "not_required"
       conversation_source: "whatsapp" | "telegram" | "manual"
       document_category:
@@ -1025,6 +1196,13 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user"],
       booking_status: ["pending", "confirmed", "cancelled"],
+      booking_trip_status: [
+        "draft",
+        "quoted",
+        "confirmed",
+        "completed",
+        "cancelled",
+      ],
       check_status: ["pending", "done", "not_required"],
       conversation_source: ["whatsapp", "telegram", "manual"],
       document_category: [
