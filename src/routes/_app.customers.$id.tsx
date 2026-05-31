@@ -432,6 +432,313 @@ function FlightsTab({ customerId, customer, items }: { customerId: string; custo
   );
 }
 
+function BookingsTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const empty = { title: "", booking_number: "", destination: "", departure_date: "", return_date: "", status: "draft", total_price: 0, amount_paid: 0, profit: 0, notes: "" };
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<any>(empty);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+  const openAdd = () => { setEditingId(null); setForm(empty); setOpen(true); };
+  const openEdit = (b: any) => {
+    setEditingId(b.id);
+    setForm({
+      title: b.title ?? "", booking_number: b.booking_number ?? "",
+      destination: b.destination ?? "",
+      departure_date: b.departure_date ?? "", return_date: b.return_date ?? "",
+      status: b.status ?? "draft",
+      total_price: b.total_price ?? 0, amount_paid: b.amount_paid ?? 0, profit: b.profit ?? 0,
+      notes: b.notes ?? "",
+    });
+    setOpen(true);
+  };
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = editingId ? {} : { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { payload[k] = v === "" ? null : v; });
+    const op = editingId
+      ? supabase.from("bookings").update(payload).eq("id", editingId)
+      : supabase.from("bookings").insert(payload);
+    const { error } = await op;
+    if (error) { toast.error(error.message); return; }
+    toast.success(editingId ? "ההזמנה עודכנה" : "הזמנה נוספה");
+    refresh();
+    setOpen(false);
+  };
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("ההזמנה נמחקה");
+    refresh();
+  };
+
+  const statusBadge = (s: string) => {
+    const map: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
+      draft: { label: "טיוטה", variant: "outline" },
+      quoted: { label: "הצעת מחיר", variant: "secondary" },
+      confirmed: { label: "מאושר", variant: "default" },
+      completed: { label: "הושלם", variant: "secondary" },
+      cancelled: { label: "בוטל", variant: "destructive" },
+    };
+    const m = map[s] ?? { label: s, variant: "outline" as const };
+    return <Badge variant={m.variant}>{m.label}</Badge>;
+  };
+
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold flex items-center gap-2"><Plane className="h-4 w-4" /> היסטוריית נסיעות והזמנות ({items.length})</h3>
+        <Button size="sm" className="gap-1" onClick={openAdd}><Plus className="h-4 w-4" /> הוסף הזמנה חדשה</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent dir="rtl" className="max-w-2xl">
+          <DialogHeader><DialogTitle>{editingId ? "עריכת הזמנה" : "הזמנה חדשה"}</DialogTitle></DialogHeader>
+          <form onSubmit={submit} className="grid grid-cols-2 gap-3">
+            <div className="col-span-2"><Field label="כותרת"><Input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="למשל: חופשה בפראג ספטמבר 2026" /></Field></div>
+            <Field label="מספר הזמנה"><Input dir="ltr" value={form.booking_number} onChange={(e) => setForm({ ...form, booking_number: e.target.value })} /></Field>
+            <Field label="יעד"><Input value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} /></Field>
+            <Field label="תאריך יציאה"><Input type="date" value={form.departure_date} onChange={(e) => setForm({ ...form, departure_date: e.target.value })} /></Field>
+            <Field label="תאריך חזרה"><Input type="date" value={form.return_date} onChange={(e) => setForm({ ...form, return_date: e.target.value })} /></Field>
+            <Field label="סטטוס">
+              <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">טיוטה</SelectItem>
+                  <SelectItem value="quoted">הצעת מחיר</SelectItem>
+                  <SelectItem value="confirmed">מאושר</SelectItem>
+                  <SelectItem value="completed">הושלם</SelectItem>
+                  <SelectItem value="cancelled">בוטל</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="מחיר כולל"><Input type="number" step="0.01" value={form.total_price} onChange={(e) => setForm({ ...form, total_price: Number(e.target.value) })} /></Field>
+            <Field label="שולם"><Input type="number" step="0.01" value={form.amount_paid} onChange={(e) => setForm({ ...form, amount_paid: Number(e.target.value) })} /></Field>
+            <Field label="רווח"><Input type="number" step="0.01" value={form.profit} onChange={(e) => setForm({ ...form, profit: Number(e.target.value) })} /></Field>
+            <div className="col-span-2"><Field label="הערות"><Textarea rows={3} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+            <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="space-y-3">
+        {items.map((b) => {
+          const bal = Number(b.total_price ?? 0) - Number(b.amount_paid ?? 0);
+          return (
+            <div key={b.id} className="border border-border rounded-lg p-4 space-y-2">
+              <div className="flex items-start justify-between gap-2 flex-wrap">
+                <div className="min-w-0">
+                  <div className="font-semibold flex items-center gap-2 flex-wrap">
+                    {b.title || "(ללא כותרת)"}
+                    {statusBadge(b.status)}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 flex items-center gap-3 flex-wrap">
+                    {b.destination && <span>📍 {b.destination}</span>}
+                    {b.departure_date && <span>🛫 {formatDate(b.departure_date)}</span>}
+                    {b.return_date && <span>🛬 {formatDate(b.return_date)}</span>}
+                    {b.booking_number && <span dir="ltr">#{b.booking_number}</span>}
+                  </div>
+                </div>
+                <RowActions onEdit={() => openEdit(b)} onDelete={() => remove(b.id)} confirmText={`למחוק את "${b.title ?? "ההזמנה"}"?`} />
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t border-border text-sm">
+                <div><span className="text-muted-foreground">מחיר: </span>{formatCurrency(b.total_price)}</div>
+                <div><span className="text-muted-foreground">שולם: </span>{formatCurrency(b.amount_paid)}</div>
+                <div className={bal > 0 ? "text-warning" : "text-success"}><span className="text-muted-foreground">יתרה: </span>{formatCurrency(bal)}</div>
+                <div className="text-success font-medium"><span className="text-muted-foreground">רווח: </span>{formatCurrency(b.profit)}</div>
+              </div>
+              {b.notes && <div className="text-sm text-muted-foreground pt-2 border-t border-border whitespace-pre-wrap">{b.notes}</div>}
+            </div>
+          );
+        })}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-8 border border-dashed border-border rounded-lg">אין הזמנות עדיין. לחץ "הוסף הזמנה חדשה" כדי להתחיל.</div>}
+      </div>
+    </Card>
+  );
+}
+
+function FrequentFlyerTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const empty = { airline: "", program_name: "", member_number: "", tier: "", notes: "" };
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState(empty);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+  const openAdd = () => { setEditingId(null); setForm(empty); setOpen(true); };
+  const openEdit = (r: any) => {
+    setEditingId(r.id);
+    setForm({ airline: r.airline ?? "", program_name: r.program_name ?? "", member_number: r.member_number ?? "", tier: r.tier ?? "", notes: r.notes ?? "" });
+    setOpen(true);
+  };
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = editingId ? {} : { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { payload[k] = v === "" ? null : v; });
+    const op = editingId
+      ? supabase.from("frequent_flyer_programs").update(payload).eq("id", editingId)
+      : supabase.from("frequent_flyer_programs").insert(payload);
+    const { error } = await op;
+    if (error) { toast.error(error.message); return; }
+    toast.success(editingId ? "המועדון עודכן" : "מועדון נוסע נוסף");
+    refresh();
+    setOpen(false);
+  };
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("frequent_flyer_programs").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("המועדון נמחק");
+    refresh();
+  };
+  const copy = async (v: string | null) => {
+    if (!v) return;
+    try { await navigator.clipboard.writeText(v); toast.success("הועתק"); } catch { toast.error("שגיאה"); }
+  };
+
+  const suggestions = ["EL AL Matmid", "Lufthansa Miles & More", "Air France/KLM Flying Blue", "Turkish Airlines Miles&Smiles", "Emirates Skywards", "Aegean Miles+Bonus", "British Airways Executive Club", "United MileagePlus"];
+
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold flex items-center gap-2"><Award className="h-4 w-4" /> מועדוני נוסע מתמיד ({items.length})</h3>
+        <Button size="sm" className="gap-1" onClick={openAdd}><Plus className="h-4 w-4" /> הוסף מועדון</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent dir="rtl">
+          <DialogHeader><DialogTitle>{editingId ? "עריכת מועדון" : "מועדון נוסע חדש"}</DialogTitle></DialogHeader>
+          <form onSubmit={submit} className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <Field label="חברת תעופה / מועדון">
+                <Input required value={form.airline} onChange={(e) => setForm({ ...form, airline: e.target.value })} list="ffp-airlines" placeholder="EL AL" />
+                <datalist id="ffp-airlines">
+                  {suggestions.map((s) => <option key={s} value={s} />)}
+                </datalist>
+              </Field>
+            </div>
+            <Field label="שם תוכנית"><Input value={form.program_name} onChange={(e) => setForm({ ...form, program_name: e.target.value })} placeholder="Matmid / Miles & More" /></Field>
+            <Field label="מספר נוסע מתמיד"><Input dir="ltr" value={form.member_number} onChange={(e) => setForm({ ...form, member_number: e.target.value })} /></Field>
+            <Field label="סטטוס / Tier"><Input value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })} placeholder="Silver / Gold / Platinum" /></Field>
+            <div className="col-span-2"><Field label="הערות"><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+            <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="space-y-2">
+        {items.map((r) => (
+          <div key={r.id} className="border border-border rounded-lg p-4 flex items-start justify-between gap-3 flex-wrap">
+            <div className="min-w-0 space-y-1">
+              <div className="font-semibold">{r.airline}{r.program_name ? ` — ${r.program_name}` : ""}</div>
+              <div className="flex items-center gap-2 flex-wrap text-sm">
+                {r.member_number && (
+                  <button onClick={() => copy(r.member_number)} className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-muted hover:bg-muted/70" dir="ltr" title="העתק">
+                    <Copy className="h-3 w-3" /> {r.member_number}
+                  </button>
+                )}
+                {r.tier && <Badge variant="secondary">{r.tier}</Badge>}
+              </div>
+              {r.notes && <div className="text-xs text-muted-foreground">{r.notes}</div>}
+            </div>
+            <RowActions onEdit={() => openEdit(r)} onDelete={() => remove(r.id)} confirmText={`למחוק את המועדון ${r.airline}?`} />
+          </div>
+        ))}
+        {items.length === 0 && <div className="text-muted-foreground text-center py-8 border border-dashed border-border rounded-lg">אין מועדוני נוסע. הוסף את חברות התעופה שהלקוח חבר בהן.</div>}
+      </div>
+    </Card>
+  );
+}
+
+function CompanionsTab({ customerId, items }: { customerId: string; items: any[] }) {
+  const qc = useQueryClient();
+  const empty = { full_name: "", relation: "", date_of_birth: "", passport_number: "", passport_expiry: "", nationality: "", notes: "" };
+  const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState(empty);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["customer-related", customerId] });
+  const openAdd = () => { setEditingId(null); setForm(empty); setOpen(true); };
+  const openEdit = (r: any) => {
+    setEditingId(r.id);
+    setForm({
+      full_name: r.full_name ?? "", relation: r.relation ?? "",
+      date_of_birth: r.date_of_birth ?? "",
+      passport_number: r.passport_number ?? "", passport_expiry: r.passport_expiry ?? "",
+      nationality: r.nationality ?? "", notes: r.notes ?? "",
+    });
+    setOpen(true);
+  };
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: any = editingId ? {} : { customer_id: customerId };
+    Object.entries(form).forEach(([k, v]) => { payload[k] = v === "" ? null : v; });
+    const op = editingId
+      ? supabase.from("companion_travelers").update(payload).eq("id", editingId)
+      : supabase.from("companion_travelers").insert(payload);
+    const { error } = await op;
+    if (error) { toast.error(error.message); return; }
+    toast.success(editingId ? "הנוסע עודכן" : "נוסע נלווה נוסף");
+    refresh();
+    setOpen(false);
+  };
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("companion_travelers").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("הנוסע נמחק");
+    refresh();
+  };
+
+  return (
+    <Card className="p-6 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold flex items-center gap-2"><Users className="h-4 w-4" /> נוסעים קבועים נלווים ({items.length})</h3>
+        <Button size="sm" className="gap-1" onClick={openAdd}><Plus className="h-4 w-4" /> הוסף נוסע</Button>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent dir="rtl" className="max-w-2xl">
+          <DialogHeader><DialogTitle>{editingId ? "עריכת נוסע" : "נוסע נלווה חדש"}</DialogTitle></DialogHeader>
+          <form onSubmit={submit} className="grid grid-cols-2 gap-3">
+            <Field label="שם מלא"><Input required value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} /></Field>
+            <Field label="קרבה / יחס">
+              <Input value={form.relation} onChange={(e) => setForm({ ...form, relation: e.target.value })} list="comp-relations" placeholder="בן/בת זוג / ילד / הורה" />
+              <datalist id="comp-relations">
+                <option value="בן/בת זוג" />
+                <option value="ילד/ה" />
+                <option value="הורה" />
+                <option value="אח/אחות" />
+                <option value="שותף לנסיעה" />
+              </datalist>
+            </Field>
+            <Field label="תאריך לידה"><Input type="date" value={form.date_of_birth} onChange={(e) => setForm({ ...form, date_of_birth: e.target.value })} /></Field>
+            <Field label="לאום"><Input value={form.nationality} onChange={(e) => setForm({ ...form, nationality: e.target.value })} /></Field>
+            <Field label="מספר דרכון"><Input dir="ltr" value={form.passport_number} onChange={(e) => setForm({ ...form, passport_number: e.target.value })} /></Field>
+            <Field label="תוקף דרכון"><Input type="date" value={form.passport_expiry} onChange={(e) => setForm({ ...form, passport_expiry: e.target.value })} /></Field>
+            <div className="col-span-2"><Field label="הערות"><Textarea rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></Field></div>
+            <DialogFooter className="col-span-2"><Button type="submit">שמור</Button></DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <div className="grid md:grid-cols-2 gap-3">
+        {items.map((r) => (
+          <div key={r.id} className="border border-border rounded-lg p-4 space-y-2">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="font-semibold">{r.full_name}</div>
+                {r.relation && <div className="text-xs text-muted-foreground">{r.relation}</div>}
+              </div>
+              <RowActions onEdit={() => openEdit(r)} onDelete={() => remove(r.id)} confirmText={`למחוק את ${r.full_name}?`} />
+            </div>
+            <div className="text-sm space-y-1 text-muted-foreground">
+              {r.date_of_birth && <div>🎂 {formatDate(r.date_of_birth)}</div>}
+              {r.passport_number && <div dir="ltr">📄 {r.passport_number}{r.passport_expiry ? ` (תוקף: ${formatDate(r.passport_expiry)})` : ""}</div>}
+              {r.nationality && <div>🌍 {r.nationality}</div>}
+              {r.notes && <div className="pt-1 border-t border-border whitespace-pre-wrap">{r.notes}</div>}
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <div className="md:col-span-2 text-muted-foreground text-center py-8 border border-dashed border-border rounded-lg">אין נוסעים נלווים. הוסף בני משפחה או שותפים לנסיעות כדי לחסוך הקלדה חוזרת.</div>}
+      </div>
+    </Card>
+  );
+}
+
 function PaymentsTab({ customerId, items, totalPaid }: { customerId: string; items: any[]; totalPaid: number }) {
   const qc = useQueryClient();
   const [amount, setAmount] = useState("");
