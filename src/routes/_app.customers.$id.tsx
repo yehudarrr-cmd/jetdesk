@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, Loader2, FileText, ScanLine, User } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, Loader2, FileText, ScanLine, User, Plane, Users, Award } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
@@ -40,7 +40,7 @@ function CustomerCardPage() {
   const related = useQuery({
     queryKey: ["customer-related", id],
     queryFn: async () => {
-      const [flights, hotels, cars, transfers, docs, payments, tasks, notes, timeline] = await Promise.all([
+      const [flights, hotels, cars, transfers, docs, payments, tasks, notes, timeline, bookings, ffp, companions] = await Promise.all([
         supabase.from("flights").select("*").eq("customer_id", id).order("departure_datetime"),
         supabase.from("hotels").select("*").eq("customer_id", id).order("check_in_date"),
         supabase.from("car_rentals").select("*").eq("customer_id", id).order("pickup_datetime"),
@@ -50,6 +50,9 @@ function CustomerCardPage() {
         supabase.from("tasks").select("*").eq("customer_id", id).order("due_date"),
         supabase.from("conversations").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
         supabase.from("timeline_events").select("*").eq("customer_id", id).order("created_at", { ascending: false }),
+        supabase.from("bookings").select("*").eq("customer_id", id).order("departure_date", { ascending: false, nullsFirst: false }),
+        supabase.from("frequent_flyer_programs").select("*").eq("customer_id", id).order("airline"),
+        supabase.from("companion_travelers").select("*").eq("customer_id", id).order("full_name"),
       ]);
       const passports = await supabase.from("passports").select("*").eq("customer_id", id).order("created_at", { ascending: false });
       return {
@@ -57,6 +60,7 @@ function CustomerCardPage() {
         transfers: transfers.data ?? [], docs: docs.data ?? [], payments: payments.data ?? [],
         tasks: tasks.data ?? [], notes: notes.data ?? [], timeline: timeline.data ?? [],
         passports: passports.data ?? [],
+        bookings: bookings.data ?? [], ffp: ffp.data ?? [], companions: companions.data ?? [],
       };
     },
   });
@@ -66,6 +70,12 @@ function CustomerCardPage() {
   const c = customer.data;
   const balance = Number(c.total_price ?? 0) - Number(c.amount_paid ?? 0);
   const totalPaid = (related.data?.payments ?? []).reduce((s, p) => s + Number(p.amount), 0);
+  const bookings = (related.data?.bookings ?? []) as any[];
+  const totalProfit = bookings.reduce((s, b) => s + Number(b.profit ?? 0), 0);
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const upcoming = bookings.filter((b) => b.departure_date && b.departure_date >= todayIso)
+    .sort((a, b) => String(a.departure_date).localeCompare(String(b.departure_date)))[0];
+  const lastDest = bookings.find((b) => b.destination)?.destination ?? c.destination ?? "—";
 
   const updateField = async (patch: Record<string, any>) => {
     const { error } = await supabase.from("customers").update(patch as any).eq("id", id);
@@ -141,16 +151,23 @@ function CustomerCardPage() {
           </div>
         </div>
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Stat label="הזמנות" value={String(bookings.length)} />
+          <Stat label="סה״כ רווחים" value={formatCurrency(totalProfit)} accent="success" />
+          <Stat label="יעד אחרון" value={lastDest} />
+          <Stat label="הזמנה קרובה" value={upcoming ? `${upcoming.destination ?? ""} • ${formatDate(upcoming.departure_date)}` : "—"} />
           <Stat label="מחיר כולל" value={formatCurrency(c.total_price)} />
           <Stat label="שולם" value={formatCurrency(c.amount_paid)} />
           <Stat label="יתרה" value={formatCurrency(balance)} accent={balance > 0 ? "warning" : "success"} />
-          <Stat label="טיסות" value={String((related.data?.flights ?? []).length)} />
+          <Stat label="יצירת קשר אחרון" value={c.last_contact_at ? formatDateTime(c.last_contact_at) : formatDate(c.created_at)} />
         </div>
       </Card>
 
       <Tabs defaultValue="overview" dir="rtl">
         <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="overview">סקירה</TabsTrigger>
+          <TabsTrigger value="bookings">הזמנות</TabsTrigger>
+          <TabsTrigger value="ffp">מועדוני נוסע</TabsTrigger>
+          <TabsTrigger value="companions">נוסעים נלווים</TabsTrigger>
           <TabsTrigger value="conversations">שיחות</TabsTrigger>
           <TabsTrigger value="passports">דרכונים</TabsTrigger>
           <TabsTrigger value="flights">טיסות</TabsTrigger>
@@ -169,6 +186,10 @@ function CustomerCardPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <Field label="טלפון"><Input dir="ltr" defaultValue={c.phone ?? ""} onBlur={(e) => updateField({ phone: e.target.value })} /></Field>
               <Field label="אימייל"><Input dir="ltr" defaultValue={c.email ?? ""} onBlur={(e) => updateField({ email: e.target.value })} /></Field>
+              <Field label="תעודת זהות"><Input dir="ltr" defaultValue={(c as any).id_number ?? ""} onBlur={(e) => updateField({ id_number: e.target.value })} /></Field>
+              <Field label="תאריך לידה"><Input type="date" defaultValue={(c as any).date_of_birth ?? ""} onBlur={(e) => updateField({ date_of_birth: e.target.value || null })} /></Field>
+              <div className="md:col-span-2"><Field label="כתובת"><Input defaultValue={(c as any).address ?? ""} onBlur={(e) => updateField({ address: e.target.value })} /></Field></div>
+              <Field label="סטטוס"><Input defaultValue={c.status ?? ""} onBlur={(e) => updateField({ status: e.target.value })} /></Field>
               <Field label="יעד"><Input defaultValue={c.destination ?? ""} onBlur={(e) => updateField({ destination: e.target.value })} /></Field>
               <Field label="PNR"><Input dir="ltr" defaultValue={c.pnr ?? ""} onBlur={(e) => updateField({ pnr: e.target.value })} /></Field>
               <Field label="תאריך התחלה"><Input type="date" defaultValue={c.travel_start_date ?? ""} onBlur={(e) => updateField({ travel_start_date: e.target.value || null })} /></Field>
@@ -177,6 +198,18 @@ function CustomerCardPage() {
               <Field label="שולם"><Input type="number" step="0.01" defaultValue={c.amount_paid ?? 0} onBlur={(e) => updateField({ amount_paid: Number(e.target.value) })} /></Field>
             </div>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="bookings" className="mt-4">
+          <BookingsTab customerId={id} items={bookings} />
+        </TabsContent>
+
+        <TabsContent value="ffp" className="mt-4">
+          <FrequentFlyerTab customerId={id} items={related.data?.ffp ?? []} />
+        </TabsContent>
+
+        <TabsContent value="companions" className="mt-4">
+          <CompanionsTab customerId={id} items={related.data?.companions ?? []} />
         </TabsContent>
 
         <TabsContent value="conversations" className="mt-4">
