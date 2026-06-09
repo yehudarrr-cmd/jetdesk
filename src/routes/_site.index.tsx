@@ -15,9 +15,12 @@ export const Route = createFileRoute("/_site/")({
       { property: "og:title", content: "גולדטוס - טסים ברמה אחרת" },
       { property: "og:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/") },
       { property: "og:image", content: heroImage },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: heroImage },
+      { name: "twitter:title", content: "גולדטוס - טסים ברמה אחרת" },
+      { name: "twitter:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
     ],
     links: [{ rel: "canonical", href: canonical("/") }],
     scripts: [
