@@ -17,7 +17,6 @@ export const Route = createFileRoute("/_site")({
         url: SITE_URL,
         logo: `${SITE_URL}/logo.png`,
         telephone: "+972-55-775-6660",
-        areaServed: "IL",
         parentOrganization: { "@type": "Organization", name: "אמירים טורס" },
         contactPoint: [
           {
