@@ -15,9 +15,12 @@ export const Route = createFileRoute("/_site/")({
       { property: "og:title", content: "גולדטוס - טסים ברמה אחרת" },
       { property: "og:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: canonical("/") },
       { property: "og:image", content: heroImage },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: heroImage },
+      { name: "twitter:title", content: "גולדטוס - טסים ברמה אחרת" },
+      { name: "twitter:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
     ],
     links: [{ rel: "canonical", href: canonical("/") }],
     scripts: [
@@ -64,7 +67,7 @@ function HomePage() {
         <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 pt-28 sm:pt-32 pb-10">
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-14 items-center">
             <div className="lg:col-span-3 space-y-5 sm:space-y-6 text-center lg:text-right">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-medium leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
                 טיסות וחופשות
                 <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
                   פרימיום בהתאמה אישית
@@ -119,7 +122,7 @@ function HomePage() {
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-10 space-y-2">
             <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">למה גולדטוס</span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight">
               שקט נפשי <span className="text-primary">מהזמנה ועד הנחיתה</span>
             </h2>
           </div>
@@ -143,7 +146,7 @@ function HomePage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-primary tracking-[0.25em] uppercase mb-2">שירותי פרימיום</div>
-                <h3 className="text-lg font-bold">הכל תחת גג אחד</h3>
+                <h3 className="font-display text-xl font-semibold">הכל תחת גג אחד</h3>
                 <p className="text-sm text-muted-foreground mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
               </div>
               <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
@@ -153,7 +156,7 @@ function HomePage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-primary tracking-[0.25em] uppercase mb-2">צור קשר</div>
-                <h3 className="text-lg font-bold">בקשת הצעת מחיר</h3>
+                <h3 className="font-display text-xl font-semibold">בקשת הצעת מחיר</h3>
                 <p className="text-sm text-muted-foreground mt-1">נחזור אליכם בתוך 24 שעות</p>
               </div>
               <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />

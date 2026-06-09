@@ -17,7 +17,6 @@ export const Route = createFileRoute("/_site")({
         url: SITE_URL,
         logo: `${SITE_URL}/logo.png`,
         telephone: "+972-55-775-6660",
-        areaServed: "IL",
         parentOrganization: { "@type": "Organization", name: "אמירים טורס" },
         contactPoint: [
           {
@@ -27,6 +26,25 @@ export const Route = createFileRoute("/_site")({
             availableLanguage: ["he", "en"],
           },
         ],
+        sameAs: [
+          "https://wa.me/972557756660",
+          "https://www.goldtus.com",
+        ],
+        areaServed: { "@type": "Country", name: "Israel" },
+        priceRange: "$$$",
+        knowsLanguage: ["he", "en"],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "שירותי גולדטוס",
+          itemListElement: [
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "טיסות פרימיום ועסקיות" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "מלונות יוקרה ובוטיק" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "השכרת רכב והעברות פרטיות" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "VIP בנתב\"ג" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "נסיעות למגזר הדתי" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "ביטוח נסיעות לחו\"ל" } },
+          ],
+        },
         openingHoursSpecification: [
           { "@type": "OpeningHoursSpecification", dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"], opens: "09:00", closes: "19:00" },
           { "@type": "OpeningHoursSpecification", dayOfWeek: "Friday", opens: "09:00", closes: "13:00" },

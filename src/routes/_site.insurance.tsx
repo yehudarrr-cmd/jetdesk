@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_site/insurance")({
       { name: "description", content: "ביטוח נסיעות לחו\"ל בפספורט קארד דרך גולדטוס - פוליסה דיגיטלית מאובטחת, רכישה עצמאית במהירות, כיסוי מלא לכל יעד." },
       { property: "og:title", content: "ביטוח נסיעות לחו\"ל | גולדטוס" },
       { property: "og:description", content: "סגרו ביטוח נסיעות לחו\"ל לפני הטיסה — דיגיטלי, מהיר ומאובטח." },
+      { property: "og:url", content: canonical("/insurance") },
     ],
     links: [{ rel: "canonical", href: canonical("/insurance") }],
     scripts: [
@@ -60,7 +61,7 @@ function InsurancePage() {
 
             <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">שקט נפשי בנסיעה</span>
 
-            <h1 className="text-3xl sm:text-5xl font-bold leading-tight tracking-tight">
+            <h1 className="font-display text-4xl sm:text-6xl font-medium leading-tight tracking-tight">
               ביטוח נסיעות לחו"ל
               <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-1">
                 סוגרים את זה לפני הטיסה

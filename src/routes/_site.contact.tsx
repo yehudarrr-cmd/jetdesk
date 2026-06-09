@@ -10,6 +10,7 @@ export const Route = createFileRoute("/_site/contact")({
       { name: "description", content: "השאירו פרטים וגולדטוס תחזור אליכם עם הצעה אישית. ניתן ליצור קשר גם בטלפון 055-775-6660 או בוואטסאפ." },
       { property: "og:title", content: "צור קשר | גולדטוס" },
       { property: "og:description", content: "טופס בקשת הצעת מחיר חכם, טלפון וחיבור ישיר לוואטסאפ." },
+      { property: "og:url", content: canonical("/contact") },
     ],
     links: [{ rel: "canonical", href: canonical("/contact") }],
     scripts: [
@@ -28,7 +29,7 @@ function ContactPage() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center space-y-3 mb-10">
           <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">צרו קשר</span>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+          <h1 className="font-display text-4xl sm:text-6xl font-medium tracking-tight">
             בואו נדבר על
             <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-1">
               הנסיעה הבאה שלכם

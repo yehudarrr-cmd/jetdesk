@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_site/privacy")({
 function PrivacyPage() {
   return (
     <article className="max-w-3xl mx-auto px-6 py-14 sm:py-20 prose-invert">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-2">מדיניות פרטיות</h1>
+      <h1 className="font-display text-4xl sm:text-5xl font-medium mb-2">מדיניות פרטיות</h1>
       <p className="text-sm text-muted-foreground mb-8">עודכן לאחרונה: מאי 2026</p>
 
       <div className="space-y-6 text-sm sm:text-base leading-relaxed text-foreground/90">
