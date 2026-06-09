@@ -67,7 +67,7 @@ function HomePage() {
         <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 pt-28 sm:pt-32 pb-10">
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-14 items-center">
             <div className="lg:col-span-3 space-y-5 sm:space-y-6 text-center lg:text-right">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-medium leading-[1.15] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
                 טיסות וחופשות
                 <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent">
                   פרימיום בהתאמה אישית

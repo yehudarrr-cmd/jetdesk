@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_site/services")({
       { name: "description", content: "שירותי הקונסיירז' של גולדטוס: טיסות פרימיום ועסקיות, מלונות יוקרה, השכרת רכב, VIP בנתב\"ג, נסיעות למגזר הדתי וביטוח נסיעות." },
       { property: "og:title", content: "שירותי פרימיום | גולדטוס" },
       { property: "og:description", content: "כל מה שצריך לנסיעת פרימיום — תחת קורת גג אחת." },
+      { property: "og:url", content: canonical("/services") },
     ],
     links: [{ rel: "canonical", href: canonical("/services") }],
     scripts: [
@@ -54,7 +55,7 @@ function ServicesPage() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center space-y-3 mb-10">
           <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">השירותים</span>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+          <h1 className="font-display text-4xl sm:text-6xl font-medium tracking-tight">
             שירותי פרימיום
             <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-1">
               הכל תחת גג אחד

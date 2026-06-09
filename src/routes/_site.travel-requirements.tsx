@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_site/travel-requirements")({
       { name: "description", content: "בדקו תוך שניות את דרישות הויזה, תוקף הדרכון, חיסונים ומסמכים נדרשים לכל יעד בעולם. מנוע חיפוש חכם המבוסס על מקורות רשמיים." },
       { property: "og:title", content: "בדיקת דרישות נסיעה - גולדטוס" },
       { property: "og:description", content: "מנוע חכם לבדיקת ויזה, דרכון, חיסונים ומסמכים לכל יעד בעולם." },
+      { property: "og:url", content: canonical("/travel-requirements") },
     ],
     links: [{ rel: "canonical", href: canonical("/travel-requirements") }],
     scripts: [
@@ -80,7 +81,7 @@ function TravelRequirementsPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 mx-auto rounded-full border border-primary/40 bg-primary/10">
             <Globe className="w-8 h-8 text-primary" strokeWidth={1.5} />
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
+          <h1 className="font-display text-4xl sm:text-6xl font-medium tracking-tight">
             דרישות נסיעה
             <span className="block bg-gradient-to-l from-primary via-primary-glow to-primary bg-clip-text text-transparent mt-1">
               לכל יעד בעולם
