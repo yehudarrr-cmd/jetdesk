@@ -122,7 +122,7 @@ function HomePage() {
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-10 space-y-2">
             <span className="inline-block text-xs tracking-[0.3em] text-primary uppercase">למה גולדטוס</span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight">
               שקט נפשי <span className="text-primary">מהזמנה ועד הנחיתה</span>
             </h2>
           </div>
@@ -146,7 +146,7 @@ function HomePage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-primary tracking-[0.25em] uppercase mb-2">שירותי פרימיום</div>
-                <h3 className="text-lg font-bold">הכל תחת גג אחד</h3>
+                <h3 className="font-display text-xl font-semibold">הכל תחת גג אחד</h3>
                 <p className="text-sm text-muted-foreground mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
               </div>
               <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
@@ -156,7 +156,7 @@ function HomePage() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs text-primary tracking-[0.25em] uppercase mb-2">צור קשר</div>
-                <h3 className="text-lg font-bold">בקשת הצעת מחיר</h3>
+                <h3 className="font-display text-xl font-semibold">בקשת הצעת מחיר</h3>
                 <p className="text-sm text-muted-foreground mt-1">נחזור אליכם בתוך 24 שעות</p>
               </div>
               <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
