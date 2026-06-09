@@ -81,6 +81,9 @@
   --shadow-elegant: 0 20px 60px -20px oklch(0 0 0 / 0.7);
   --shadow-glow: 0 0 60px -8px oklch(0.78 0.13 82 / 0.5);
   --shadow-gold-soft: 0 8px 32px -8px oklch(0.78 0.13 82 / 0.3);
+  /* Typography */
+  --font-display: "Frank Ruhl Libre", "Heebo", Georgia, serif;
+  --font-body: "Heebo", "Assistant", system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
@@ -89,8 +92,12 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: "Heebo", "Assistant", system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.78 0.13 82 / 0.10), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.78 0.13 82 / 0.06), transparent 60%);
+    background-attachment: fixed;
   }
 }
 
@@ -103,6 +110,26 @@
   .shadow-glow { box-shadow: var(--shadow-glow); }
   .shadow-gold-soft { box-shadow: var(--shadow-gold-soft); }
   .text-gold { color: var(--primary); }
+  .font-display { font-family: var(--font-display); font-feature-settings: "ss01", "liga"; letter-spacing: -0.01em; }
+  .text-gold-gradient {
+    background: linear-gradient(135deg, oklch(0.72 0.12 80), oklch(0.92 0.14 90), oklch(0.72 0.12 80));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .gold-hairline {
+    background: linear-gradient(90deg, transparent, oklch(0.78 0.13 82 / 0.6), transparent);
+    height: 1px;
+  }
+  .grain-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
 }
 
 @layer utilities {
