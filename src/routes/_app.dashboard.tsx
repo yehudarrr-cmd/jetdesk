@@ -390,9 +390,9 @@ function LeadsHighlightCard({ count, active, onClick }: { count: number; active:
       onClick={onClick}
       className={`relative cursor-pointer overflow-hidden p-5 transition-all hover:-translate-y-0.5 hover:shadow-2xl border-0 ${
         has
-          ? "bg-gradient-to-l from-pink-500 via-fuchsia-500 to-orange-500 text-white shadow-[0_15px_50px_-12px_rgba(236,72,153,0.55)]"
-          : "bg-gradient-to-l from-pink-500/80 via-fuchsia-500/80 to-orange-500/80 text-white"
-      } ${active ? "ring-4 ring-pink-300/60" : "ring-2 ring-pink-400/30"}`}
+          ? "bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-[0_15px_50px_-12px_rgba(185,28,28,0.55)]"
+          : "bg-gradient-to-l from-red-900/80 via-red-800/80 to-red-950/80 text-white"
+      } ${active ? "ring-4 ring-red-500/60" : "ring-2 ring-red-800/30"}`}
     >
       {has && (
         <span className="absolute inset-0 pointer-events-none animate-pulse bg-gradient-to-l from-white/0 via-white/10 to-white/0" />
