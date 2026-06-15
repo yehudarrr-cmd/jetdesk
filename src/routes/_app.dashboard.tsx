@@ -116,13 +116,13 @@ function DashboardPage() {
       />
 
       {openPanel === "leads" && (
-        <Card className="overflow-hidden border-2 border-pink-500/40 shadow-[0_10px_40px_-10px_rgba(236,72,153,0.35)]">
-          <div className="p-5 border-b border-border flex items-center justify-between bg-gradient-to-r from-pink-500/10 via-fuchsia-500/10 to-orange-500/10">
+        <Card className="overflow-hidden border-2 border-red-900/60 shadow-[0_10px_40px_-10px_rgba(220,38,38,0.35)]">
+          <div className="p-5 border-b border-border flex items-center justify-between bg-gradient-to-r from-red-900/20 via-red-800/20 to-red-950/20">
             <div className="flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-pink-500" />
+              <Sprout className="h-5 w-5 text-red-500" />
               <h2 className="text-lg font-semibold">לידים חדשים מהאתר</h2>
             </div>
-            <Badge className="bg-gradient-to-r from-pink-500 to-orange-500 text-white border-0">{newLeadsList.data?.length ?? 0}</Badge>
+            <Badge className="bg-gradient-to-r from-red-900 to-red-700 text-white border-0">{newLeadsList.data?.length ?? 0}</Badge>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
