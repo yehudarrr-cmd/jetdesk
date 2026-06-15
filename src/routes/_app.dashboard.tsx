@@ -7,22 +7,23 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCurrency, formatDateTime, hoursUntil } from "@/lib/format";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
-import { Plane, Wallet, AlertTriangle, CheckCircle2, MessageCircle, Clock, ChevronDown } from "lucide-react";
+import { Plane, Wallet, AlertTriangle, CheckCircle2, MessageCircle, Clock, ChevronDown, Sprout, Phone, Mail, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/_app/dashboard")({
   component: DashboardPage,
 });
 
 function DashboardPage() {
-  const [openPanel, setOpenPanel] = useState<null | "flights" | "balances">(null);
+  const [openPanel, setOpenPanel] = useState<null | "flights" | "balances" | "leads">(null);
   const stats = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
-      const [customers, payments, tasks, flights] = await Promise.all([
+      const [customers, payments, tasks, flights, newLeads] = await Promise.all([
         supabase.from("customers").select("id,total_price,amount_paid"),
         supabase.from("payments").select("amount"),
         supabase.from("tasks").select("id,priority,status").in("status", ["open", "in_progress"]),
         supabase.from("flights").select("id,check_in_status,insurance_status,ticket_status,departure_datetime").gte("departure_datetime", new Date().toISOString()),
+        supabase.from("landing_leads").select("id", { count: "exact", head: true }).eq("status", "new"),
       ]);
       const totalRevenue = (customers.data ?? []).reduce((s, c) => s + Number(c.total_price ?? 0), 0);
       const totalPaid = (customers.data ?? []).reduce((s, c) => s + Number(c.amount_paid ?? 0), 0);
@@ -35,6 +36,7 @@ function DashboardPage() {
         totalRevenue, balances,
         customers: customers.data?.length ?? 0,
         urgentTasks, missingDocs,
+        newLeads: newLeads.count ?? 0,
       };
     },
   });
@@ -86,12 +88,105 @@ function DashboardPage() {
     },
   });
 
+  const newLeadsList = useQuery({
+    queryKey: ["dashboard-new-leads"],
+    enabled: openPanel === "leads",
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("landing_leads")
+        .select("*")
+        .eq("status", "new")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold">לוח בקרה</h1>
         <p className="text-muted-foreground mt-1">תמונת מצב יומית של הסוכנות</p>
       </div>
+
+      <LeadsHighlightCard
+        count={stats.data?.newLeads ?? 0}
+        active={openPanel === "leads"}
+        onClick={() => setOpenPanel(openPanel === "leads" ? null : "leads")}
+      />
+
+      {openPanel === "leads" && (
+        <Card className="overflow-hidden border-2 border-pink-500/40 shadow-[0_10px_40px_-10px_rgba(236,72,153,0.35)]">
+          <div className="p-5 border-b border-border flex items-center justify-between bg-gradient-to-r from-pink-500/10 via-fuchsia-500/10 to-orange-500/10">
+            <div className="flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-pink-500" />
+              <h2 className="text-lg font-semibold">לידים חדשים מהאתר</h2>
+            </div>
+            <Badge className="bg-gradient-to-r from-pink-500 to-orange-500 text-white border-0">{newLeadsList.data?.length ?? 0}</Badge>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/40"><tr className="text-right text-muted-foreground">
+                <th className="px-4 py-3 font-medium">שם</th>
+                <th className="px-4 py-3 font-medium">טלפון</th>
+                <th className="px-4 py-3 font-medium">אימייל</th>
+                <th className="px-4 py-3 font-medium">יעד</th>
+                <th className="px-4 py-3 font-medium">תאריכים</th>
+                <th className="px-4 py-3 font-medium">נוסעים</th>
+                <th className="px-4 py-3 font-medium">הודעה</th>
+                <th className="px-4 py-3 font-medium">מקור</th>
+                <th className="px-4 py-3 font-medium">נוצר</th>
+                <th className="px-4 py-3"></th>
+              </tr></thead>
+              <tbody>
+                {(newLeadsList.data ?? []).map((l: any) => {
+                  const wa = whatsappLink(l.phone, `שלום ${l.name ?? ""}, פנית אלינו דרך האתר ואני שמח לחזור אליך`);
+                  return (
+                    <tr key={l.id} className="border-t border-border hover:bg-pink-500/5">
+                      <td className="px-4 py-3 font-medium">{l.name}</td>
+                      <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.phone ?? "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.email ?? "—"}</td>
+                      <td className="px-4 py-3">{l.destination ?? "—"}</td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground">
+                        {l.travel_start_date ?? "—"}{l.travel_end_date ? ` → ${l.travel_end_date}` : ""}
+                      </td>
+                      <td className="px-4 py-3">{l.number_of_travelers ?? "—"}</td>
+                      <td className="px-4 py-3 max-w-[200px] truncate text-muted-foreground" title={l.message ?? ""}>{l.message ?? "—"}</td>
+                      <td className="px-4 py-3 text-xs"><Badge variant="secondary">{l.source ?? "אתר"}</Badge></td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground">{formatDateTime(l.created_at)}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          {wa && (
+                            <Button size="sm" variant="outline" asChild>
+                              <a href={wa} target="_blank" rel="noreferrer"><MessageCircle className="h-4 w-4" /></a>
+                            </Button>
+                          )}
+                          {l.phone && (
+                            <Button size="sm" variant="outline" asChild>
+                              <a href={`tel:${l.phone}`}><Phone className="h-4 w-4" /></a>
+                            </Button>
+                          )}
+                          {l.email && (
+                            <Button size="sm" variant="outline" asChild>
+                              <a href={`mailto:${l.email}`}><Mail className="h-4 w-4" /></a>
+                            </Button>
+                          )}
+                          <Button size="sm" variant="default" asChild>
+                            <Link to="/leads" className="gap-1"><ExternalLink className="h-3 w-3" />פתח</Link>
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {(newLeadsList.data ?? []).length === 0 && (
+                  <tr><td colSpan={10} className="px-4 py-12 text-center text-muted-foreground">{newLeadsList.isLoading ? "טוען..." : "אין לידים חדשים"}</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard icon={<Wallet className="h-5 w-5" />} label="סך הכנסות" value={formatCurrency(stats.data?.totalRevenue ?? 0)} accent="primary" />
@@ -285,5 +380,45 @@ function StatusDot({ status }: { status: string }) {
       <span className={`h-2 w-2 rounded-full ${s.color}`} />
       <span className="text-muted-foreground">{s.label}</span>
     </span>
+  );
+}
+
+function LeadsHighlightCard({ count, active, onClick }: { count: number; active: boolean; onClick: () => void }) {
+  const has = count > 0;
+  return (
+    <Card
+      onClick={onClick}
+      className={`relative cursor-pointer overflow-hidden p-5 transition-all hover:-translate-y-0.5 hover:shadow-2xl border-0 ${
+        has
+          ? "bg-gradient-to-l from-pink-500 via-fuchsia-500 to-orange-500 text-white shadow-[0_15px_50px_-12px_rgba(236,72,153,0.55)]"
+          : "bg-gradient-to-l from-pink-500/80 via-fuchsia-500/80 to-orange-500/80 text-white"
+      } ${active ? "ring-4 ring-pink-300/60" : "ring-2 ring-pink-400/30"}`}
+    >
+      {has && (
+        <span className="absolute inset-0 pointer-events-none animate-pulse bg-gradient-to-l from-white/0 via-white/10 to-white/0" />
+      )}
+      <div className="relative flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center shadow-inner">
+            <Sprout className={`h-7 w-7 ${has ? "animate-pulse" : ""}`} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="text-sm font-medium opacity-90">לידים חדשים מהאתר</div>
+              {has && (
+                <span className="text-[10px] font-bold bg-white text-pink-600 px-2 py-0.5 rounded-full animate-bounce">
+                  חדש!
+                </span>
+              )}
+            </div>
+            <div className="text-4xl font-extrabold leading-tight mt-1">{count}</div>
+            <div className="text-xs opacity-80 mt-1">
+              {has ? "לחץ לצפייה וטיפול בלידים" : "אין כרגע לידים חדשים"}
+            </div>
+          </div>
+        </div>
+        <ChevronDown className={`h-5 w-5 opacity-80 transition-transform ${active ? "rotate-180" : ""}`} />
+      </div>
+    </Card>
   );
 }
