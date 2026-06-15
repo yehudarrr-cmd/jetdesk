@@ -116,13 +116,13 @@ function DashboardPage() {
       />
 
       {openPanel === "leads" && (
-        <Card className="overflow-hidden border-2 border-pink-500/40 shadow-[0_10px_40px_-10px_rgba(236,72,153,0.35)]">
-          <div className="p-5 border-b border-border flex items-center justify-between bg-gradient-to-r from-pink-500/10 via-fuchsia-500/10 to-orange-500/10">
+        <Card className="overflow-hidden border-2 border-red-900/60 shadow-[0_10px_40px_-10px_rgba(220,38,38,0.35)]">
+          <div className="p-5 border-b border-border flex items-center justify-between bg-gradient-to-r from-red-900/20 via-red-800/20 to-red-950/20">
             <div className="flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-pink-500" />
+              <Sprout className="h-5 w-5 text-red-500" />
               <h2 className="text-lg font-semibold">לידים חדשים מהאתר</h2>
             </div>
-            <Badge className="bg-gradient-to-r from-pink-500 to-orange-500 text-white border-0">{newLeadsList.data?.length ?? 0}</Badge>
+            <Badge className="bg-gradient-to-r from-red-900 to-red-700 text-white border-0">{newLeadsList.data?.length ?? 0}</Badge>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -142,7 +142,7 @@ function DashboardPage() {
                 {(newLeadsList.data ?? []).map((l: any) => {
                   const wa = whatsappLink(l.phone, `שלום ${l.name ?? ""}, פנית אלינו דרך האתר ואני שמח לחזור אליך`);
                   return (
-                    <tr key={l.id} className="border-t border-border hover:bg-pink-500/5">
+                    <tr key={l.id} className="border-t border-border hover:bg-red-500/5">
                       <td className="px-4 py-3 font-medium">{l.name}</td>
                       <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.phone ?? "—"}</td>
                       <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.email ?? "—"}</td>
@@ -390,9 +390,9 @@ function LeadsHighlightCard({ count, active, onClick }: { count: number; active:
       onClick={onClick}
       className={`relative cursor-pointer overflow-hidden p-5 transition-all hover:-translate-y-0.5 hover:shadow-2xl border-0 ${
         has
-          ? "bg-gradient-to-l from-pink-500 via-fuchsia-500 to-orange-500 text-white shadow-[0_15px_50px_-12px_rgba(236,72,153,0.55)]"
-          : "bg-gradient-to-l from-pink-500/80 via-fuchsia-500/80 to-orange-500/80 text-white"
-      } ${active ? "ring-4 ring-pink-300/60" : "ring-2 ring-pink-400/30"}`}
+          ? "bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-[0_15px_50px_-12px_rgba(185,28,28,0.55)]"
+          : "bg-gradient-to-l from-red-900/80 via-red-800/80 to-red-950/80 text-white"
+      } ${active ? "ring-4 ring-red-500/60" : "ring-2 ring-red-800/30"}`}
     >
       {has && (
         <span className="absolute inset-0 pointer-events-none animate-pulse bg-gradient-to-l from-white/0 via-white/10 to-white/0" />
@@ -406,7 +406,7 @@ function LeadsHighlightCard({ count, active, onClick }: { count: number; active:
             <div className="flex items-center gap-2">
               <div className="text-sm font-medium opacity-90">לידים חדשים מהאתר</div>
               {has && (
-                <span className="text-[10px] font-bold bg-white text-pink-600 px-2 py-0.5 rounded-full animate-bounce">
+                <span className="text-[10px] font-bold bg-white text-red-700 px-2 py-0.5 rounded-full animate-bounce">
                   חדש!
                 </span>
               )}
