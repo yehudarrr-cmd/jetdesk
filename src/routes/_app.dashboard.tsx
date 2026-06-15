@@ -406,7 +406,7 @@ function LeadsHighlightCard({ count, active, onClick }: { count: number; active:
             <div className="flex items-center gap-2">
               <div className="text-sm font-medium opacity-90">לידים חדשים מהאתר</div>
               {has && (
-                <span className="text-[10px] font-bold bg-white text-pink-600 px-2 py-0.5 rounded-full animate-bounce">
+                <span className="text-[10px] font-bold bg-white text-red-700 px-2 py-0.5 rounded-full animate-bounce">
                   חדש!
                 </span>
               )}
