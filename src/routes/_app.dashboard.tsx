@@ -142,7 +142,7 @@ function DashboardPage() {
                 {(newLeadsList.data ?? []).map((l: any) => {
                   const wa = whatsappLink(l.phone, `שלום ${l.name ?? ""}, פנית אלינו דרך האתר ואני שמח לחזור אליך`);
                   return (
-                    <tr key={l.id} className="border-t border-border hover:bg-pink-500/5">
+                    <tr key={l.id} className="border-t border-border hover:bg-red-500/5">
                       <td className="px-4 py-3 font-medium">{l.name}</td>
                       <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.phone ?? "—"}</td>
                       <td className="px-4 py-3 text-muted-foreground" dir="ltr">{l.email ?? "—"}</td>
