@@ -382,3 +382,43 @@ function StatusDot({ status }: { status: string }) {
     </span>
   );
 }
+
+function LeadsHighlightCard({ count, active, onClick }: { count: number; active: boolean; onClick: () => void }) {
+  const has = count > 0;
+  return (
+    <Card
+      onClick={onClick}
+      className={`relative cursor-pointer overflow-hidden p-5 transition-all hover:-translate-y-0.5 hover:shadow-2xl border-0 ${
+        has
+          ? "bg-gradient-to-l from-pink-500 via-fuchsia-500 to-orange-500 text-white shadow-[0_15px_50px_-12px_rgba(236,72,153,0.55)]"
+          : "bg-gradient-to-l from-pink-500/80 via-fuchsia-500/80 to-orange-500/80 text-white"
+      } ${active ? "ring-4 ring-pink-300/60" : "ring-2 ring-pink-400/30"}`}
+    >
+      {has && (
+        <span className="absolute inset-0 pointer-events-none animate-pulse bg-gradient-to-l from-white/0 via-white/10 to-white/0" />
+      )}
+      <div className="relative flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center shadow-inner">
+            <Sprout className={`h-7 w-7 ${has ? "animate-pulse" : ""}`} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="text-sm font-medium opacity-90">לידים חדשים מהאתר</div>
+              {has && (
+                <span className="text-[10px] font-bold bg-white text-pink-600 px-2 py-0.5 rounded-full animate-bounce">
+                  חדש!
+                </span>
+              )}
+            </div>
+            <div className="text-4xl font-extrabold leading-tight mt-1">{count}</div>
+            <div className="text-xs opacity-80 mt-1">
+              {has ? "לחץ לצפייה וטיפול בלידים" : "אין כרגע לידים חדשים"}
+            </div>
+          </div>
+        </div>
+        <ChevronDown className={`h-5 w-5 opacity-80 transition-transform ${active ? "rotate-180" : ""}`} />
+      </div>
+    </Card>
+  );
+}
