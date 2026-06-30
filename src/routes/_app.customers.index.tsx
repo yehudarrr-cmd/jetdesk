@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, LayoutGrid, Table as TableIcon, PlaneTakeoff, Calendar, User } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_app/customers/")({
 
 function CustomersPage() {
   const [q, setQ] = useState("");
+  const [view, setView] = useState<"cards" | "table">("cards");
   const customers = useQuery({
     queryKey: ["customers", q],
     queryFn: async () => {
@@ -38,7 +39,27 @@ function CustomersPage() {
           <h1 className="text-3xl font-bold">לקוחות</h1>
           <p className="text-muted-foreground mt-1">{customers.data?.length ?? 0} לקוחות במערכת</p>
         </div>
-        <NewCustomerDialog />
+        <div className="flex items-center gap-2">
+          <div className="flex rounded-md border border-border bg-card/40 p-1">
+            <Button
+              size="sm"
+              variant={view === "cards" ? "default" : "ghost"}
+              onClick={() => setView("cards")}
+              className="gap-1.5 h-8"
+            >
+              <LayoutGrid className="h-4 w-4" /> כרטיסים
+            </Button>
+            <Button
+              size="sm"
+              variant={view === "table" ? "default" : "ghost"}
+              onClick={() => setView("table")}
+              className="gap-1.5 h-8"
+            >
+              <TableIcon className="h-4 w-4" /> טבלה
+            </Button>
+          </div>
+          <NewCustomerDialog />
+        </div>
       </div>
 
       <div className="relative">
@@ -51,6 +72,77 @@ function CustomersPage() {
         />
       </div>
 
+      {view === "cards" ? (
+        <>
+          {(customers.data ?? []).length === 0 ? (
+            <Card className="p-12 text-center text-muted-foreground">אין לקוחות עדיין. צור את הראשון!</Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {(customers.data ?? []).map((c) => {
+                const balance = Number(c.total_price ?? 0) - Number(c.amount_paid ?? 0);
+                const status = c.status ?? "active";
+                const statusClass =
+                  status === "active"
+                    ? "bg-success/15 text-success border-success/30"
+                    : status === "closed"
+                    ? "bg-muted/40 text-muted-foreground border-border"
+                    : "bg-primary/15 text-primary border-primary/30";
+                return (
+                  <Link
+                    key={c.id}
+                    to="/customers/$id"
+                    params={{ id: c.id }}
+                    className="group block"
+                  >
+                    <Card className="h-full p-5 bg-gradient-to-br from-card to-card/60 border-border/60 transition-all duration-300 hover:scale-[1.02] hover:border-primary/60 hover:shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)] cursor-pointer flex flex-col gap-4">
+                      <div className="flex items-start gap-3">
+                        <div className="h-11 w-11 shrink-0 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border border-primary/40 grid place-items-center text-primary">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="font-bold text-foreground truncate group-hover:text-primary transition-colors">
+                            {c.name}
+                          </div>
+                          {(c as any).name_en && (
+                            <div className="text-xs text-muted-foreground truncate" dir="ltr">{(c as any).name_en}</div>
+                          )}
+                        </div>
+                        <Badge variant="outline" className={`text-[10px] ${statusClass}`}>{status}</Badge>
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2 text-foreground/90">
+                          <PlaneTakeoff className="h-4 w-4 text-primary shrink-0" />
+                          <span className="font-medium truncate">{c.destination ?? "—"}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-muted-foreground text-xs">
+                          <Calendar className="h-4 w-4 shrink-0" />
+                          <span className="truncate">
+                            {c.travel_start_date ? `${formatDate(c.travel_start_date)} – ${formatDate(c.travel_end_date)}` : "ללא תאריך"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-auto pt-3 border-t border-border/60 flex items-end justify-between">
+                        <div>
+                          <div className="text-[10px] text-muted-foreground uppercase tracking-wide">סכום</div>
+                          <div className="text-sm font-semibold text-foreground">{formatCurrency(c.total_price)}</div>
+                        </div>
+                        <div className="text-left">
+                          <div className="text-[10px] text-muted-foreground uppercase tracking-wide">יתרה</div>
+                          <div className={`text-base font-bold ${balance > 0 ? "text-primary" : "text-success/80"}`}>
+                            {formatCurrency(balance)}
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </>
+      ) : (
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -97,6 +189,7 @@ function CustomersPage() {
           </table>
         </div>
       </Card>
+      )}
     </div>
   );
 }
