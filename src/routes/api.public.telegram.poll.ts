@@ -234,7 +234,7 @@ async function handlePairing(chatId: number, text: string, msg: any, updateId: n
 }
 
 function helpText() {
-  return `אני העוזר של Travel CRM 🌍\nשלח לי טקסט חופשי ואני אעדכן את המערכת:\n\n• "יעקב חלפון שילם 500$ במזומן"\n• "צור לקוח חדש: דנה לוי 0501234567 לתאילנד 15-25/8"\n• "תזכיר לי מחר להתקשר ליעקב"\n• "מה היתרה של דנה?"`;
+  return `אני העוזר של JetDesk 🌍\nשלח לי טקסט חופשי ואני אעדכן את המערכת:\n\n• "יעקב חלפון שילם 500$ במזומן"\n• "צור לקוח חדש: דנה לוי 0501234567 לתאילנד 15-25/8"\n• "תזכיר לי מחר להתקשר ליעקב"\n• "מה היתרה של דנה?"`;
 }
 
 async function executeAction(ownerId: string, result: any): Promise<string> {

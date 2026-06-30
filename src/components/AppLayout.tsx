@@ -10,7 +10,6 @@ import {
   CheckSquare,
   CreditCard,
   LogOut,
-  Sparkles,
   Bot,
   Menu,
   Sprout,
@@ -21,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Session } from "@supabase/supabase-js";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
+import jetdeskLogo from "@/assets/jetdesk-logo-transparent.png.asset.json";
 
 const NAV = [
   { to: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
@@ -98,16 +98,14 @@ export function AppLayout() {
   );
 
   const sidebarHeader = (
-    <div className="px-6 py-6 border-b border-sidebar-border">
-      <div className="flex items-center gap-2">
-        <div className="h-9 w-9 rounded-lg gradient-primary flex items-center justify-center shadow-glow">
-          <Sparkles className="h-5 w-5 text-primary-foreground" />
-        </div>
-        <div>
-          <div className="font-bold text-sidebar-foreground leading-tight">Travel CRM</div>
-          <div className="text-[10px] text-muted-foreground">כרטסת לקוח</div>
-        </div>
-      </div>
+    <div className="px-6 py-5 border-b border-sidebar-border flex justify-center">
+      <img
+        src={jetdeskLogo.url}
+        alt="JetDesk - CRM for Travel Agents"
+        width={180}
+        height={60}
+        className="h-14 w-auto object-contain"
+      />
     </div>
   );
 
@@ -153,10 +151,13 @@ export function AppLayout() {
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md gradient-primary flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-sm">Travel CRM</span>
+            <img
+              src={jetdeskLogo.url}
+              alt="JetDesk"
+              width={130}
+              height={44}
+              className="h-10 w-auto object-contain"
+            />
           </div>
           <div className="w-9" />
         </header>

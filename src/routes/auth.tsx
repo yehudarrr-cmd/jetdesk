@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import jetdeskLogo from "@/assets/jetdesk-logo-transparent.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -54,10 +54,13 @@ function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
       <Card className="w-full max-w-md p-8 shadow-elegant">
         <div className="flex flex-col items-center mb-6">
-          <div className="h-12 w-12 rounded-xl gradient-primary flex items-center justify-center shadow-glow mb-3">
-            <Sparkles className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <h1 className="text-2xl font-bold">Travel CRM</h1>
+          <img
+            src={jetdeskLogo.url}
+            alt="JetDesk - CRM for Travel Agents"
+            width={200}
+            height={68}
+            className="h-16 w-auto object-contain mb-3"
+          />
           <p className="text-sm text-muted-foreground">כרטסת לקוח חכמה לסוכן הנסיעות</p>
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
