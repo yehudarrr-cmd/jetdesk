@@ -162,7 +162,7 @@ function CustomersPage() {
                   <tr key={c.id} className="border-t border-border hover:bg-muted/20">
                     <td className="px-4 py-3">
                       <Link to="/customers/$id" params={{ id: c.id }} className="text-primary font-medium hover:underline">
-                        {c.name}
+                        {displayNameHebrew(c.name)}
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground" dir="ltr">{c.phone ?? "—"}</td>
