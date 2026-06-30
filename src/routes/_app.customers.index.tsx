@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from "@/components/ui/label";
 import { Plus, Search, LayoutGrid, Table as TableIcon, PlaneTakeoff, Calendar, User } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { displayNameHebrew } from "@/lib/he-translit";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/customers/")({
