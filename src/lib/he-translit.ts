@@ -160,9 +160,18 @@ function splitConcatenated(word: string): string[] {
 
 export function displayNameHebrew(name: string | null | undefined): string {
   if (!name || !name.trim()) return "—";
-  // Already contains Hebrew letters — keep as-is.
-  if (/[\u0590-\u05FF]/.test(name)) return name.trim();
-  return nameToHebrew(name).trim() || name.trim();
+  const trimmed = name.trim();
+  // If the value contains a Hebrew part and an English part separated by a slash
+  // (e.g. "יעקב כהן / JACOB COHEN"), return only the Hebrew part.
+  const slashParts = trimmed.split("/").map((p) => p.trim());
+  if (slashParts.length >= 2) {
+    const hebrewPart = slashParts.find((p) => /[\u0590-\u05FF]/.test(p));
+    if (hebrewPart) return hebrewPart;
+  }
+  // Already Hebrew — keep as-is.
+  if (/[\u0590-\u05FF]/.test(trimmed)) return trimmed;
+  // English only — transliterate to Hebrew.
+  return nameToHebrew(trimmed).trim() || trimmed;
 }
 
 export function nameToHebrew(englishName: string): string {
