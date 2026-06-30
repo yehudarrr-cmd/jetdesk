@@ -402,7 +402,7 @@ function FlightsTab({ customerId, customer, items }: { customerId: string; custo
               <div className="flex items-center gap-2">
                 {customer.phone && (
                   <Button variant="outline" size="sm" asChild>
-                    <a href={whatsappLink(customer.phone, WhatsAppTemplates.flightUpdate(customer.name, f.flight_number ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
+                    <a href={whatsappLink(customer.phone, WhatsAppTemplates.flightUpdate(displayNameHebrew(customer.name), f.flight_number ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
                       <MessageCircle className="h-4 w-4" /> עדכון
                     </a>
                   </Button>
