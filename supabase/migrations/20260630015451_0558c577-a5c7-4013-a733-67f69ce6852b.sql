@@ -1,0 +1,3 @@
+CREATE POLICY "Users can insert own telegram messages" ON public.telegram_messages FOR INSERT TO authenticated WITH CHECK (owner_id = auth.uid());
+CREATE POLICY "Users can update own telegram messages" ON public.telegram_messages FOR UPDATE TO authenticated USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
+CREATE POLICY "Users can delete own telegram messages" ON public.telegram_messages FOR DELETE TO authenticated USING (owner_id = auth.uid());
