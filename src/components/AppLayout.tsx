@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import type { Session } from "@supabase/supabase-js";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
-import jetdeskLogo from "@/assets/jetdesk-logo.png.asset.json";
+import jetdeskLogo from "@/assets/jetdesk-logo-transparent.png.asset.json";
 
 const NAV = [
   { to: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
