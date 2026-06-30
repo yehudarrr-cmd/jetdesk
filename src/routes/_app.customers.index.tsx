@@ -102,11 +102,8 @@ function CustomersPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-bold text-foreground break-words leading-tight group-hover:text-primary transition-colors">
-                            {c.name}
+                            {displayNameHebrew(c.name)}
                           </div>
-                          {(c as any).name_en && (
-                            <div className="text-xs text-muted-foreground break-words leading-tight mt-0.5" dir="ltr">{(c as any).name_en}</div>
-                          )}
                         </div>
                         <Badge variant="outline" className={`text-[10px] ${statusClass}`}>{status}</Badge>
                       </div>
