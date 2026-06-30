@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from "@/components/ui/label";
 import { Plus, Search, LayoutGrid, Table as TableIcon, PlaneTakeoff, Calendar, User } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { displayNameHebrew } from "@/lib/he-translit";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/customers/")({
@@ -101,11 +102,8 @@ function CustomersPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="font-bold text-foreground break-words leading-tight group-hover:text-primary transition-colors">
-                            {c.name}
+                            {displayNameHebrew(c.name)}
                           </div>
-                          {(c as any).name_en && (
-                            <div className="text-xs text-muted-foreground break-words leading-tight mt-0.5" dir="ltr">{(c as any).name_en}</div>
-                          )}
                         </div>
                         <Badge variant="outline" className={`text-[10px] ${statusClass}`}>{status}</Badge>
                       </div>
@@ -164,7 +162,7 @@ function CustomersPage() {
                   <tr key={c.id} className="border-t border-border hover:bg-muted/20">
                     <td className="px-4 py-3">
                       <Link to="/customers/$id" params={{ id: c.id }} className="text-primary font-medium hover:underline">
-                        {c.name}
+                        {displayNameHebrew(c.name)}
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground" dir="ltr">{c.phone ?? "—"}</td>

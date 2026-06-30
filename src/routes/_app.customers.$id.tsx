@@ -15,6 +15,7 @@ import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, L
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
+import { displayNameHebrew } from "@/lib/he-translit";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/customers/$id")({
@@ -112,7 +113,7 @@ function CustomerCardPage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold">{c.name}</h1>
+              <h1 className="text-3xl font-bold">{displayNameHebrew(c.name)}</h1>
               <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setNewName(c.name); setRenameOpen(true); }} title="שנה שם">
                 <Pencil className="h-4 w-4" />
               </Button>
@@ -126,7 +127,7 @@ function CustomerCardPage() {
           <div className="flex flex-wrap gap-2">
             {c.phone && (
               <Button variant="outline" size="sm" asChild>
-                <a href={whatsappLink(c.phone, WhatsAppTemplates.generalReminder(c.name, c.destination ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
+                <a href={whatsappLink(c.phone, WhatsAppTemplates.generalReminder(displayNameHebrew(c.name), c.destination ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
                   <MessageCircle className="h-4 w-4" /> ווטסאפ — תזכורת
                 </a>
               </Button>
@@ -137,7 +138,7 @@ function CustomerCardPage() {
               </AlertDialogTrigger>
               <AlertDialogContent dir="rtl">
                 <AlertDialogHeader>
-                  <AlertDialogTitle>למחוק את {c.name}?</AlertDialogTitle>
+                  <AlertDialogTitle>למחוק את {displayNameHebrew(c.name)}?</AlertDialogTitle>
                   <AlertDialogDescription>
                     פעולה זו תמחק את הלקוח לצמיתות. נתונים מקושרים (טיסות, מלונות, תשלומים וכו׳) עלולים להישאר ללא לקוח.
                   </AlertDialogDescription>
@@ -401,7 +402,7 @@ function FlightsTab({ customerId, customer, items }: { customerId: string; custo
               <div className="flex items-center gap-2">
                 {customer.phone && (
                   <Button variant="outline" size="sm" asChild>
-                    <a href={whatsappLink(customer.phone, WhatsAppTemplates.flightUpdate(customer.name, f.flight_number ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
+                    <a href={whatsappLink(customer.phone, WhatsAppTemplates.flightUpdate(displayNameHebrew(customer.name), f.flight_number ?? ""))!} target="_blank" rel="noreferrer" className="gap-1">
                       <MessageCircle className="h-4 w-4" /> עדכון
                     </a>
                   </Button>
