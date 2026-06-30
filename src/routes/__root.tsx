@@ -38,6 +38,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "he_IL" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "גולדטוס | סוכנות נסיעות פרימיום - טיסות, מלונות ו-VIP" },
+      { name: "twitter:title", content: "גולדטוס | סוכנות נסיעות פרימיום - טיסות, מלונות ו-VIP" },
+      { property: "og:description", content: "גולדטוס - סוכנות נסיעות פרימיום מבית אמירים טורס. טיסות עסקיות, מלונות יוקרה, VIP בנתב\"ג וביטוח נסיעות. שירות אישי 24/7." },
+      { name: "twitter:description", content: "גולדטוס - סוכנות נסיעות פרימיום מבית אמירים טורס. טיסות עסקיות, מלונות יוקרה, VIP בנתב\"ג וביטוח נסיעות. שירות אישי 24/7." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/62AQQtzm4vSZrffm1h6h6VOLxA93/social-images/social-1782789249101-גולדטוס_לוגו.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/62AQQtzm4vSZrffm1h6h6VOLxA93/social-images/social-1782789249101-גולדטוס_לוגו.webp" },
     ],
     links: [
       {
