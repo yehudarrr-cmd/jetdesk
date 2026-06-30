@@ -75,12 +75,27 @@ function ImportPage() {
 
       if (!existingCustomer && r.nameEn) {
         const target = normalizeName(r.nameEn);
+        const heTarget = normalizeName(r.nameHe || "");
         const { data: candidates } = await supabase
           .from("customers")
           .select("id, name, phone, destination, travel_start_date")
-          .ilike("name", `%${r.nameEn.split(" ")[0]}%`)
-          .limit(50);
-        existingCustomer = (candidates ?? []).find((c) => normalizeName(c.name ?? "").includes(target) || target.includes(normalizeName(c.name ?? ""))) ?? null;
+          .or(
+            [
+              `name.ilike.%${r.nameEn.split(" ")[0]}%`,
+              r.nameEn.split(" ").slice(-1)[0] && `name.ilike.%${r.nameEn.split(" ").slice(-1)[0]}%`,
+              r.nameHe && `name.ilike.%${r.nameHe.split(" ")[0]}%`,
+            ]
+              .filter(Boolean)
+              .join(",")
+          )
+          .limit(100);
+        existingCustomer = (candidates ?? []).find((c) => {
+          const n = normalizeName(c.name ?? "");
+          if (!n) return false;
+          if (target && (n.includes(target) || target.includes(n))) return true;
+          if (heTarget && (n.includes(heTarget) || heTarget.includes(n))) return true;
+          return false;
+        }) ?? null;
       }
 
       if (!existingCustomer && r.phone) {
