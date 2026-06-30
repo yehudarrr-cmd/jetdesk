@@ -15,6 +15,7 @@ import { ArrowRight, Phone, MessageCircle, Plus, Trash2, Pencil, Copy, Upload, L
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { whatsappLink, WhatsAppTemplates } from "@/lib/whatsapp";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/format";
+import { displayNameHebrew } from "@/lib/he-translit";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/customers/$id")({
