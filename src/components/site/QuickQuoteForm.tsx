@@ -18,6 +18,13 @@ import { WHATSAPP_NUMBER } from "@/lib/site-constants";
 
 const quickQuoteSchema = z.object({
   destination: z.string().trim().min(2, "אנא מלאו יעד").max(120),
+  phone: z
+    .string()
+    .trim()
+    .min(9, "אנא הזינו מספר טלפון תקין")
+    .max(20, "מספר טלפון ארוך מדי")
+    .regex(/^[0-9+\-\s()]+$/, "מספר טלפון לא תקין"),
+  name: z.string().trim().max(80).optional(),
   departDate: z.string().trim().max(20).optional(),
   returnDate: z.string().trim().max(20).optional(),
   travelers: z.string().trim().min(1).max(3),
@@ -38,6 +45,8 @@ export function QuickQuoteForm() {
     const formData = new FormData(e.currentTarget);
     const raw = {
       destination: String(formData.get("destination") || ""),
+      phone: String(formData.get("phone") || ""),
+      name: String(formData.get("name") || ""),
       departDate: String(formData.get("departDate") || ""),
       returnDate: String(formData.get("returnDate") || ""),
       travelers: String(formData.get("travelers") || "2"),
@@ -51,6 +60,8 @@ export function QuickQuoteForm() {
     const d = parsed.data;
     const lines = [
       "שלום, אשמח לקבל הצעה לחופשה:",
+      d.name ? `שם: ${d.name}` : null,
+      `טלפון: ${d.phone}`,
       `יעד: ${d.destination}`,
       d.departDate ? `תאריך יציאה: ${d.departDate}` : null,
       d.returnDate ? `תאריך חזרה: ${d.returnDate}` : null,
@@ -59,8 +70,8 @@ export function QuickQuoteForm() {
     ].filter(Boolean).join("\n");
 
     supabase.from("landing_leads").insert({
-      name: "פנייה מהירה (וואטסאפ)",
-      phone: "—",
+      name: d.name || "פנייה מהירה (וואטסאפ)",
+      phone: d.phone,
       destination: d.destination,
       number_of_travelers: parseInt(d.travelers) || 1,
       message: lines,
@@ -86,6 +97,17 @@ export function QuickQuoteForm() {
         <div>
           <Label htmlFor="q-destination" className="text-xs">יעד *</Label>
           <Input id="q-destination" name="destination" required maxLength={120} placeholder="מלדיביים, דובאי, יוון..." className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label htmlFor="q-name" className="text-xs">שם</Label>
+            <Input id="q-name" name="name" maxLength={80} placeholder="ישראל ישראלי" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+          </div>
+          <div>
+            <Label htmlFor="q-phone" className="text-xs">טלפון *</Label>
+            <Input id="q-phone" name="phone" type="tel" required maxLength={20} placeholder="050-0000000" dir="ltr" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
