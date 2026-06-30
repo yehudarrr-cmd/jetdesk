@@ -158,6 +158,13 @@ function splitConcatenated(word: string): string[] {
   return [upper];
 }
 
+export function displayNameHebrew(name: string | null | undefined): string {
+  if (!name || !name.trim()) return "—";
+  // Already contains Hebrew letters — keep as-is.
+  if (/[\u0590-\u05FF]/.test(name)) return name.trim();
+  return nameToHebrew(name).trim() || name.trim();
+}
+
 export function nameToHebrew(englishName: string): string {
   if (!englishName) return "";
   const cleaned = englishName.trim().replace(/\s+/g, " ");
