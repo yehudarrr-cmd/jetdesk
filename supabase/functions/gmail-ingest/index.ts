@@ -37,7 +37,10 @@ type Extracted = {
 // ---------- Gmail helpers ----------
 function gmailHeaders() {
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-  const GOOGLE_MAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
+  const GOOGLE_MAIL_API_KEY =
+    Deno.env.get("GOOGLE_MAIL_API_KEY_1") ??
+    Deno.env.get("GOOGLE_MAIL_API_KEY_2") ??
+    Deno.env.get("GOOGLE_MAIL_API_KEY");
   if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
   if (!GOOGLE_MAIL_API_KEY) throw new Error("Gmail connector not linked (GOOGLE_MAIL_API_KEY missing)");
   return {
