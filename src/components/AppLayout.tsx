@@ -98,13 +98,13 @@ export function AppLayout() {
   );
 
   const sidebarHeader = (
-    <div className="px-6 py-5 border-b border-sidebar-border flex justify-center">
+    <div className="px-4 py-6 border-b border-sidebar-border flex justify-center">
       <img
         src={jetdeskLogo.url}
         alt="JetDesk - CRM for Travel Agents"
-        width={180}
-        height={60}
-        className="h-14 w-auto object-contain"
+        width={260}
+        height={88}
+        className="h-20 w-auto object-contain drop-shadow-[0_0_18px_rgba(212,175,55,0.25)]"
       />
     </div>
   );
