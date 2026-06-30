@@ -103,8 +103,8 @@ function CustomersPage() {
                           <div className="font-bold text-foreground truncate group-hover:text-primary transition-colors">
                             {c.name}
                           </div>
-                          {c.name_en && (
-                            <div className="text-xs text-muted-foreground truncate" dir="ltr">{c.name_en}</div>
+                          {(c as any).name_en && (
+                            <div className="text-xs text-muted-foreground truncate" dir="ltr">{(c as any).name_en}</div>
                           )}
                         </div>
                         <Badge variant="outline" className={`text-[10px] ${statusClass}`}>{status}</Badge>
