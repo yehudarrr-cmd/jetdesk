@@ -22,16 +22,16 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
 
   return (
     <header className={wrapperClass}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-10 h-20 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div className="max-w-7xl mx-auto px-5 sm:px-10 h-24 sm:h-28 grid grid-cols-[auto_1fr_auto] items-center gap-4">
         {/* Right (RTL): logo */}
         <Link to="/" aria-label="גולדטוס - דף הבית" className="flex items-center shrink-0">
           <img
             src={logoImage}
             alt="גולדטוס - GoldTus"
-            width={160}
-            height={64}
-            className="h-12 sm:h-14 w-auto"
-            style={{ filter: "drop-shadow(0 4px 10px rgba(11,30,59,0.15))" }}
+            width={260}
+            height={104}
+            className="h-16 sm:h-20 lg:h-24 w-auto"
+            style={{ filter: "drop-shadow(0 6px 16px rgba(11,30,59,0.35)) drop-shadow(0 0 1px rgba(11,30,59,0.4))" }}
           />
         </Link>
 
