@@ -16,7 +16,6 @@ import {
   Signal,
 } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
-import heroImage from "@/assets/landing-hero.jpg";
 import {
   canonical,
   ldScript,
@@ -25,7 +24,10 @@ import {
   WIFLY_URL,
 } from "@/lib/site-constants";
 
-export { heroImage as landingHeroImage };
+const heroImage =
+  "https://images.unsplash.com/photo-1724053377801-04d2e6817c17?w=1200&h=630&fit=crop&q=85&auto=format";
+
+export const landingHeroImage = heroImage;
 
 const HERO_SLIDES = [
   {
