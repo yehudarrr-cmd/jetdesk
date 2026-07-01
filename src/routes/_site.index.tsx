@@ -413,25 +413,25 @@ function HomePage() {
       </section>
 
       {/* WHY US */}
-      <section className="py-16 sm:py-24 px-6 relative overflow-hidden mt-10">
+      <section className="py-16 sm:py-24 px-6 relative overflow-hidden bg-[#002d72]">
         <div className="relative max-w-6xl mx-auto">
           <div className="text-center mb-12 space-y-2">
-            <span className="inline-block text-xs tracking-[0.35em] text-accent uppercase font-bold">למה גולדטוס</span>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-primary">
-              שקט נפשי <span className="text-accent">מהזמנה ועד הנחיתה</span>
+            <span className="inline-block text-xs tracking-[0.35em] text-[#FFD447] uppercase font-bold">למה גולדטוס</span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+              שקט נפשי <span className="text-[#FFD447]">מהזמנה ועד הנחיתה</span>
             </h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {whyUs.map((item, i) => (
               <div
                 key={i}
-                className="group text-center bg-white rounded-2xl border border-primary/10 p-5 sm:p-6 hover:border-accent/60 hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.2)] transition-all"
+                className="group text-center bg-white rounded-2xl border border-[#FFD447]/30 p-5 sm:p-6 hover:border-[#FFD447] hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(255,212,71,0.35)] transition-all"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl bg-[linear-gradient(135deg,oklch(0.98_0.005_90),oklch(0.94_0.02_82))] flex items-center justify-center ring-1 ring-accent/40 mb-4">
-                  <item.icon className="w-7 h-7 text-primary group-hover:text-accent transition-colors" strokeWidth={1.5} />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl bg-[#002d72] flex items-center justify-center ring-2 ring-[#FFD447]/60 mb-4">
+                  <item.icon className="w-7 h-7 text-[#FFD447]" strokeWidth={2} />
                 </div>
-                <h3 className="text-sm sm:text-base font-bold text-primary">{item.title}</h3>
-                <p className="text-xs text-foreground/60 mt-1.5 leading-relaxed">{item.desc}</p>
+                <h3 className="text-sm sm:text-base font-bold text-[#002d72]">{item.title}</h3>
+                <p className="text-xs text-[#002d72]/70 mt-1.5 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -439,26 +439,26 @@ function HomePage() {
       </section>
 
       {/* CTA STRIP */}
-      <section className="pb-16 sm:pb-20 px-6">
+      <section className="py-16 sm:py-20 px-6 bg-[#001a4d]">
         <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-4">
-          <Link to="/services" className="group p-6 rounded-2xl border border-primary/15 bg-white hover:border-accent transition-colors shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)]">
+          <Link to="/services" className="group p-6 rounded-2xl border-2 border-[#FFD447]/40 bg-white hover:border-[#FFD447] transition-colors shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-accent tracking-[0.25em] uppercase mb-2 font-bold">שירותי פרימיום</div>
-                <h3 className="font-display text-xl font-semibold text-primary">הכל תחת גג אחד</h3>
-                <p className="text-sm text-muted-foreground mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
+                <div className="text-xs text-[#c99a1e] tracking-[0.25em] uppercase mb-2 font-bold">שירותי פרימיום</div>
+                <h3 className="font-display text-xl font-bold text-[#002d72]">הכל תחת גג אחד</h3>
+                <p className="text-sm text-[#002d72]/70 mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
               </div>
-              <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-5 h-5 text-[#002d72] group-hover:-translate-x-1 transition-transform" />
             </div>
           </Link>
-          <Link to="/contact" className="group p-6 rounded-2xl border border-primary/15 bg-white hover:border-accent transition-colors shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)]">
+          <Link to="/contact" className="group p-6 rounded-2xl bg-[#002d72] border-2 border-[#FFD447] hover:bg-[#001a4d] transition-colors shadow-[0_20px_50px_-15px_rgba(255,212,71,0.35)]">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-accent tracking-[0.25em] uppercase mb-2 font-bold">צור קשר</div>
-                <h3 className="font-display text-xl font-semibold text-primary">בקשת הצעת מחיר</h3>
-                <p className="text-sm text-muted-foreground mt-1">נחזור אליכם בתוך 24 שעות</p>
+                <div className="text-xs text-[#FFD447] tracking-[0.25em] uppercase mb-2 font-bold">צור קשר</div>
+                <h3 className="font-display text-xl font-bold text-[#FFD447]">בקשת הצעת מחיר</h3>
+                <p className="text-sm text-white/85 mt-1">נחזור אליכם בתוך 24 שעות</p>
               </div>
-              <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-5 h-5 text-[#FFD447] group-hover:-translate-x-1 transition-transform" />
             </div>
           </Link>
         </div>
