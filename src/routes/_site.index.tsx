@@ -237,19 +237,19 @@ function HomePage() {
       </section>
 
       {/* SOCIAL PROOF – WhatsApp testimonial */}
-      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-white">
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#002d72]">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div className="order-2 lg:order-none text-right">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Real Client - Real Words
             </span>
-            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.15] tracking-tight text-primary">
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.15] tracking-tight text-[#FFD447]">
               לא אני אומר. לקוח שחזר הלילה מפאפוס אומר.
             </h2>
-            <p className="mt-5 text-base sm:text-lg font-medium text-foreground/85 leading-relaxed">
+            <p className="mt-5 text-base sm:text-lg font-medium text-white/90 leading-relaxed">
               בסוף לא זוכרים רק את המלון או את הטיסה. זוכרים את מי שדואג לך.
             </p>
-            <p className="mt-6 text-sm sm:text-base text-foreground/70 italic">
+            <p className="mt-6 text-sm sm:text-base text-white/70 italic">
               תודה על האמון. מחכה לחופשה הבאה שלכם.
             </p>
           </div>
@@ -289,13 +289,13 @@ function HomePage() {
       </section>
 
       {/* SEO TRAVEL TIPS HUB */}
-      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#F8FAFC]">
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#001a4d]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Knowledge Base
             </span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-primary">
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
               טיפים חכמים למטייל הישראלי
             </h2>
           </div>
