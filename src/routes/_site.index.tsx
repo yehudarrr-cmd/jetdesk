@@ -29,24 +29,24 @@ export { heroImage as landingHeroImage };
 
 const HERO_SLIDES = [
   {
-    url: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1920&q=80",
-    alt: "מלדיביים – בונגלו על המים",
+    url: "https://images.unsplash.com/photo-1724053377801-04d2e6817c17?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל – חוף טורקיז וחול לבן",
   },
   {
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80",
-    alt: "חוף טרופי - מים טורקיז",
+    url: "https://images.unsplash.com/photo-1721989253907-a6242e07c5b2?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל – Anse Source d'Argent, סלעים ומים צלולים",
   },
   {
-    url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=80",
-    alt: "מלדיביים - ריזורט על המים",
+    url: "https://images.unsplash.com/photo-1636110026885-8950fbdd3e74?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל – מבט אווירי על חוף ואוקיינוס",
   },
   {
-    url: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1920&q=80",
-    alt: "איי סיישל - מפרץ פרטי",
+    url: "https://images.unsplash.com/photo-1693260741045-2c136abbb95f?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל – סלעי גרניט ומים כחולים",
   },
   {
-    url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1920&q=80",
-    alt: "בורה בורה - לגונה טורקיז",
+    url: "https://images.unsplash.com/photo-1729606684010-ed7627949061?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל – סירות ועצי דקל על חוף חולי",
   },
 ];
 
