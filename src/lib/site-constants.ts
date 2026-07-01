@@ -8,6 +8,7 @@ export const PASSPORTCARD_URL =
   "https://marketing.passportcard.co.il/BLP/vRzjRu5u8%2BxXbCU%2BP5prTw==";
 /** Affiliate: WiFly eSIM / global roaming */
 export const WIFLY_URL = "https://aff.wifly.co.il/click?campaign_id=1&ref_id=247";
+export const GOLD_DEAL_CLUB_WHATSAPP_URL = "https://chat.whatsapp.com/L8bWaSPyqKEAlsDZHhqfZB";
 
 export const canonical = (path = "/") =>
   `${SITE_URL}${path === "/" ? "/" : path.replace(/\/$/, "")}`;

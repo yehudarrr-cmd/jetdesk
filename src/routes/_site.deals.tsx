@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Flame, Plane, Hotel, Calendar, MoonStar, MapPin, MessageCircle, ExternalLink, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl } from "@/lib/site-constants";
+import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl, GOLD_DEAL_CLUB_WHATSAPP_URL } from "@/lib/site-constants";
+import { generatedDestinationImageUrl, safeDealImageUrl } from "@/lib/deal-image";
 
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
 
@@ -91,6 +92,15 @@ function DealsPage() {
               <MessageCircle className="w-5 h-5" fill="currentColor" />
               קבלו הצעות בוואטסאפ
             </a>
+            <a
+              href={GOLD_DEAL_CLUB_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm sm:text-base font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 shadow-[0_10px_30px_-12px_rgba(255,212,71,0.45)] hover:translate-y-[-1px] transition-all"
+            >
+              <MessageCircle className="w-5 h-5" fill="currentColor" />
+              הצטרפו למועדון דיל הזהב
+            </a>
           </div>
         </div>
       </section>
@@ -146,6 +156,15 @@ function DealsPage() {
             <MessageCircle className="w-5 h-5" fill="currentColor" />
             שלחו לנו הודעה בוואטסאפ
           </a>
+          <a
+            href={GOLD_DEAL_CLUB_WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 transition-all"
+          >
+            <MessageCircle className="w-5 h-5" fill="currentColor" />
+            כניסה לקבוצת מועדון דיל הזהב
+          </a>
         </div>
       </section>
     </div>
@@ -157,6 +176,8 @@ function DealCard({ deal }: { deal: Deal }) {
     `שלום, אשמח לפרטים על הדיל ל${deal.destination}`,
   );
   const dateRange = formatDateRange(deal.start_date, deal.end_date);
+  const generatedImage = generatedDestinationImageUrl(deal.destination, deal.country);
+  const imageSrc = safeDealImageUrl(deal.image_url, deal.destination, deal.country);
   return (
     <a
       href={href}
@@ -166,13 +187,19 @@ function DealCard({ deal }: { deal: Deal }) {
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-[#001a4d]">
         <img
-          src={deal.image_url || IMG_FALLBACK}
+          src={imageSrc}
+          data-generated-src={generatedImage}
           alt={`${deal.destination} - ${deal.title ?? ""}`}
           loading="lazy"
           decoding="async"
           referrerPolicy="no-referrer"
           onError={(e) => {
             const img = e.currentTarget;
+            const generated = img.dataset.generatedSrc;
+            if (generated && img.src !== new URL(generated, window.location.origin).href) {
+              img.src = generated;
+              return;
+            }
             if (img.src !== IMG_FALLBACK) img.src = IMG_FALLBACK;
           }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

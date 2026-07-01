@@ -14,6 +14,7 @@ import {
   Stethoscope,
   Luggage,
   Signal,
+  MessageCircle,
 } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
 import {
@@ -22,6 +23,7 @@ import {
   SITE_URL,
   PASSPORTCARD_URL,
   WIFLY_URL,
+  GOLD_DEAL_CLUB_WHATSAPP_URL,
 } from "@/lib/site-constants";
 
 const heroImage =
@@ -252,6 +254,15 @@ function HomePage() {
             <p className="mt-6 text-sm sm:text-base text-white/70 italic">
               תודה על האמון. מחכה לחופשה הבאה שלכם.
             </p>
+              <a
+                href={GOLD_DEAL_CLUB_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-7 rounded-full bg-[#FFD447] text-[#002d72] px-6 py-3 text-sm font-bold hover:bg-[#FFC000] shadow-[0_14px_34px_-14px_rgba(255,212,71,0.75)] transition-all hover:-translate-y-0.5"
+              >
+                <MessageCircle className="w-5 h-5" fill="currentColor" />
+                הצטרפו למועדון דיל הזהב בוואטסאפ
+              </a>
           </div>
 
           <div className="order-1 lg:order-none flex justify-center">
