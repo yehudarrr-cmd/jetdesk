@@ -59,7 +59,7 @@ function SiteLayout() {
   const location = useLocation();
   const transparent = location.pathname === "/";
   return (
-    <div className="min-h-screen bg-background text-foreground" dir="rtl">
+    <div className="site-light min-h-screen bg-background text-foreground" dir="rtl">
       <a href="#main-content" className="skip-to-content">דלג לתוכן הראשי</a>
       <SiteHeader transparent={transparent} />
       <main id="main-content">
