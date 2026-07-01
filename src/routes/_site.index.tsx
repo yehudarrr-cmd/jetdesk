@@ -52,6 +52,14 @@ const HERO_SLIDES = [
   },
 ];
 
+const TIP_IMAGES = {
+  credit: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80",
+  passport: "https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?auto=format&fit=crop&w=800&q=80",
+  georgia: "https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80",
+  connection: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
+  esim: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=800&q=80",
+};
+
 export const Route = createFileRoute("/_site/")({
   head: () => ({
     meta: [
