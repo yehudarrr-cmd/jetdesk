@@ -287,7 +287,14 @@ function AdminDealsPage() {
           <div className="grid gap-3">
             {deals.map((d) => (
               <div key={d.id} className="flex flex-wrap items-center gap-3 p-3 rounded-lg border border-border">
-                <img src={d.image_url || undefined} alt="" className="w-20 h-14 rounded object-cover bg-muted" loading="lazy" />
+                <img
+                  src={d.image_url || undefined}
+                  alt=""
+                  className="w-20 h-14 rounded object-cover bg-muted"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+                />
                 <div className="flex-1 min-w-[200px]">
                   <div className="font-semibold">{d.destination}{d.country ? ` · ${d.country}` : ""}</div>
                   <div className="text-xs text-muted-foreground truncate">{d.title || d.hotel || "—"}</div>

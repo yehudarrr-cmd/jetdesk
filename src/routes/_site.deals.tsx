@@ -170,6 +170,11 @@ function DealCard({ deal }: { deal: Deal }) {
           alt={`${deal.destination} - ${deal.title ?? ""}`}
           loading="lazy"
           decoding="async"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (img.src !== IMG_FALLBACK) img.src = IMG_FALLBACK;
+          }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         {deal.featured && (
