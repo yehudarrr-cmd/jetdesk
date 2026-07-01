@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, ShieldCheck, Wifi } from "lucide-react";
+import { Menu, X, ShieldCheck, Wifi, MessageCircle } from "lucide-react";
 import logoImage from "@/assets/goldtus-logo-transparent.png";
-import { PASSPORTCARD_URL, WIFLY_URL } from "@/lib/site-constants";
+import { PASSPORTCARD_URL, WIFLY_URL, whatsappUrl } from "@/lib/site-constants";
 
 const NAV = [
   { to: "/", label: "בית" },
@@ -57,6 +57,15 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
 
         {/* Left (RTL): affiliate CTAs */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-white bg-success hover:bg-[oklch(0.55_0.15_155)] shadow-[0_8px_24px_-10px_rgba(5,150,105,0.5)] hover:translate-y-[-1px] transition-all animate-wa-pulse"
+          >
+            <MessageCircle className="w-4 h-4" fill="currentColor" />
+            וואטסאפ
+          </a>
           <a
             href={PASSPORTCARD_URL}
             target="_blank"
