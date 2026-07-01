@@ -151,9 +151,7 @@ function HomePage() {
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} /> שירות אישי</span>
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-accent" strokeWidth={1.75} /> VIP בנתב"ג</span>
               </div>
-              <div className="rounded-3xl bg-white border border-primary/10 shadow-[0_20px_45px_-25px_rgba(11,30,59,0.35)] p-1">
-                <QuickQuoteForm />
-              </div>
+              <QuickQuoteForm />
             </div>
           </div>
         </div>
