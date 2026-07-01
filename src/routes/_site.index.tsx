@@ -24,24 +24,24 @@ export { heroImage as landingHeroImage };
 
 const HERO_SLIDES = [
   {
-    url: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=1920&q=80",
-    alt: "סנטוריני – יוון",
-  },
-  {
     url: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1920&q=80",
     alt: "מלדיביים – בונגלו על המים",
   },
   {
-    url: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80",
-    alt: "פריז – מגדל אייפל",
+    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80",
+    alt: "חוף טרופי - מים טורקיז",
   },
   {
-    url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80",
-    alt: "דובאי – קו רקיע",
+    url: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=80",
+    alt: "מלדיביים - ריזורט על המים",
   },
   {
-    url: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1920&q=80",
-    alt: "באלי – ריזורט טרופי",
+    url: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1920&q=80",
+    alt: "איי סיישל - מפרץ פרטי",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1920&q=80",
+    alt: "בורה בורה - לגונה טורקיז",
   },
 ];
 
@@ -97,85 +97,60 @@ function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative min-h-[92svh] flex flex-col overflow-hidden">
-        <div className="absolute inset-0">
-          {HERO_SLIDES.map((s, i) => (
-            <img
-              key={s.url}
-              src={s.url}
-              alt={s.alt}
-              width={1920}
-              height={1080}
-              fetchPriority={i === 0 ? "high" : "low"}
-              decoding="async"
-              loading={i === 0 ? "eager" : "lazy"}
-              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1600ms] ease-in-out"
-              style={{ opacity: slide === i ? 1 : 0 }}
-            />
-          ))}
-          {/* Light gradient mask for legibility of dark text */}
-          <div className="absolute inset-0 bg-gradient-to-l from-white/85 via-white/55 to-white/30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white/70" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
-        </div>
+      <section className="relative bg-[#F1F5F9] overflow-hidden">
+        <div className="relative px-5 sm:px-10 pt-28 sm:pt-32 pb-16 sm:pb-20">
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+            {/* SLIDER - visually right in RTL */}
+            <div className="relative order-1 lg:order-none rounded-3xl overflow-hidden shadow-[0_30px_60px_-30px_rgba(11,30,59,0.35)] ring-1 ring-primary/10 bg-white min-h-[320px] sm:min-h-[420px] lg:min-h-[560px]">
+              {HERO_SLIDES.map((s, i) => (
+                <img
+                  key={s.url}
+                  src={s.url}
+                  alt={s.alt}
+                  width={1600}
+                  height={1200}
+                  fetchPriority={i === 0 ? "high" : "low"}
+                  decoding="async"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1600ms] ease-in-out"
+                  style={{ opacity: slide === i ? 1 : 0 }}
+                />
+              ))}
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              <div className="absolute z-10 bottom-4 inset-x-0 flex items-center justify-center gap-2">
+                {HERO_SLIDES.map((s, i) => (
+                  <button
+                    key={s.url}
+                    type="button"
+                    aria-label={`מעבר לתמונה ${i + 1}`}
+                    onClick={() => setSlide(i)}
+                    className={`h-1.5 rounded-full transition-all ${
+                      slide === i ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
 
-        {/* Slider dots */}
-        <div className="absolute z-20 bottom-6 inset-x-0 flex items-center justify-center gap-2">
-          {HERO_SLIDES.map((s, i) => (
-            <button
-              key={s.url}
-              type="button"
-              aria-label={`מעבר לתמונה ${i + 1}`}
-              onClick={() => setSlide(i)}
-              className={`h-1.5 rounded-full transition-all ${
-                slide === i ? "w-8 bg-primary" : "w-2 bg-primary/30 hover:bg-primary/60"
-              }`}
-            />
-          ))}
-        </div>
-
-        <div className="relative z-10 flex-1 flex items-center px-5 sm:px-10 pt-28 sm:pt-32 pb-14">
-          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-5 gap-8 lg:gap-14 items-center">
-            <div className="lg:col-span-3 space-y-5 sm:space-y-6 text-center lg:text-right">
-              <span className="inline-block text-[11px] sm:text-xs tracking-[0.35em] text-primary uppercase font-semibold bg-white/70 backdrop-blur-sm rounded-full px-4 py-1.5 border border-primary/15">
+            {/* TEXT + FORM - visually left in RTL */}
+            <div className="order-2 lg:order-none flex flex-col gap-6 text-right">
+              <span className="inline-block self-start text-[11px] sm:text-xs tracking-[0.35em] text-primary uppercase font-semibold bg-white rounded-full px-4 py-1.5 border border-primary/15 shadow-sm">
                 Premium Wanderlust · גולדטוס
               </span>
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-semibold leading-[1.1] tracking-tight text-primary">
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight text-primary">
                 טיסות וחופשות
                 <span className="block bg-[linear-gradient(90deg,oklch(0.28_0.09_260),oklch(0.55_0.15_82),oklch(0.28_0.09_260))] bg-clip-text text-transparent">
                   פרימיום בהתאמה אישית
                 </span>
               </h1>
-              <p className="text-sm sm:text-base lg:text-lg text-foreground/80 leading-relaxed max-w-lg mx-auto lg:mx-0">
+              <p className="text-sm sm:text-base lg:text-lg text-foreground/80 leading-relaxed max-w-lg">
                 שלחו יעד, תאריכים ומספר נוסעים - נחזור עם דיל מדויק, בלי כאב ראש. שקט נפשי וניהול מלא מהתכנון ועד הנחיתה.
               </p>
-
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/80 justify-center lg:justify-start pt-1">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/80">
                 <span className="flex items-center gap-1.5"><Plane className="w-4 h-4 text-accent" strokeWidth={1.75} /> טיסות פרימיום</span>
                 <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} /> שירות אישי</span>
                 <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-accent" strokeWidth={1.75} /> VIP בנתב"ג</span>
               </div>
-
-              <div className="flex flex-wrap gap-3 justify-center lg:justify-start pt-1">
-                <Link
-                  to="/services"
-                  className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-2.5 text-sm font-bold shadow-[0_16px_36px_-12px_rgba(11,30,59,0.45)] hover:-translate-y-0.5 hover:shadow-[0_22px_40px_-14px_rgba(11,30,59,0.55)] transition-all border border-[oklch(0.75_0.13_82_/_0.35)]"
-                >
-                  <Sparkles className="w-4 h-4" strokeWidth={2} />
-                  <span>לכל השירותים</span>
-                  <ArrowLeft className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-white/70 backdrop-blur-sm text-primary px-5 py-2.5 text-sm font-bold hover:bg-white hover:-translate-y-0.5 transition-all"
-                >
-                  <Heart className="w-4 h-4 text-accent" strokeWidth={2} />
-                  <span>ייעוץ אישי</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-2 lg:self-center">
               <QuickQuoteForm />
             </div>
           </div>
