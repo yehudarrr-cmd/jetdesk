@@ -273,6 +273,84 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          active: boolean | null
+          airline: string | null
+          country: string | null
+          created_at: string
+          currency: string | null
+          destination: string
+          end_date: string | null
+          external_url: string | null
+          featured: boolean | null
+          gallery: Json | null
+          hotel: string | null
+          id: string
+          image_url: string | null
+          last_synced_at: string | null
+          nights: number | null
+          price_from: number | null
+          quote_url: string | null
+          slug: string | null
+          sort_order: number | null
+          start_date: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean | null
+          airline?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          destination: string
+          end_date?: string | null
+          external_url?: string | null
+          featured?: boolean | null
+          gallery?: Json | null
+          hotel?: string | null
+          id?: string
+          image_url?: string | null
+          last_synced_at?: string | null
+          nights?: number | null
+          price_from?: number | null
+          quote_url?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          start_date?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean | null
+          airline?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          destination?: string
+          end_date?: string | null
+          external_url?: string | null
+          featured?: boolean | null
+          gallery?: Json | null
+          hotel?: string | null
+          id?: string
+          image_url?: string | null
+          last_synced_at?: string | null
+          nights?: number | null
+          price_from?: number | null
+          quote_url?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          start_date?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           category: Database["public"]["Enums"]["document_category"] | null
