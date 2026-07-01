@@ -9,6 +9,11 @@ import {
   Wifi,
   Plane,
   Crown,
+  CreditCard,
+  BookOpen,
+  Stethoscope,
+  Luggage,
+  Signal,
 } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
 import heroImage from "@/assets/landing-hero.jpg";
@@ -216,6 +221,152 @@ function HomePage() {
                 </span>
               </div>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF – WhatsApp testimonial */}
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-white">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="order-2 lg:order-none text-right">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+              Real Client - Real Words
+            </span>
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.15] tracking-tight text-primary">
+              לא אני אומר. לקוח שחזר הלילה מפאפוס אומר.
+            </h2>
+            <p className="mt-5 text-base sm:text-lg font-medium text-foreground/85 leading-relaxed">
+              בסוף לא זוכרים רק את המלון או את הטיסה. זוכרים את מי שדואג לך.
+            </p>
+            <p className="mt-6 text-sm sm:text-base text-foreground/70 italic">
+              תודה על האמון. מחכה לחופשה הבאה שלכם.
+            </p>
+          </div>
+
+          <div className="order-1 lg:order-none flex justify-center">
+            <div className="relative w-[300px] sm:w-[340px] rounded-[42px] bg-[#0b1e3b] p-3 shadow-[0_40px_80px_-30px_rgba(11,30,59,0.55)] ring-1 ring-primary/20">
+              <div className="absolute top-3 inset-x-0 flex justify-center pointer-events-none">
+                <div className="h-6 w-32 rounded-b-2xl bg-[#0b1e3b]" />
+              </div>
+              <div className="rounded-[32px] overflow-hidden bg-[#ECE5DD]">
+                <div className="bg-[#075E54] text-white px-4 pt-8 pb-3 flex items-center gap-3" dir="rtl">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg font-bold">ג</div>
+                  <div className="flex-1 text-right">
+                    <div className="text-sm font-semibold">לקוח גולדטוס</div>
+                    <div className="text-[11px] text-white/80">Yesterday, 23:20</div>
+                  </div>
+                </div>
+                <div className="px-3 py-4 space-y-2 min-h-[360px]" dir="rtl">
+                  <div className="max-w-[85%] bg-white rounded-2xl rounded-tr-sm px-3 py-2 text-sm text-[#111] shadow-sm mr-auto text-right">
+                    מה קורה? יקר<br />
+                    נחתנו בשלום תודה רבה על הכל<br />
+                    על הזמינות והשירות<br />
+                    הכל הלך מעולה<br />
+                    נהנו מאוד כמובן<br />
+                    שבפעם הבאה אנחנו איתך
+                    <div className="text-[10px] text-black/40 mt-1">23:18</div>
+                  </div>
+                  <div className="max-w-[75%] bg-[#DCF8C6] rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-[#111] shadow-sm ml-auto text-right">
+                    איזה כיף לשמוע. שמח שנהניתם. תודה
+                    <div className="text-[10px] text-black/40 mt-1 flex justify-end gap-1">23:20 ✓✓</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO TRAVEL TIPS HUB */}
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#F8FAFC]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10 sm:mb-14">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+              Knowledge Base
+            </span>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-primary">
+              טיפים חכמים למטייל הישראלי
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
+              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
+                <CreditCard className="w-6 h-6" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+                תשלום בכרטיס אשראי בחו"ל - האם לבחור בשקלים או במטבע המקומי?
+              </h3>
+              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+                כשאתם משלמים בחו"ל בכרטיס אשראי, מסוף התשלום יציע לכם לעיתים קרובות לבחור בין חיוב בשקלים (ILS) לבין חיוב במטבע המקומי. התשובה החד-משמעית היא: כמעט תמיד עדיף לבחור במטבע המקומי. ההמרה לשקלים בקופה כוללת כמעט תמיד שער המרה גבוה מאוד ופחות משתלם. בחירה במטבע המקומי משאירה את עמלת ההמרה לחברת האשראי שלכם, שהיא לרוב זולה ומשתלמת משמעותית.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
+              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_82),oklch(0.65_0.15_82))] flex items-center justify-center text-primary mb-4">
+                <BookOpen className="w-6 h-6" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+                תוקף דרכון לטיסה - כמה חודשים מראש חובה לבדוק את הדרכון?
+              </h3>
+              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+                הידעתם? עצם העובדה שהדרכון שלכם בתוקף למהלך השהות אינה מספיקה. מדינות רבות ברחבי העולם (כולל אירופה וארה"ב) דורשות באופן רשמי שהדרכון שלכם יהיה בתוקף של לפחות 6 חודשים מעבר ליום הכניסה למדינה. לא מעט נוסעים מגיעים מדי יום לנתב"ג ומגלים ברגע האחרון שהם אינם יכולים לעלות לטיסה. בדקו את תוקף הדרכון שלכם עוד לפני הזמנת החופשה!
+              </p>
+            </article>
+
+            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
+              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
+                <Stethoscope className="w-6 h-6" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+                חובת ביטוח רפואי לגאורגיה - חוק חדש למטיילים בטביליסי ובאטומי
+              </h3>
+              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+                ממשלת גאורגיה החלה לאכוף בקפידה חוק חדש המטיל חובת הצגת ביטוח רפואי לכל תייר הנכנס למדינה. כבר לא מדובר בהמלצה, אלא בדרישה רשמית של משטרת הגבולות הגאורגית לחובת כיסוי מלא לכל ימי השהות. ודאו שהפקתם פוליסה מתאימה ושמרתם אותה בנייד.
+              </p>
+              <a
+                href={PASSPORTCARD_URL}
+                target="_blank"
+                rel="noopener sponsored"
+                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-primary hover:text-accent transition-colors"
+              >
+                לחצו כאן להפקת ביטוח נסיעות מותאם לגאורגיה ב-PassportCard
+                <ArrowLeft className="w-4 h-4" />
+              </a>
+            </article>
+
+            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
+              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
+                <Luggage className="w-6 h-6" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+                טיסת קונקשן (טיסה עם עצירת ביניים) - איך לעשות את זה נכון ובלי לאבד את המזוודה?
+              </h3>
+              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+                טיסת המשך דורשת תכנון קפדני: זמן חיבור מינימלי, בדיקת העברת מזוודות אוטומטית בין חברות התעופה, וידוא מסוף היציאה, וסיכוני הגעה באיחור. אנחנו בונים לכם מסלול טיסה שמפחית סיכונים ומבטיח נחיתה חלקה עם המזוודה במקום הנכון.
+              </p>
+            </article>
+
+            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right md:col-span-2 lg:col-span-1">
+              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
+                <Signal className="w-6 h-6" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+                eSIM לחו"ל או חבילת גלישה מהארץ - מה הדרך הזולה ביותר להישאר מחוברים?
+              </h3>
+              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+                חבילות eSIM לרוב זולות משמעותית מחבילות רומינג של המפעילים בארץ, מציעות מהירות טובה יותר, ומופעלות בדקה - בלי להחליף כרטיס SIM פיזי. השוו את מחיר הג'יגה ליום השהות ואת מספר הימים הכלולים בחבילה לפני שאתם רוכשים.
+              </p>
+              <a
+                href={WIFLY_URL}
+                target="_blank"
+                rel="noopener sponsored"
+                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-success hover:text-primary transition-colors"
+              >
+                לרכישת חבילת גלישה משתלמת ואינטרנט מהיר לחו"ל בקליק לחצו כאן
+                <ArrowLeft className="w-4 h-4" />
+              </a>
+            </article>
           </div>
         </div>
       </section>
