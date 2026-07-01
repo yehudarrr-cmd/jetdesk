@@ -31,6 +31,7 @@ import { Route as AppEmailIngestRouteImport } from './routes/_app.email-ingest'
 import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
+import { Route as ApiPublicParseDealRouteImport } from './routes/api.public.parse-deal'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
@@ -142,6 +143,11 @@ const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   path: '/customers/',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicParseDealRoute = ApiPublicParseDealRouteImport.update({
+  id: '/api/public/parse-deal',
+  path: '/api/public/parse-deal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
   id: '/customers/$id',
   path: '/customers/$id',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/parse-deal'
     | '/customers/'
     | '/api/public/telegram/poll'
   fileRoutesByTo: FileRoutesByTo
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/parse-deal'
     | '/customers'
     | '/api/public/telegram/poll'
   id:
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/_site/travel-requirements'
     | '/_site/'
     | '/_app/customers/$id'
+    | '/api/public/parse-deal'
     | '/_app/customers/'
     | '/api/public/telegram/poll'
   fileRoutesById: FileRoutesById
@@ -309,6 +321,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   SiteRoute: typeof SiteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicParseDealRoute: typeof ApiPublicParseDealRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
@@ -468,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomersIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/public/parse-deal': {
+      id: '/api/public/parse-deal'
+      path: '/api/public/parse-deal'
+      fullPath: '/api/public/parse-deal'
+      preLoaderRoute: typeof ApiPublicParseDealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/customers/$id': {
       id: '/_app/customers/$id'
       path: '/customers/$id'
@@ -545,6 +565,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   SiteRoute: SiteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicParseDealRoute: ApiPublicParseDealRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
 export const routeTree = rootRouteImport
