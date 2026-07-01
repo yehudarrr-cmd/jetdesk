@@ -45,6 +45,7 @@ export function SiteFooter() {
             </div>
             <div className="flex items-center gap-6">
               <span>© {new Date().getFullYear()} GoldTus</span>
+              <span className="text-muted-foreground/60 text-xs">ט.ל.ח</span>
               <Link to="/auth" className="hover:text-primary transition-colors">
                 כניסה למערכת
               </Link>
