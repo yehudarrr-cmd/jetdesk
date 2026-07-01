@@ -36,6 +36,7 @@ import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
 import { Route as ApiPublicParseDealRouteImport } from './routes/api.public.parse-deal'
+import { Route as ApiPublicDealImageRouteImport } from './routes/api.public.deal-image'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
@@ -172,6 +173,11 @@ const ApiPublicParseDealRoute = ApiPublicParseDealRouteImport.update({
   path: '/api/public/parse-deal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDealImageRoute = ApiPublicDealImageRouteImport.update({
+  id: '/api/public/deal-image',
+  path: '/api/public/deal-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
   id: '/customers/$id',
   path: '/customers/$id',
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
@@ -300,6 +309,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/customers/'
     | '/api/public/telegram/poll'
@@ -329,6 +339,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/customers'
     | '/api/public/telegram/poll'
@@ -360,6 +371,7 @@ export interface FileRouteTypes {
     | '/_site/travel-requirements'
     | '/_site/'
     | '/_app/customers/$id'
+    | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/_app/customers/'
     | '/api/public/telegram/poll'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   SiteRoute: typeof SiteRouteWithChildren
   AuthRoute: typeof AuthRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiPublicDealImageRoute: typeof ApiPublicDealImageRoute
   ApiPublicParseDealRoute: typeof ApiPublicParseDealRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
@@ -565,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicParseDealRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/deal-image': {
+      id: '/api/public/deal-image'
+      path: '/api/public/deal-image'
+      fullPath: '/api/public/deal-image'
+      preLoaderRoute: typeof ApiPublicDealImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/customers/$id': {
       id: '/_app/customers/$id'
       path: '/customers/$id'
@@ -649,6 +669,7 @@ const rootRouteChildren: RootRouteChildren = {
   SiteRoute: SiteRouteWithChildren,
   AuthRoute: AuthRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiPublicDealImageRoute: ApiPublicDealImageRoute,
   ApiPublicParseDealRoute: ApiPublicParseDealRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { generatedDestinationImageUrl, safeDealImageUrl } from "@/lib/deal-image";
 
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
 type DealInsert = Database["public"]["Tables"]["deals"]["Insert"];
@@ -287,14 +288,7 @@ function AdminDealsPage() {
           <div className="grid gap-3">
             {deals.map((d) => (
               <div key={d.id} className="flex flex-wrap items-center gap-3 p-3 rounded-lg border border-border">
-                <img
-                  src={d.image_url || undefined}
-                  alt=""
-                  className="w-20 h-14 rounded object-cover bg-muted"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
-                />
+                <AdminDealImage deal={d} />
                 <div className="flex-1 min-w-[200px]">
                   <div className="font-semibold">{d.destination}{d.country ? ` · ${d.country}` : ""}</div>
                   <div className="text-xs text-muted-foreground truncate">{d.title || d.hotel || "—"}</div>
@@ -341,5 +335,28 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <Label className="text-xs">{label}</Label>
       {children}
     </div>
+  );
+}
+
+function AdminDealImage({ deal }: { deal: Deal }) {
+  const generated = generatedDestinationImageUrl(deal.destination, deal.country);
+  return (
+    <img
+      src={safeDealImageUrl(deal.image_url, deal.destination, deal.country)}
+      data-generated-src={generated}
+      alt=""
+      className="w-20 h-14 rounded object-cover bg-muted"
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      onError={(e) => {
+        const img = e.currentTarget;
+        const fallback = img.dataset.generatedSrc;
+        if (fallback && img.src !== new URL(fallback, window.location.origin).href) {
+          img.src = fallback;
+        } else {
+          img.style.visibility = "hidden";
+        }
+      }}
+    />
   );
 }

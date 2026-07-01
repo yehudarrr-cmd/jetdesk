@@ -87,6 +87,20 @@ function stripTags(s: string): string {
   return decode(s.replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
 }
 
+function normalizeImageUrl(raw: string): string | null {
+  const clean = decode(raw);
+  try {
+    const url = new URL(clean, "https://quotes.goldtus.com");
+    if (url.protocol !== "https:") return null;
+    const href = url.toString();
+    if (/\/branding\//i.test(href) || /logo/i.test(href)) return null;
+    if (!/(bstatic\.com|tripcdn\.com|image\.pollinations\.ai|quotes\.goldtus\.com|goldtus\.com)/i.test(url.hostname)) return null;
+    return href;
+  } catch {
+    return null;
+  }
+}
+
 const HEBREW_MONTHS: Record<string, number> = {
   "ינואר": 1, "פברואר": 2, "מרץ": 3, "מרס": 3, "אפריל": 4, "מאי": 5,
   "יוני": 6, "יולי": 7, "אוגוסט": 8, "ספטמבר": 9, "אוקטובר": 10,
@@ -127,7 +141,7 @@ export function parseQuoteHtml(html: string): ParsedDeal {
 
   // Hero / og:image
   const ogImage = html.match(/property="og:image"\s+content="([^"]+)"/i);
-  if (ogImage) result.image_url = decode(ogImage[1]);
+  if (ogImage) result.image_url = normalizeImageUrl(ogImage[1]);
 
   // Hotel: uppercase Latin name that repeats (appears in hotel section)
   const hotelMatches = Array.from(
@@ -183,8 +197,12 @@ export function parseQuoteHtml(html: string): ParsedDeal {
   }
 
   // Gallery: hotel images
-  const gallery = Array.from(html.matchAll(/https:\/\/cf\.bstatic\.com\/[^"'\s)]+/g))
-    .map((m) => decode(m[0]));
+  const gallery = [
+    ...Array.from(html.matchAll(/https:\/\/[^"'\s)]+(?:bstatic\.com|tripcdn\.com|image\.pollinations\.ai)[^"'\s)]*/g)).map((m) => m[0]),
+    ...Array.from(html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)).map((m) => m[1]),
+  ]
+    .map((src) => normalizeImageUrl(src))
+    .filter((src): src is string => !!src);
   result.gallery = [...new Set(gallery)].slice(0, 8);
 
   // If no og:image was set, use the first gallery photo as the hero.
