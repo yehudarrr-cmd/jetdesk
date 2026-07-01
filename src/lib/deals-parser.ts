@@ -187,5 +187,10 @@ export function parseQuoteHtml(html: string): ParsedDeal {
     .map((m) => decode(m[0]));
   result.gallery = [...new Set(gallery)].slice(0, 8);
 
+  // If no og:image was set, use the first gallery photo as the hero.
+  if (!result.image_url && result.gallery.length > 0) {
+    result.image_url = result.gallery[0];
+  }
+
   return result;
 }

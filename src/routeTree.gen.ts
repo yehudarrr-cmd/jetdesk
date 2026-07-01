@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AppRouteImport } from './routes/_app'
@@ -38,6 +39,11 @@ import { Route as ApiPublicParseDealRouteImport } from './routes/api.public.pars
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -180,6 +186,7 @@ const ApiPublicTelegramPollRoute = ApiPublicTelegramPollRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
   '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/email-ingest': typeof AppEmailIngestRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof SiteIndexRoute
   '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard': typeof AppDashboardRoute
   '/documents': typeof AppDocumentsRoute
   '/email-ingest': typeof AppEmailIngestRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/_site': typeof SiteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/documents': typeof AppDocumentsRoute
   '/_app/email-ingest': typeof AppEmailIngestRoute
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/sitemap.xml'
     | '/dashboard'
     | '/documents'
     | '/email-ingest'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/sitemap.xml'
     | '/dashboard'
     | '/documents'
     | '/email-ingest'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_site'
     | '/auth'
+    | '/sitemap.xml'
     | '/_app/dashboard'
     | '/_app/documents'
     | '/_app/email-ingest'
@@ -357,12 +369,20 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   SiteRoute: typeof SiteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiPublicParseDealRoute: typeof ApiPublicParseDealRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -628,6 +648,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   SiteRoute: SiteRouteWithChildren,
   AuthRoute: AuthRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiPublicParseDealRoute: ApiPublicParseDealRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
