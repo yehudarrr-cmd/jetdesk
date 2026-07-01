@@ -26,7 +26,7 @@ import jetdeskLogo from "@/assets/jetdesk-logo-transparent.png.asset.json";
 const NAV = [
   { to: "/dashboard", label: "לוח בקרה", icon: LayoutDashboard },
   { to: "/leads", label: "לידים מהאתר", icon: Sprout },
-  { to: "/deals", label: "דילים חמים", icon: Flame },
+  { to: "/manage-deals", label: "דילים חמים", icon: Flame },
   { to: "/customers", label: "לקוחות", icon: Users },
   { to: "/import", label: "ייבוא הזמנות", icon: Upload },
   { to: "/intake", label: "תיבת קליטה", icon: Inbox },

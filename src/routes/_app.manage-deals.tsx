@@ -14,7 +14,7 @@ import type { Database } from "@/integrations/supabase/types";
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
 type DealInsert = Database["public"]["Tables"]["deals"]["Insert"];
 
-export const Route = createFileRoute("/_app/deals")({
+export const Route = createFileRoute("/_app/manage-deals")({
   component: AdminDealsPage,
 });
 

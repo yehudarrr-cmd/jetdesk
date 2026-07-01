@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteTravelRequirementsRouteImport } from './routes/_site.travel-requirements'
 import { Route as SiteTermsRouteImport } from './routes/_site.terms'
+import { Route as SiteSitemapRouteImport } from './routes/_site.sitemap'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
@@ -24,6 +25,7 @@ import { Route as SiteAccessibilityRouteImport } from './routes/_site.accessibil
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
+import { Route as AppManageDealsRouteImport } from './routes/_app.manage-deals'
 import { Route as AppLeadsRouteImport } from './routes/_app.leads'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppImportRouteImport } from './routes/_app.import'
@@ -62,6 +64,11 @@ const SiteTravelRequirementsRoute = SiteTravelRequirementsRouteImport.update({
 const SiteTermsRoute = SiteTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteSitemapRoute = SiteSitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteServicesRoute = SiteServicesRouteImport.update({
@@ -107,6 +114,11 @@ const AppTasksRoute = AppTasksRouteImport.update({
 const AppPaymentsRoute = AppPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppManageDealsRoute = AppManageDealsRouteImport.update({
+  id: '/manage-deals',
+  path: '/manage-deals',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLeadsRoute = AppLeadsRouteImport.update({
@@ -175,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
+  '/manage-deals': typeof AppManageDealsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
@@ -184,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/sitemap': typeof SiteSitemapRoute
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -201,6 +215,7 @@ export interface FileRoutesByTo {
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
+  '/manage-deals': typeof AppManageDealsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
@@ -210,6 +225,7 @@ export interface FileRoutesByTo {
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/sitemap': typeof SiteSitemapRoute
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
@@ -229,6 +245,7 @@ export interface FileRoutesById {
   '/_app/import': typeof AppImportRoute
   '/_app/intake': typeof AppIntakeRoute
   '/_app/leads': typeof AppLeadsRoute
+  '/_app/manage-deals': typeof AppManageDealsRoute
   '/_app/payments': typeof AppPaymentsRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/telegram': typeof AppTelegramRoute
@@ -238,6 +255,7 @@ export interface FileRoutesById {
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
+  '/_site/sitemap': typeof SiteSitemapRoute
   '/_site/terms': typeof SiteTermsRoute
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
@@ -258,6 +276,7 @@ export interface FileRouteTypes {
     | '/import'
     | '/intake'
     | '/leads'
+    | '/manage-deals'
     | '/payments'
     | '/tasks'
     | '/telegram'
@@ -267,6 +286,7 @@ export interface FileRouteTypes {
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/sitemap'
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
@@ -284,6 +304,7 @@ export interface FileRouteTypes {
     | '/import'
     | '/intake'
     | '/leads'
+    | '/manage-deals'
     | '/payments'
     | '/tasks'
     | '/telegram'
@@ -293,6 +314,7 @@ export interface FileRouteTypes {
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/sitemap'
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
@@ -311,6 +333,7 @@ export interface FileRouteTypes {
     | '/_app/import'
     | '/_app/intake'
     | '/_app/leads'
+    | '/_app/manage-deals'
     | '/_app/payments'
     | '/_app/tasks'
     | '/_app/telegram'
@@ -320,6 +343,7 @@ export interface FileRouteTypes {
     | '/_site/insurance'
     | '/_site/privacy'
     | '/_site/services'
+    | '/_site/sitemap'
     | '/_site/terms'
     | '/_site/travel-requirements'
     | '/_site/'
@@ -379,6 +403,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof SiteTermsRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/sitemap': {
+      id: '/_site/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SiteSitemapRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/services': {
@@ -442,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/payments'
       fullPath: '/payments'
       preLoaderRoute: typeof AppPaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/manage-deals': {
+      id: '/_app/manage-deals'
+      path: '/manage-deals'
+      fullPath: '/manage-deals'
+      preLoaderRoute: typeof AppManageDealsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/leads': {
@@ -532,6 +570,7 @@ interface AppRouteChildren {
   AppImportRoute: typeof AppImportRoute
   AppIntakeRoute: typeof AppIntakeRoute
   AppLeadsRoute: typeof AppLeadsRoute
+  AppManageDealsRoute: typeof AppManageDealsRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTelegramRoute: typeof AppTelegramRoute
@@ -547,6 +586,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppImportRoute: AppImportRoute,
   AppIntakeRoute: AppIntakeRoute,
   AppLeadsRoute: AppLeadsRoute,
+  AppManageDealsRoute: AppManageDealsRoute,
   AppPaymentsRoute: AppPaymentsRoute,
   AppTasksRoute: AppTasksRoute,
   AppTelegramRoute: AppTelegramRoute,
@@ -563,6 +603,7 @@ interface SiteRouteChildren {
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
+  SiteSitemapRoute: typeof SiteSitemapRoute
   SiteTermsRoute: typeof SiteTermsRoute
   SiteTravelRequirementsRoute: typeof SiteTravelRequirementsRoute
   SiteIndexRoute: typeof SiteIndexRoute
@@ -575,6 +616,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteInsuranceRoute: SiteInsuranceRoute,
   SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
+  SiteSitemapRoute: SiteSitemapRoute,
   SiteTermsRoute: SiteTermsRoute,
   SiteTravelRequirementsRoute: SiteTravelRequirementsRoute,
   SiteIndexRoute: SiteIndexRoute,
