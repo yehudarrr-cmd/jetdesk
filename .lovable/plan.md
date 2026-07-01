@@ -1,41 +1,76 @@
-## Hero Polish - Alignment, Styling & Sticky Actions
+## מטרה
+עמוד `/deals` איכותי ל-SEO, בעיצוב Dark Luxury קיים, עם מערכת דילים גמישה שנשאבת אוטומטית מ-quotes.goldtus.com.
 
-### 1. Restructure hero into a balanced two-column block
+## 1. מקור נתונים — Supabase + סקרייפ אוטומטי
 
-Move the intro copy (badge, headline, subtitle, benefits row) into the **left column above the form**, so left and right columns start on the same top baseline. The slider on the right becomes taller and matches the full stacked height of `text + form` on the left.
+טבלה חדשה `public.deals`:
+- `id`, `slug`, `quote_url` (unique)
+- `destination`, `country`, `title`, `hotel`, `airline`
+- `price_from` (integer), `currency`
+- `start_date`, `end_date`, `nights`
+- `image_url`, `gallery` (jsonb)
+- `featured` (bool), `active` (bool), `sort_order`
+- `tags` (text[]) — לעתיד: חג/חודש/רגע-אחרון
+- `last_synced_at`, `created_at`, `updated_at`
+- RLS: קריאה ל-anon (רק `active=true`), כתיבה לאדמינים.
 
-Resulting structure inside the hero grid:
+מדוע Supabase ולא JSON: מאפשר הוספה מהדשבורד, סנכרון אוטומטי, ועמודי יעד עתידיים (`/deals/batumi`) ללא deploy.
 
-```text
-+--------------------------+--------------------------+
-| badge (pill)             |                          |
-| H1 title                 |                          |
-| subtitle paragraph       |         SLIDER           |
-| benefits icon row        |     (full column height) |
-| ------------------------ |                          |
-| Quick Quote form card    |                          |
-+--------------------------+--------------------------+
-```
+## 2. סקרייפ אוטומטי מ-quotes.goldtus.com
 
-- Grid: `lg:grid-cols-2`, `items-stretch`, `gap-10`.
-- Left column: `flex flex-col gap-6`, form pinned to the bottom with `mt-auto` so its bottom edge aligns with the slider's bottom edge.
-- Slider container: remove fixed `min-h`; use `h-full` with a `min-h-[420px]` fallback for small screens so it fills the row height set by the left column.
+בדקתי דוגמה — הדף מכיל מבנה קבוע (יעד, מלון, מחיר ₪, תאריכי יציאה/חזרה, לילות, חברת תעופה, תמונה). סקרייפ אפשרי.
 
-### 2. Styling refinements to text block
+Server function `syncDealFromQuote(quoteUrl)`:
+- fetch לדף → פארס HTML (regex/cheerio-lite) לחילוץ השדות.
+- upsert ל-`deals` לפי `quote_url`.
+- `syncAllDeals()` — לולאה על כל הרשומות הקיימות (ריענון מחירים).
 
-- **Badge pill**: add top margin (`mt-2`), increase padding to `px-5 py-2`, slightly larger tracking. Sits lower and looks more substantial.
-- **Subtitle**: bump weight from default to `font-medium` and color to `text-foreground/90` for stronger contrast on white.
-- **Benefits row** (Plane / ShieldCheck / Crown): increase gap to `gap-x-6 gap-y-3`, add `pt-2 border-t border-primary/10` divider above so it clearly belongs to the text block and aligns to the paragraph's right edge.
-- Keep all dashes as regular hyphens.
+ממשק ניהול `/_app/deals`:
+- שדה URL להדבקה → כפתור "משוך מההצעה" → תצוגה מקדימה → שמור.
+- טבלת דילים עם toggle Active/Featured, עריכה ידנית של שדות שהחילוץ פספס, מחיקה, כפתור "רענן כל הדילים".
+- ייבוא ראשוני של 13 ה-URLs שסופקו.
 
-### 3. Sticky action visibility
+## 3. עמוד `/deals` (ציבורי)
 
-- **Desktop**: promote the header's affiliate buttons (PassportCard + WiFly) and add a WhatsApp button next to them so all three critical CTAs live in the sticky header. The floating round WhatsApp bubble at bottom-left stays as a secondary anchor.
-- **Mobile**: existing `FloatingWhatsApp` bottom bar (WhatsApp + Insurance + eSIM) already pins to the viewport - no change needed beyond confirming spacer height still clears content.
+- **Hero**: כותרת "דילים חמים לחו״ל" בזהב על נייבי, כפתור וואטסאפ.
+- **Info Box** אלגנטי: הודעת "חשוב לדעת" (מחירים דינמיים / ט.ל.ח).
+- **Grid דילים**: כרטיסים מוארי-זהב על נייבי (עקבי לעיצוב הקיים) — תמונה WebP + Lazy, יעד, כותרת, "החל מ-₪X", תאריכים, לילות, מלון, חברת תעופה, כפתור זהב "לפרטים ולהזמנה" → `externalUrl`.
+- **Featured** למעלה, השאר לפי `sort_order`.
+- **CTA תחתון**: "לא מצאתם את הדיל?" + כפתור וואטסאפ גדול.
 
-### Files touched
+## 4. SEO
 
-- `src/routes/_site.index.tsx` - hero grid restructure, badge/subtitle/benefits styling.
-- `src/components/site/SiteHeader.tsx` - add WhatsApp CTA next to affiliate buttons in the desktop header.
+`head()` על `/deals`:
+- Title: `דילים חמים לחו"ל | טיסות וחבילות נופש - GoldTus`
+- Meta description כמבוקש
+- Canonical `https://goldtus.com/deals`
+- OG title/description/type/url + og:image (תמונת דיל ראשי)
+- JSON-LD: `BreadcrumbList` + `CollectionPage` עם `hasPart` של `Offer`/`TouristTrip` לכל דיל (עוזר לגוגל להבין מבצעים).
+- הוספת `/deals` ל-`public/sitemap.xml` (וארכיטקטורה שתומכת בעתיד ב-`/deals/:slug`).
+- קישור "🔥 דילים חמים" ב-`SiteHeader` בתפריט הראשי.
 
-No new dependencies, no data or route changes.
+## 5. HTML Sitemap
+
+עמוד `/sitemap` פשוט (רשימת קישורים מקובצת: ראשי, שירותים, דילים) — כרגע קטן, יגדל אוטומטית כשנוסיף `/deals/:slug`. קישור בפוטר.
+
+## 6. ארכיטקטורה עתידית (ללא שינוי מבנה)
+
+- `/deals/:destination` — route דינמי שסונן `deals` לפי `country`/`destination`/`tags`.
+- `/deals/last-minute`, `/deals/holidays/:holiday` — פילטרים מעל אותה טבלה.
+- שדות `tags[]` + `country` כבר יאפשרו את זה בלי מיגרציה נוספת.
+
+## 7. ביצועים
+
+- `loading="lazy"` + `decoding="async"` + `sizes` על כל תמונה.
+- Loader משתמש ב-`ensureQueryData` (SSR-friendly).
+- אין תלות חיצונית כבדה בעמוד הציבורי.
+
+## פרטים טכניים
+- Route: `src/routes/_site.deals.tsx` (leaf תחת site layout).
+- Admin: `src/routes/_app.deals.tsx`.
+- Server fns: `src/lib/deals.functions.ts` — `listPublicDeals`, `listAdminDeals`, `syncDealFromQuote`, `syncAllDeals`, `upsertDealManual`, `deleteDeal`, `toggleDealFlag`.
+- Parser: `src/lib/deals-parser.server.ts` — פונקציות regex ייעודיות על ה-HTML של quotes.goldtus.com (יעד, מלון, מחיר, תאריכים, לילות, חברת תעופה, תמונה ראשית). fallback: אם שדה חסר — נשמר null וניתן לעריכה ידנית.
+- מיגרציה יוצרת טבלה + GRANT + RLS + policies (anon SELECT WHERE active, authenticated admins full).
+
+## שאלה אחת לפני build
+מי נחשב "אדמין" לכתיבה? כרגע לפי הקוד יש `has_role(auth.uid(), 'admin')` — אשתמש בזה. אם צריך לפתוח לכל משתמש מחובר, אעדכן.

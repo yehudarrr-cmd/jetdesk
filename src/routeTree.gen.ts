@@ -15,14 +15,17 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as SiteIndexRouteImport } from './routes/_site.index'
 import { Route as SiteTravelRequirementsRouteImport } from './routes/_site.travel-requirements'
 import { Route as SiteTermsRouteImport } from './routes/_site.terms'
+import { Route as SiteSitemapRouteImport } from './routes/_site.sitemap'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
+import { Route as SiteDealsRouteImport } from './routes/_site.deals'
 import { Route as SiteContactRouteImport } from './routes/_site.contact'
 import { Route as SiteAccessibilityRouteImport } from './routes/_site.accessibility'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
 import { Route as AppTasksRouteImport } from './routes/_app.tasks'
 import { Route as AppPaymentsRouteImport } from './routes/_app.payments'
+import { Route as AppManageDealsRouteImport } from './routes/_app.manage-deals'
 import { Route as AppLeadsRouteImport } from './routes/_app.leads'
 import { Route as AppIntakeRouteImport } from './routes/_app.intake'
 import { Route as AppImportRouteImport } from './routes/_app.import'
@@ -31,6 +34,7 @@ import { Route as AppEmailIngestRouteImport } from './routes/_app.email-ingest'
 import { Route as AppDocumentsRouteImport } from './routes/_app.documents'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app.customers.index'
+import { Route as ApiPublicParseDealRouteImport } from './routes/api.public.parse-deal'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
 
@@ -62,6 +66,11 @@ const SiteTermsRoute = SiteTermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => SiteRoute,
 } as any)
+const SiteSitemapRoute = SiteSitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteServicesRoute = SiteServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -75,6 +84,11 @@ const SitePrivacyRoute = SitePrivacyRouteImport.update({
 const SiteInsuranceRoute = SiteInsuranceRouteImport.update({
   id: '/insurance',
   path: '/insurance',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteDealsRoute = SiteDealsRouteImport.update({
+  id: '/deals',
+  path: '/deals',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteContactRoute = SiteContactRouteImport.update({
@@ -100,6 +114,11 @@ const AppTasksRoute = AppTasksRouteImport.update({
 const AppPaymentsRoute = AppPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppManageDealsRoute = AppManageDealsRouteImport.update({
+  id: '/manage-deals',
+  path: '/manage-deals',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLeadsRoute = AppLeadsRouteImport.update({
@@ -142,6 +161,11 @@ const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   path: '/customers/',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicParseDealRoute = ApiPublicParseDealRouteImport.update({
+  id: '/api/public/parse-deal',
+  path: '/api/public/parse-deal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppCustomersIdRoute = AppCustomersIdRouteImport.update({
   id: '/customers/$id',
   path: '/customers/$id',
@@ -163,17 +187,21 @@ export interface FileRoutesByFullPath {
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
+  '/manage-deals': typeof AppManageDealsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
   '/accessibility': typeof SiteAccessibilityRoute
   '/contact': typeof SiteContactRoute
+  '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/sitemap': typeof SiteSitemapRoute
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -187,17 +215,21 @@ export interface FileRoutesByTo {
   '/import': typeof AppImportRoute
   '/intake': typeof AppIntakeRoute
   '/leads': typeof AppLeadsRoute
+  '/manage-deals': typeof AppManageDealsRoute
   '/payments': typeof AppPaymentsRoute
   '/tasks': typeof AppTasksRoute
   '/telegram': typeof AppTelegramRoute
   '/accessibility': typeof SiteAccessibilityRoute
   '/contact': typeof SiteContactRoute
+  '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
+  '/sitemap': typeof SiteSitemapRoute
   '/terms': typeof SiteTermsRoute
   '/travel-requirements': typeof SiteTravelRequirementsRoute
   '/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -213,18 +245,22 @@ export interface FileRoutesById {
   '/_app/import': typeof AppImportRoute
   '/_app/intake': typeof AppIntakeRoute
   '/_app/leads': typeof AppLeadsRoute
+  '/_app/manage-deals': typeof AppManageDealsRoute
   '/_app/payments': typeof AppPaymentsRoute
   '/_app/tasks': typeof AppTasksRoute
   '/_app/telegram': typeof AppTelegramRoute
   '/_site/accessibility': typeof SiteAccessibilityRoute
   '/_site/contact': typeof SiteContactRoute
+  '/_site/deals': typeof SiteDealsRoute
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
+  '/_site/sitemap': typeof SiteSitemapRoute
   '/_site/terms': typeof SiteTermsRoute
   '/_site/travel-requirements': typeof SiteTravelRequirementsRoute
   '/_site/': typeof SiteIndexRoute
   '/_app/customers/$id': typeof AppCustomersIdRoute
+  '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
@@ -240,17 +276,21 @@ export interface FileRouteTypes {
     | '/import'
     | '/intake'
     | '/leads'
+    | '/manage-deals'
     | '/payments'
     | '/tasks'
     | '/telegram'
     | '/accessibility'
     | '/contact'
+    | '/deals'
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/sitemap'
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/parse-deal'
     | '/customers/'
     | '/api/public/telegram/poll'
   fileRoutesByTo: FileRoutesByTo
@@ -264,17 +304,21 @@ export interface FileRouteTypes {
     | '/import'
     | '/intake'
     | '/leads'
+    | '/manage-deals'
     | '/payments'
     | '/tasks'
     | '/telegram'
     | '/accessibility'
     | '/contact'
+    | '/deals'
     | '/insurance'
     | '/privacy'
     | '/services'
+    | '/sitemap'
     | '/terms'
     | '/travel-requirements'
     | '/customers/$id'
+    | '/api/public/parse-deal'
     | '/customers'
     | '/api/public/telegram/poll'
   id:
@@ -289,18 +333,22 @@ export interface FileRouteTypes {
     | '/_app/import'
     | '/_app/intake'
     | '/_app/leads'
+    | '/_app/manage-deals'
     | '/_app/payments'
     | '/_app/tasks'
     | '/_app/telegram'
     | '/_site/accessibility'
     | '/_site/contact'
+    | '/_site/deals'
     | '/_site/insurance'
     | '/_site/privacy'
     | '/_site/services'
+    | '/_site/sitemap'
     | '/_site/terms'
     | '/_site/travel-requirements'
     | '/_site/'
     | '/_app/customers/$id'
+    | '/api/public/parse-deal'
     | '/_app/customers/'
     | '/api/public/telegram/poll'
   fileRoutesById: FileRoutesById
@@ -309,6 +357,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   SiteRoute: typeof SiteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicParseDealRoute: typeof ApiPublicParseDealRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
@@ -356,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteTermsRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/_site/sitemap': {
+      id: '/_site/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SiteSitemapRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/services': {
       id: '/_site/services'
       path: '/services'
@@ -375,6 +431,13 @@ declare module '@tanstack/react-router' {
       path: '/insurance'
       fullPath: '/insurance'
       preLoaderRoute: typeof SiteInsuranceRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/deals': {
+      id: '/_site/deals'
+      path: '/deals'
+      fullPath: '/deals'
+      preLoaderRoute: typeof SiteDealsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/contact': {
@@ -410,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/payments'
       fullPath: '/payments'
       preLoaderRoute: typeof AppPaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/manage-deals': {
+      id: '/_app/manage-deals'
+      path: '/manage-deals'
+      fullPath: '/manage-deals'
+      preLoaderRoute: typeof AppManageDealsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/leads': {
@@ -468,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCustomersIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/public/parse-deal': {
+      id: '/api/public/parse-deal'
+      path: '/api/public/parse-deal'
+      fullPath: '/api/public/parse-deal'
+      preLoaderRoute: typeof ApiPublicParseDealRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app/customers/$id': {
       id: '/_app/customers/$id'
       path: '/customers/$id'
@@ -493,6 +570,7 @@ interface AppRouteChildren {
   AppImportRoute: typeof AppImportRoute
   AppIntakeRoute: typeof AppIntakeRoute
   AppLeadsRoute: typeof AppLeadsRoute
+  AppManageDealsRoute: typeof AppManageDealsRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
   AppTasksRoute: typeof AppTasksRoute
   AppTelegramRoute: typeof AppTelegramRoute
@@ -508,6 +586,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppImportRoute: AppImportRoute,
   AppIntakeRoute: AppIntakeRoute,
   AppLeadsRoute: AppLeadsRoute,
+  AppManageDealsRoute: AppManageDealsRoute,
   AppPaymentsRoute: AppPaymentsRoute,
   AppTasksRoute: AppTasksRoute,
   AppTelegramRoute: AppTelegramRoute,
@@ -520,9 +599,11 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 interface SiteRouteChildren {
   SiteAccessibilityRoute: typeof SiteAccessibilityRoute
   SiteContactRoute: typeof SiteContactRoute
+  SiteDealsRoute: typeof SiteDealsRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
+  SiteSitemapRoute: typeof SiteSitemapRoute
   SiteTermsRoute: typeof SiteTermsRoute
   SiteTravelRequirementsRoute: typeof SiteTravelRequirementsRoute
   SiteIndexRoute: typeof SiteIndexRoute
@@ -531,9 +612,11 @@ interface SiteRouteChildren {
 const SiteRouteChildren: SiteRouteChildren = {
   SiteAccessibilityRoute: SiteAccessibilityRoute,
   SiteContactRoute: SiteContactRoute,
+  SiteDealsRoute: SiteDealsRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
   SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
+  SiteSitemapRoute: SiteSitemapRoute,
   SiteTermsRoute: SiteTermsRoute,
   SiteTravelRequirementsRoute: SiteTravelRequirementsRoute,
   SiteIndexRoute: SiteIndexRoute,
@@ -545,6 +628,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   SiteRoute: SiteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicParseDealRoute: ApiPublicParseDealRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
 export const routeTree = rootRouteImport

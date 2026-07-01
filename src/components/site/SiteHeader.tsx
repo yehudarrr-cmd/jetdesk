@@ -6,6 +6,7 @@ import { PASSPORTCARD_URL, WIFLY_URL, whatsappUrl } from "@/lib/site-constants";
 
 const NAV = [
   { to: "/", label: "בית" },
+  { to: "/deals", label: "🔥 דילים חמים" },
   { to: "/services", label: "היעדים שלנו" },
   { to: "/services", label: "שירותי VIP" },
   { to: "/travel-requirements", label: "טיולים מאורגנים" },

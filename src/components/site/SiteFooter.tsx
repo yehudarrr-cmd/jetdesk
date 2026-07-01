@@ -37,6 +37,8 @@ export function SiteFooter() {
             <Link to="/terms" className="hover:text-primary transition-colors">תנאי שימוש</Link>
             <span aria-hidden="true">·</span>
             <Link to="/accessibility" className="hover:text-primary transition-colors">הצהרת נגישות</Link>
+            <span aria-hidden="true">·</span>
+            <Link to="/sitemap" className="hover:text-primary transition-colors">מפת האתר</Link>
           </nav>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
