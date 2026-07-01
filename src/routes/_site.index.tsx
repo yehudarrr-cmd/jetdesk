@@ -301,82 +301,112 @@ function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
-                <CreditCard className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.credit} alt="תשלום בכרטיס אשראי בחו״ל" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <CreditCard className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 תשלום בכרטיס אשראי בחו"ל - האם לבחור בשקלים או במטבע המקומי?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 כשאתם משלמים בחו"ל בכרטיס אשראי, מסוף התשלום יציע לכם לעיתים קרובות לבחור בין חיוב בשקלים (ILS) לבין חיוב במטבע המקומי. התשובה החד-משמעית היא: כמעט תמיד עדיף לבחור במטבע המקומי. ההמרה לשקלים בקופה כוללת כמעט תמיד שער המרה גבוה מאוד ופחות משתלם. בחירה במטבע המקומי משאירה את עמלת ההמרה לחברת האשראי שלכם, שהיא לרוב זולה ומשתלמת משמעותית.
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_82),oklch(0.65_0.15_82))] flex items-center justify-center text-primary mb-4">
-                <BookOpen className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.passport} alt="תוקף דרכון" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <BookOpen className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 תוקף דרכון לטיסה - כמה חודשים מראש חובה לבדוק את הדרכון?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 הידעתם? עצם העובדה שהדרכון שלכם בתוקף למהלך השהות אינה מספיקה. מדינות רבות ברחבי העולם (כולל אירופה וארה"ב) דורשות באופן רשמי שהדרכון שלכם יהיה בתוקף של לפחות 6 חודשים מעבר ליום הכניסה למדינה. לא מעט נוסעים מגיעים מדי יום לנתב"ג ומגלים ברגע האחרון שהם אינם יכולים לעלות לטיסה. בדקו את תוקף הדרכון שלכם עוד לפני הזמנת החופשה!
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
-                <Stethoscope className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.georgia} alt="גאורגיה - טביליסי" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Stethoscope className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 חובת ביטוח רפואי לגאורגיה - חוק חדש למטיילים בטביליסי ובאטומי
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 ממשלת גאורגיה החלה לאכוף בקפידה חוק חדש המטיל חובת הצגת ביטוח רפואי לכל תייר הנכנס למדינה. כבר לא מדובר בהמלצה, אלא בדרישה רשמית של משטרת הגבולות הגאורגית לחובת כיסוי מלא לכל ימי השהות. ודאו שהפקתם פוליסה מתאימה ושמרתם אותה בנייד.
               </p>
               <a
                 href={PASSPORTCARD_URL}
                 target="_blank"
                 rel="noopener sponsored"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-primary hover:text-accent transition-colors"
+                className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#002d72] text-[#FFD447] px-4 py-2 text-xs font-bold hover:bg-[#001a4d] transition-colors ring-1 ring-[#FFD447]/50"
               >
                 לחצו כאן להפקת ביטוח נסיעות מותאם לגאורגיה ב-PassportCard
                 <ArrowLeft className="w-4 h-4" />
               </a>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
-                <Luggage className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.connection} alt="טיסת קונקשן" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Luggage className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 טיסת קונקשן (טיסה עם עצירת ביניים) - איך לעשות את זה נכון ובלי לאבד את המזוודה?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 טיסת המשך דורשת תכנון קפדני: זמן חיבור מינימלי, בדיקת העברת מזוודות אוטומטית בין חברות התעופה, וידוא מסוף היציאה, וסיכוני הגעה באיחור. אנחנו בונים לכם מסלול טיסה שמפחית סיכונים ומבטיח נחיתה חלקה עם המזוודה במקום הנכון.
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right md:col-span-2 lg:col-span-1">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
-                <Signal className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right md:col-span-2 lg:col-span-1">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.esim} alt="eSIM לחו״ל" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Signal className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 eSIM לחו"ל או חבילת גלישה מהארץ - מה הדרך הזולה ביותר להישאר מחוברים?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 חבילות eSIM לרוב זולות משמעותית מחבילות רומינג של המפעילים בארץ, מציעות מהירות טובה יותר, ומופעלות בדקה - בלי להחליף כרטיס SIM פיזי. השוו את מחיר הג'יגה ליום השהות ואת מספר הימים הכלולים בחבילה לפני שאתם רוכשים.
               </p>
               <a
                 href={WIFLY_URL}
                 target="_blank"
                 rel="noopener sponsored"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-success hover:text-primary transition-colors"
+                className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#002d72] text-[#FFD447] px-4 py-2 text-xs font-bold hover:bg-[#001a4d] transition-colors ring-1 ring-[#FFD447]/50"
               >
                 לרכישת חבילת גלישה משתלמת ואינטרנט מהיר לחו"ל בקליק לחצו כאן
                 <ArrowLeft className="w-4 h-4" />
               </a>
+              </div>
             </article>
           </div>
         </div>
