@@ -99,31 +99,35 @@ function HomePage() {
       {/* HERO */}
       <section className="relative bg-[#F1F5F9] overflow-hidden">
         <div className="relative px-5 sm:px-10 pt-28 sm:pt-32 pb-16 sm:pb-20">
-          <div className="w-full max-w-7xl mx-auto">
-            {/* Title block - fully separated from slider */}
-            <div className="max-w-3xl mb-8 sm:mb-10 text-right">
-              <span className="inline-block text-[11px] sm:text-xs tracking-[0.35em] text-primary uppercase font-semibold bg-white rounded-full px-4 py-1.5 border border-primary/15 shadow-sm">
-                Premium Wanderlust · גולדטוס
-              </span>
-              <h1 className="mt-4 font-display text-3xl sm:text-5xl lg:text-6xl font-semibold leading-[1.15] tracking-tight text-primary">
-                טיסות וחופשות
-                <span className="block bg-[linear-gradient(90deg,oklch(0.28_0.09_260),oklch(0.55_0.15_82),oklch(0.28_0.09_260))] bg-clip-text text-transparent">
-                  פרימיום בהתאמה אישית
+          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+            {/* LEFT (RTL) column: title block + form, both aligned to slider height */}
+            <div className="order-2 lg:order-none flex flex-col gap-6 text-right">
+              <div>
+                <span className="inline-block mt-2 text-[11px] sm:text-xs tracking-[0.4em] text-primary uppercase font-semibold bg-white rounded-full px-5 py-2 border border-primary/15 shadow-sm">
+                  Premium Wanderlust · גולדטוס
                 </span>
-              </h1>
-              <p className="mt-4 text-sm sm:text-base lg:text-lg text-foreground/80 leading-relaxed max-w-2xl">
-                שלחו יעד, תאריכים ומספר נוסעים - נחזור עם דיל מדויק, בלי כאב ראש. שקט נפשי וניהול מלא מהתכנון ועד הנחיתה.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs sm:text-sm text-foreground/80">
-                <span className="flex items-center gap-1.5"><Plane className="w-4 h-4 text-accent" strokeWidth={1.75} /> טיסות פרימיום</span>
-                <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} /> שירות אישי</span>
-                <span className="flex items-center gap-1.5"><Crown className="w-4 h-4 text-accent" strokeWidth={1.75} /> VIP בנתב"ג</span>
+                <h1 className="mt-5 font-display text-3xl sm:text-5xl lg:text-6xl font-semibold leading-[1.15] tracking-tight text-primary">
+                  טיסות וחופשות
+                  <span className="block bg-[linear-gradient(90deg,oklch(0.28_0.09_260),oklch(0.55_0.15_82),oklch(0.28_0.09_260))] bg-clip-text text-transparent">
+                    פרימיום בהתאמה אישית
+                  </span>
+                </h1>
+                <p className="mt-5 text-sm sm:text-base lg:text-lg font-medium text-foreground/90 leading-relaxed max-w-xl">
+                  שלחו יעד, תאריכים ומספר נוסעים - נחזור עם דיל מדויק, בלי כאב ראש. שקט נפשי וניהול מלא מהתכנון ועד הנחיתה.
+                </p>
+                <div className="mt-5 pt-4 border-t border-primary/10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs sm:text-sm text-foreground/80">
+                  <span className="flex items-center gap-2"><Plane className="w-4 h-4 text-accent" strokeWidth={1.75} /> טיסות פרימיום</span>
+                  <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} /> שירות אישי</span>
+                  <span className="flex items-center gap-2"><Crown className="w-4 h-4 text-accent" strokeWidth={1.75} /> VIP בנתב"ג</span>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <QuickQuoteForm />
               </div>
             </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
-            {/* SLIDER - visually right in RTL */}
-            <div className="relative order-1 lg:order-none rounded-3xl overflow-hidden shadow-[0_30px_60px_-30px_rgba(11,30,59,0.35)] ring-1 ring-primary/10 bg-white min-h-[320px] sm:min-h-[420px] lg:min-h-[520px]">
+            {/* RIGHT (RTL) column: slider, matches full left height */}
+            <div className="relative order-1 lg:order-none rounded-3xl overflow-hidden shadow-[0_30px_60px_-30px_rgba(11,30,59,0.35)] ring-1 ring-primary/10 bg-white min-h-[320px] sm:min-h-[420px] lg:min-h-[560px] lg:h-full">
               {HERO_SLIDES.map((s, i) => (
                 <img
                   key={s.url}
@@ -153,12 +157,6 @@ function HomePage() {
                 ))}
               </div>
             </div>
-
-            {/* FORM - visually left in RTL */}
-            <div className="order-2 lg:order-none">
-              <QuickQuoteForm />
-            </div>
-          </div>
           </div>
         </div>
       </section>
