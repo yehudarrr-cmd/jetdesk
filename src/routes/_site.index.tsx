@@ -103,67 +103,68 @@ function HomePage() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative bg-[#F1F5F9] overflow-hidden">
-        <div className="relative px-5 sm:px-10 pt-28 sm:pt-32 pb-16 sm:pb-20">
-          <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
-            {/* LEFT (RTL) column: title block + form, both aligned to slider height */}
-            <div className="order-2 lg:order-none flex flex-col gap-6 text-right">
-              <div>
-                <span className="inline-block mt-2 text-[11px] sm:text-xs tracking-[0.4em] text-primary uppercase font-semibold bg-white rounded-full px-5 py-2 border border-primary/15 shadow-sm">
-                  Premium Wanderlust · גולדטוס
-                </span>
-                <h1 className="mt-5 font-display text-3xl sm:text-5xl lg:text-6xl font-semibold leading-[1.15] tracking-tight text-primary">
-                  טיסות וחופשות
-                  <span className="block bg-[linear-gradient(90deg,oklch(0.28_0.09_260),oklch(0.55_0.15_82),oklch(0.28_0.09_260))] bg-clip-text text-transparent">
-                    פרימיום בהתאמה אישית
-                  </span>
-                </h1>
-                <p className="mt-5 text-sm sm:text-base lg:text-lg font-medium text-foreground/90 leading-relaxed max-w-xl">
-                  שלחו יעד, תאריכים ומספר נוסעים - נחזור עם דיל מדויק, בלי כאב ראש. שקט נפשי וניהול מלא מהתכנון ועד הנחיתה.
-                </p>
-                <div className="mt-5 pt-4 border-t border-primary/10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs sm:text-sm text-foreground/80">
-                  <span className="flex items-center gap-2"><Plane className="w-4 h-4 text-accent" strokeWidth={1.75} /> טיסות פרימיום</span>
-                  <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-accent" strokeWidth={1.75} /> שירות אישי</span>
-                  <span className="flex items-center gap-2"><Crown className="w-4 h-4 text-accent" strokeWidth={1.75} /> VIP בנתב"ג</span>
-                </div>
-              </div>
-              <div className="mt-auto">
-                <QuickQuoteForm />
-              </div>
-            </div>
+      {/* HERO – El Al inspired: full-width horizontal slider on top, floating booking card below */}
+      <section className="relative bg-[#002d72] overflow-hidden">
+        {/* Full-width slider band */}
+        <div className="relative w-full h-[62vh] min-h-[460px] sm:min-h-[520px] lg:min-h-[600px] max-h-[780px]">
+          {HERO_SLIDES.map((s, i) => (
+            <img
+              key={s.url}
+              src={s.url}
+              alt={s.alt}
+              width={1920}
+              height={1080}
+              fetchPriority={i === 0 ? "high" : "low"}
+              decoding="async"
+              loading={i === 0 ? "eager" : "lazy"}
+              className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1600ms] ease-in-out"
+              style={{ opacity: slide === i ? 1 : 0 }}
+            />
+          ))}
+          {/* El Al style deep-blue overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,45,114,0.55)_0%,rgba(0,45,114,0.25)_35%,rgba(0,45,114,0.75)_100%)] pointer-events-none" />
 
-            {/* RIGHT (RTL) column: slider, matches full left height */}
-            <div className="relative order-1 lg:order-none rounded-3xl overflow-hidden shadow-[0_30px_60px_-30px_rgba(11,30,59,0.35)] ring-1 ring-primary/10 bg-white min-h-[320px] sm:min-h-[420px] lg:min-h-[560px] lg:h-full">
-              {HERO_SLIDES.map((s, i) => (
-                <img
-                  key={s.url}
-                  src={s.url}
-                  alt={s.alt}
-                  width={1600}
-                  height={1200}
-                  fetchPriority={i === 0 ? "high" : "low"}
-                  decoding="async"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1600ms] ease-in-out"
-                  style={{ opacity: slide === i ? 1 : 0 }}
-                />
-              ))}
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              <div className="absolute z-10 bottom-4 inset-x-0 flex items-center justify-center gap-2">
-                {HERO_SLIDES.map((s, i) => (
-                  <button
-                    key={s.url}
-                    type="button"
-                    aria-label={`מעבר לתמונה ${i + 1}`}
-                    onClick={() => setSlide(i)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      slide === i ? "w-8 bg-white" : "w-2 bg-white/50 hover:bg-white/80"
-                    }`}
-                  />
-                ))}
+          {/* Headline overlay */}
+          <div className="absolute inset-0 flex items-center">
+            <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 text-right text-white">
+              <span className="inline-block text-[11px] sm:text-xs tracking-[0.4em] uppercase font-semibold bg-white/15 backdrop-blur-sm rounded-full px-5 py-2 border border-white/30">
+                Premium Wanderlust · גולדטוס
+              </span>
+              <h1 className="mt-5 font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+                טסים ברמה אחרת
+                <span className="block text-[#FFD447] mt-2">חופשות פרימיום בהתאמה אישית</span>
+              </h1>
+              <p className="mt-5 text-base sm:text-lg lg:text-xl font-medium text-white/90 leading-relaxed max-w-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
+                שלחו יעד, תאריכים ומספר נוסעים - נחזור עם דיל מדויק, ללא כאב ראש. ניהול מלא מהתכנון ועד הנחיתה.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/90">
+                <span className="flex items-center gap-2"><Plane className="w-4 h-4 text-[#FFD447]" strokeWidth={2} /> טיסות פרימיום</span>
+                <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-[#FFD447]" strokeWidth={2} /> שירות אישי</span>
+                <span className="flex items-center gap-2"><Crown className="w-4 h-4 text-[#FFD447]" strokeWidth={2} /> VIP בנתב"ג</span>
               </div>
             </div>
+          </div>
+
+          {/* Slider dots */}
+          <div className="absolute z-10 bottom-6 inset-x-0 flex items-center justify-center gap-2">
+            {HERO_SLIDES.map((s, i) => (
+              <button
+                key={s.url}
+                type="button"
+                aria-label={`מעבר לתמונה ${i + 1}`}
+                onClick={() => setSlide(i)}
+                className={`h-1.5 rounded-full transition-all ${
+                  slide === i ? "w-10 bg-[#FFD447]" : "w-2 bg-white/60 hover:bg-white/90"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Floating booking card – El Al style, overlaps slider */}
+        <div className="relative z-20 max-w-6xl mx-auto px-5 sm:px-10 -mt-24 sm:-mt-28 pb-16">
+          <div className="rounded-2xl bg-white shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] ring-1 ring-primary/10 p-5 sm:p-7">
+            <QuickQuoteForm />
           </div>
         </div>
       </section>
