@@ -170,7 +170,7 @@ function HomePage() {
       </section>
 
       {/* INSTANT TRAVEL ESSENTIALS – Affiliate zone */}
-      <section className="relative -mt-10 sm:-mt-16 z-20 px-5 sm:px-10">
+      <section className="relative pt-4 sm:pt-6 pb-14 z-20 px-5 sm:px-10 bg-[#F8FAFC]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
             <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
