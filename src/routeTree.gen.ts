@@ -18,6 +18,7 @@ import { Route as SiteTermsRouteImport } from './routes/_site.terms'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
+import { Route as SiteDealsRouteImport } from './routes/_site.deals'
 import { Route as SiteContactRouteImport } from './routes/_site.contact'
 import { Route as SiteAccessibilityRouteImport } from './routes/_site.accessibility'
 import { Route as AppTelegramRouteImport } from './routes/_app.telegram'
@@ -76,6 +77,11 @@ const SitePrivacyRoute = SitePrivacyRouteImport.update({
 const SiteInsuranceRoute = SiteInsuranceRouteImport.update({
   id: '/insurance',
   path: '/insurance',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteDealsRoute = SiteDealsRouteImport.update({
+  id: '/deals',
+  path: '/deals',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteContactRoute = SiteContactRouteImport.update({
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/telegram': typeof AppTelegramRoute
   '/accessibility': typeof SiteAccessibilityRoute
   '/contact': typeof SiteContactRoute
+  '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/telegram': typeof AppTelegramRoute
   '/accessibility': typeof SiteAccessibilityRoute
   '/contact': typeof SiteContactRoute
+  '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
@@ -226,6 +234,7 @@ export interface FileRoutesById {
   '/_app/telegram': typeof AppTelegramRoute
   '/_site/accessibility': typeof SiteAccessibilityRoute
   '/_site/contact': typeof SiteContactRoute
+  '/_site/deals': typeof SiteDealsRoute
   '/_site/insurance': typeof SiteInsuranceRoute
   '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/telegram'
     | '/accessibility'
     | '/contact'
+    | '/deals'
     | '/insurance'
     | '/privacy'
     | '/services'
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/telegram'
     | '/accessibility'
     | '/contact'
+    | '/deals'
     | '/insurance'
     | '/privacy'
     | '/services'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/_app/telegram'
     | '/_site/accessibility'
     | '/_site/contact'
+    | '/_site/deals'
     | '/_site/insurance'
     | '/_site/privacy'
     | '/_site/services'
@@ -388,6 +400,13 @@ declare module '@tanstack/react-router' {
       path: '/insurance'
       fullPath: '/insurance'
       preLoaderRoute: typeof SiteInsuranceRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/deals': {
+      id: '/_site/deals'
+      path: '/deals'
+      fullPath: '/deals'
+      preLoaderRoute: typeof SiteDealsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/contact': {
@@ -540,6 +559,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 interface SiteRouteChildren {
   SiteAccessibilityRoute: typeof SiteAccessibilityRoute
   SiteContactRoute: typeof SiteContactRoute
+  SiteDealsRoute: typeof SiteDealsRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
   SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
@@ -551,6 +571,7 @@ interface SiteRouteChildren {
 const SiteRouteChildren: SiteRouteChildren = {
   SiteAccessibilityRoute: SiteAccessibilityRoute,
   SiteContactRoute: SiteContactRoute,
+  SiteDealsRoute: SiteDealsRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
   SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
