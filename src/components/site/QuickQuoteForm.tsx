@@ -85,10 +85,10 @@ export function QuickQuoteForm() {
   };
 
   return (
-    <Card className="p-6 sm:p-7 lg:p-8 bg-black/55 backdrop-blur-2xl border border-primary/20 rounded-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
+    <Card className="p-6 sm:p-7 lg:p-8 bg-white/75 backdrop-blur-2xl border border-white/70 rounded-2xl shadow-[0_30px_60px_-25px_rgba(11,30,59,0.35)] text-foreground ring-1 ring-[oklch(0.75_0.13_82_/_0.25)]">
       <form onSubmit={handleQuickQuote} className="space-y-5">
         <div className="text-center space-y-1">
-          <h2 className="text-lg sm:text-xl font-bold">קבלו הצעה מותאמת אישית</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-primary">קבלו הצעה מותאמת אישית</h2>
           <p className="text-xs text-muted-foreground leading-relaxed">
             מלאו פרטים — נחזור עם הצעה בהקדם
           </p>
@@ -96,40 +96,40 @@ export function QuickQuoteForm() {
 
         <div>
           <Label htmlFor="q-destination" className="text-xs">יעד *</Label>
-          <Input id="q-destination" name="destination" required maxLength={120} placeholder="מלדיביים, דובאי, יוון..." className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+          <Input id="q-destination" name="destination" required maxLength={120} placeholder="מלדיביים, דובאי, יוון..." className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="q-name" className="text-xs">שם</Label>
-            <Input id="q-name" name="name" maxLength={80} placeholder="ישראל ישראלי" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+            <Input id="q-name" name="name" maxLength={80} placeholder="ישראל ישראלי" className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
           </div>
           <div>
             <Label htmlFor="q-phone" className="text-xs">טלפון *</Label>
-            <Input id="q-phone" name="phone" type="tel" required maxLength={20} placeholder="050-0000000" dir="ltr" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+            <Input id="q-phone" name="phone" type="tel" required maxLength={20} placeholder="050-0000000" dir="ltr" className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="q-depart" className="text-xs">תאריך יציאה</Label>
-            <Input id="q-depart" name="departDate" type="date" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+            <Input id="q-depart" name="departDate" type="date" className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
           </div>
           <div>
             <Label htmlFor="q-return" className="text-xs">תאריך חזרה</Label>
-            <Input id="q-return" name="returnDate" type="date" className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+            <Input id="q-return" name="returnDate" type="date" className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label htmlFor="q-travelers" className="text-xs">מס' נוסעים</Label>
-            <Input id="q-travelers" name="travelers" type="number" min={1} max={20} defaultValue={2} required className="mt-1.5 h-11 bg-input/60 border-border/60 focus:border-primary" />
+            <Input id="q-travelers" name="travelers" type="number" min={1} max={20} defaultValue={2} required className="mt-1.5 h-11 bg-white border-border focus:border-primary" />
           </div>
           <div>
             <Label htmlFor="q-level" className="text-xs">רמת חופשה</Label>
             <Select value={quickLevel} onValueChange={(v) => setQuickLevel(v as typeof quickLevel)}>
-              <SelectTrigger id="q-level" className="mt-1.5 h-11 bg-input/60 border-border/60">
+              <SelectTrigger id="q-level" className="mt-1.5 h-11 bg-white border-border">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -141,7 +141,7 @@ export function QuickQuoteForm() {
           </div>
         </div>
 
-        <Button type="submit" className="w-full h-12 bg-success hover:bg-success/90 text-white font-semibold gap-2 shadow-glow text-base hover:scale-[1.02] transition-transform">
+        <Button type="submit" className="w-full h-12 bg-success hover:bg-success/90 text-white font-bold gap-2 text-base rounded-xl hover:scale-[1.02] transition-transform animate-wa-pulse">
           <MessageCircle className="w-5 h-5" fill="currentColor" />
           קבלו הצעה בוואטסאפ
         </Button>
