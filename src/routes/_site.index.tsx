@@ -178,13 +178,13 @@ function HomePage() {
       </section>
 
       {/* INSTANT TRAVEL ESSENTIALS – Affiliate zone */}
-      <section className="relative pt-4 sm:pt-6 pb-14 z-20 px-5 sm:px-10 bg-[#F8FAFC]">
+      <section className="relative pt-10 sm:pt-14 pb-16 sm:pb-20 z-20 px-5 sm:px-10 bg-[#001a4d]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Instant Travel Essentials
             </span>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-primary mt-1">
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mt-1">
               סוגרים פינות לטיסה בקליק
             </h2>
           </div>
