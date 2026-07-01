@@ -52,6 +52,14 @@ const HERO_SLIDES = [
   },
 ];
 
+const TIP_IMAGES = {
+  credit: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80",
+  passport: "https://images.unsplash.com/photo-1518544801976-3e159e50e5bb?auto=format&fit=crop&w=800&q=80",
+  georgia: "https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=800&q=80",
+  connection: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
+  esim: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=800&q=80",
+};
+
 export const Route = createFileRoute("/_site/")({
   head: () => ({
     meta: [
@@ -170,13 +178,13 @@ function HomePage() {
       </section>
 
       {/* INSTANT TRAVEL ESSENTIALS – Affiliate zone */}
-      <section className="relative pt-4 sm:pt-6 pb-14 z-20 px-5 sm:px-10 bg-[#F8FAFC]">
+      <section className="relative pt-10 sm:pt-14 pb-16 sm:pb-20 z-20 px-5 sm:px-10 bg-[#001a4d]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Instant Travel Essentials
             </span>
-            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-primary mt-1">
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mt-1">
               סוגרים פינות לטיסה בקליק
             </h2>
           </div>
@@ -229,19 +237,19 @@ function HomePage() {
       </section>
 
       {/* SOCIAL PROOF – WhatsApp testimonial */}
-      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-white">
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#002d72]">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div className="order-2 lg:order-none text-right">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Real Client - Real Words
             </span>
-            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold leading-[1.15] tracking-tight text-primary">
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.15] tracking-tight text-[#FFD447]">
               לא אני אומר. לקוח שחזר הלילה מפאפוס אומר.
             </h2>
-            <p className="mt-5 text-base sm:text-lg font-medium text-foreground/85 leading-relaxed">
+            <p className="mt-5 text-base sm:text-lg font-medium text-white/90 leading-relaxed">
               בסוף לא זוכרים רק את המלון או את הטיסה. זוכרים את מי שדואג לך.
             </p>
-            <p className="mt-6 text-sm sm:text-base text-foreground/70 italic">
+            <p className="mt-6 text-sm sm:text-base text-white/70 italic">
               תודה על האמון. מחכה לחופשה הבאה שלכם.
             </p>
           </div>
@@ -281,119 +289,149 @@ function HomePage() {
       </section>
 
       {/* SEO TRAVEL TIPS HUB */}
-      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#F8FAFC]">
+      <section className="py-16 sm:py-24 px-5 sm:px-10 bg-[#001a4d]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <span className="inline-block text-[11px] tracking-[0.35em] text-accent uppercase font-bold">
+            <span className="inline-block text-[11px] tracking-[0.35em] text-[#FFD447] uppercase font-bold">
               Knowledge Base
             </span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-primary">
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
               טיפים חכמים למטייל הישראלי
             </h2>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
-                <CreditCard className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.credit} alt="תשלום בכרטיס אשראי בחו״ל" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <CreditCard className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 תשלום בכרטיס אשראי בחו"ל - האם לבחור בשקלים או במטבע המקומי?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 כשאתם משלמים בחו"ל בכרטיס אשראי, מסוף התשלום יציע לכם לעיתים קרובות לבחור בין חיוב בשקלים (ILS) לבין חיוב במטבע המקומי. התשובה החד-משמעית היא: כמעט תמיד עדיף לבחור במטבע המקומי. ההמרה לשקלים בקופה כוללת כמעט תמיד שער המרה גבוה מאוד ופחות משתלם. בחירה במטבע המקומי משאירה את עמלת ההמרה לחברת האשראי שלכם, שהיא לרוב זולה ומשתלמת משמעותית.
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_82),oklch(0.65_0.15_82))] flex items-center justify-center text-primary mb-4">
-                <BookOpen className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.passport} alt="תוקף דרכון" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <BookOpen className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 תוקף דרכון לטיסה - כמה חודשים מראש חובה לבדוק את הדרכון?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 הידעתם? עצם העובדה שהדרכון שלכם בתוקף למהלך השהות אינה מספיקה. מדינות רבות ברחבי העולם (כולל אירופה וארה"ב) דורשות באופן רשמי שהדרכון שלכם יהיה בתוקף של לפחות 6 חודשים מעבר ליום הכניסה למדינה. לא מעט נוסעים מגיעים מדי יום לנתב"ג ומגלים ברגע האחרון שהם אינם יכולים לעלות לטיסה. בדקו את תוקף הדרכון שלכם עוד לפני הזמנת החופשה!
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
-                <Stethoscope className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.georgia} alt="גאורגיה - טביליסי" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Stethoscope className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 חובת ביטוח רפואי לגאורגיה - חוק חדש למטיילים בטביליסי ובאטומי
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 ממשלת גאורגיה החלה לאכוף בקפידה חוק חדש המטיל חובת הצגת ביטוח רפואי לכל תייר הנכנס למדינה. כבר לא מדובר בהמלצה, אלא בדרישה רשמית של משטרת הגבולות הגאורגית לחובת כיסוי מלא לכל ימי השהות. ודאו שהפקתם פוליסה מתאימה ושמרתם אותה בנייד.
               </p>
               <a
                 href={PASSPORTCARD_URL}
                 target="_blank"
                 rel="noopener sponsored"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-primary hover:text-accent transition-colors"
+                className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#002d72] text-[#FFD447] px-4 py-2 text-xs font-bold hover:bg-[#001a4d] transition-colors ring-1 ring-[#FFD447]/50"
               >
                 לחצו כאן להפקת ביטוח נסיעות מותאם לגאורגיה ב-PassportCard
                 <ArrowLeft className="w-4 h-4" />
               </a>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] flex items-center justify-center text-primary-foreground mb-4">
-                <Luggage className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.connection} alt="טיסת קונקשן" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Luggage className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 טיסת קונקשן (טיסה עם עצירת ביניים) - איך לעשות את זה נכון ובלי לאבד את המזוודה?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 טיסת המשך דורשת תכנון קפדני: זמן חיבור מינימלי, בדיקת העברת מזוודות אוטומטית בין חברות התעופה, וידוא מסוף היציאה, וסיכוני הגעה באיחור. אנחנו בונים לכם מסלול טיסה שמפחית סיכונים ומבטיח נחיתה חלקה עם המזוודה במקום הנכון.
               </p>
+              </div>
             </article>
 
-            <article className="bg-white rounded-2xl border border-primary/10 p-6 shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)] hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.3)] transition-all text-right md:col-span-2 lg:col-span-1">
-              <div className="w-12 h-12 rounded-xl bg-[linear-gradient(135deg,oklch(0.55_0.15_155),oklch(0.65_0.15_170))] flex items-center justify-center text-white mb-4">
-                <Signal className="w-6 h-6" strokeWidth={1.75} />
+            <article className="bg-white rounded-2xl overflow-hidden border border-[#FFD447]/30 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)] hover:-translate-y-1 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)] transition-all text-right md:col-span-2 lg:col-span-1">
+              <div className="relative h-40 overflow-hidden">
+                <img src={TIP_IMAGES.esim} alt="eSIM לחו״ל" className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#002d72]/70 to-transparent" />
+                <div className="absolute top-3 right-3 w-11 h-11 rounded-xl bg-[#002d72] flex items-center justify-center text-[#FFD447] ring-2 ring-[#FFD447]/60 shadow-lg">
+                  <Signal className="w-5 h-5" strokeWidth={2} />
+                </div>
               </div>
-              <h3 className="font-display text-lg sm:text-xl font-bold text-primary leading-snug">
+              <div className="p-6">
+              <h3 className="font-display text-lg sm:text-xl font-bold text-[#002d72] leading-snug">
                 eSIM לחו"ל או חבילת גלישה מהארץ - מה הדרך הזולה ביותר להישאר מחוברים?
               </h3>
-              <p className="mt-3 text-sm text-foreground/75 leading-relaxed">
+              <p className="mt-3 text-sm text-[#002d72]/75 leading-relaxed">
                 חבילות eSIM לרוב זולות משמעותית מחבילות רומינג של המפעילים בארץ, מציעות מהירות טובה יותר, ומופעלות בדקה - בלי להחליף כרטיס SIM פיזי. השוו את מחיר הג'יגה ליום השהות ואת מספר הימים הכלולים בחבילה לפני שאתם רוכשים.
               </p>
               <a
                 href={WIFLY_URL}
                 target="_blank"
                 rel="noopener sponsored"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-success hover:text-primary transition-colors"
+                className="inline-flex items-center gap-2 mt-4 rounded-full bg-[#002d72] text-[#FFD447] px-4 py-2 text-xs font-bold hover:bg-[#001a4d] transition-colors ring-1 ring-[#FFD447]/50"
               >
                 לרכישת חבילת גלישה משתלמת ואינטרנט מהיר לחו"ל בקליק לחצו כאן
                 <ArrowLeft className="w-4 h-4" />
               </a>
+              </div>
             </article>
           </div>
         </div>
       </section>
 
       {/* WHY US */}
-      <section className="py-16 sm:py-24 px-6 relative overflow-hidden mt-10">
+      <section className="py-16 sm:py-24 px-6 relative overflow-hidden bg-[#002d72]">
         <div className="relative max-w-6xl mx-auto">
           <div className="text-center mb-12 space-y-2">
-            <span className="inline-block text-xs tracking-[0.35em] text-accent uppercase font-bold">למה גולדטוס</span>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-primary">
-              שקט נפשי <span className="text-accent">מהזמנה ועד הנחיתה</span>
+            <span className="inline-block text-xs tracking-[0.35em] text-[#FFD447] uppercase font-bold">למה גולדטוס</span>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+              שקט נפשי <span className="text-[#FFD447]">מהזמנה ועד הנחיתה</span>
             </h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {whyUs.map((item, i) => (
               <div
                 key={i}
-                className="group text-center bg-white rounded-2xl border border-primary/10 p-5 sm:p-6 hover:border-accent/60 hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(11,30,59,0.2)] transition-all"
+                className="group text-center bg-white rounded-2xl border border-[#FFD447]/30 p-5 sm:p-6 hover:border-[#FFD447] hover:-translate-y-1 hover:shadow-[0_20px_40px_-15px_rgba(255,212,71,0.35)] transition-all"
               >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl bg-[linear-gradient(135deg,oklch(0.98_0.005_90),oklch(0.94_0.02_82))] flex items-center justify-center ring-1 ring-accent/40 mb-4">
-                  <item.icon className="w-7 h-7 text-primary group-hover:text-accent transition-colors" strokeWidth={1.5} />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl bg-[#002d72] flex items-center justify-center ring-2 ring-[#FFD447]/60 mb-4">
+                  <item.icon className="w-7 h-7 text-[#FFD447]" strokeWidth={2} />
                 </div>
-                <h3 className="text-sm sm:text-base font-bold text-primary">{item.title}</h3>
-                <p className="text-xs text-foreground/60 mt-1.5 leading-relaxed">{item.desc}</p>
+                <h3 className="text-sm sm:text-base font-bold text-[#002d72]">{item.title}</h3>
+                <p className="text-xs text-[#002d72]/70 mt-1.5 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -401,26 +439,26 @@ function HomePage() {
       </section>
 
       {/* CTA STRIP */}
-      <section className="pb-16 sm:pb-20 px-6">
+      <section className="py-16 sm:py-20 px-6 bg-[#001a4d]">
         <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-4">
-          <Link to="/services" className="group p-6 rounded-2xl border border-primary/15 bg-white hover:border-accent transition-colors shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)]">
+          <Link to="/services" className="group p-6 rounded-2xl border-2 border-[#FFD447]/40 bg-white hover:border-[#FFD447] transition-colors shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-accent tracking-[0.25em] uppercase mb-2 font-bold">שירותי פרימיום</div>
-                <h3 className="font-display text-xl font-semibold text-primary">הכל תחת גג אחד</h3>
-                <p className="text-sm text-muted-foreground mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
+                <div className="text-xs text-[#c99a1e] tracking-[0.25em] uppercase mb-2 font-bold">שירותי פרימיום</div>
+                <h3 className="font-display text-xl font-bold text-[#002d72]">הכל תחת גג אחד</h3>
+                <p className="text-sm text-[#002d72]/70 mt-1">טיסות, מלונות, רכב, VIP ועוד</p>
               </div>
-              <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-5 h-5 text-[#002d72] group-hover:-translate-x-1 transition-transform" />
             </div>
           </Link>
-          <Link to="/contact" className="group p-6 rounded-2xl border border-primary/15 bg-white hover:border-accent transition-colors shadow-[0_10px_30px_-20px_rgba(11,30,59,0.25)]">
+          <Link to="/contact" className="group p-6 rounded-2xl bg-[#002d72] border-2 border-[#FFD447] hover:bg-[#001a4d] transition-colors shadow-[0_20px_50px_-15px_rgba(255,212,71,0.35)]">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-accent tracking-[0.25em] uppercase mb-2 font-bold">צור קשר</div>
-                <h3 className="font-display text-xl font-semibold text-primary">בקשת הצעת מחיר</h3>
-                <p className="text-sm text-muted-foreground mt-1">נחזור אליכם בתוך 24 שעות</p>
+                <div className="text-xs text-[#FFD447] tracking-[0.25em] uppercase mb-2 font-bold">צור קשר</div>
+                <h3 className="font-display text-xl font-bold text-[#FFD447]">בקשת הצעת מחיר</h3>
+                <p className="text-sm text-white/85 mt-1">נחזור אליכם בתוך 24 שעות</p>
               </div>
-              <ArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-5 h-5 text-[#FFD447] group-hover:-translate-x-1 transition-transform" />
             </div>
           </Link>
         </div>
