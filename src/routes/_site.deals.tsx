@@ -60,6 +60,7 @@ function DealsPage() {
         .select("*")
         .eq("active", true)
         .order("featured", { ascending: false })
+        .order("price_from", { ascending: true, nullsFirst: false })
         .order("sort_order", { ascending: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
