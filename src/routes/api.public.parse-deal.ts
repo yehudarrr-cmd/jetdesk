@@ -27,7 +27,7 @@ export const Route = createFileRoute("/api/public/parse-deal")({
 
           const html = await fetchQuoteHtml(parsed.toString());
           if (!html) {
-            return json({ error: "upstream fetch failed" }, 502);
+            return json({ error: "לא ניתן למשוך את ההצעה כרגע: הדומיין quotes.goldtus.com לא נפתר ב-DNS ציבורי / Cloudflare מחזיר 530. צריך לתקן את רשומת ה-DNS של תת-הדומיין או לשלוח קישור נגיש ציבורית." }, 502);
           }
           const deal = parseQuoteHtml(html);
           return json({ deal, quote_url: parsed.toString() });
@@ -63,6 +63,10 @@ export async function fetchQuoteHtml(url: string): Promise<string | null> {
   } catch {
     // fall through to proxy
   }
+
+  const firecrawlHtml = await fetchQuoteHtmlWithFirecrawl(url);
+  if (firecrawlHtml) return firecrawlHtml;
+
   const proxies = [
     `https://r.jina.ai/${url}`,
     `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
@@ -79,4 +83,39 @@ export async function fetchQuoteHtml(url: string): Promise<string | null> {
     }
   }
   return null;
+}
+
+async function fetchQuoteHtmlWithFirecrawl(url: string): Promise<string | null> {
+  const apiKey = process.env.FIRECRAWL_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const res = await fetch("https://api.firecrawl.dev/v2/scrape", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+        formats: ["html", "markdown"],
+        onlyMainContent: false,
+        waitFor: 2000,
+        location: { country: "IL", languages: ["he"] },
+      }),
+    });
+
+    if (!res.ok) return null;
+    const payload = (await res.json()) as {
+      html?: string;
+      markdown?: string;
+      data?: { html?: string; markdown?: string };
+    };
+    const html = payload.html ?? payload.data?.html;
+    const markdown = payload.markdown ?? payload.data?.markdown;
+    const content = html || markdown;
+    return content && content.length > 200 ? content : null;
+  } catch {
+    return null;
+  }
 }
