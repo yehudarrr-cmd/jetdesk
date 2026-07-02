@@ -4,32 +4,71 @@ import { TRUSTY_INSURANCE_COMPARE_URL } from "@/lib/site-constants";
 
 const DISMISS_KEY = "insurance-compare-dismissed-v1";
 const SHOW_DELAY_MS = 6000;
+const REOPEN_AFTER_MS = 1000 * 60 * 30; // 30 min
 
 export function InsuranceComparePopup() {
   const [open, setOpen] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    let isDismissed = false;
     try {
-      const dismissed = window.sessionStorage.getItem(DISMISS_KEY);
-      if (dismissed) return;
+      const raw = window.localStorage.getItem(DISMISS_KEY);
+      if (raw) {
+        const ts = Number(raw);
+        if (Number.isFinite(ts) && Date.now() - ts < REOPEN_AFTER_MS) {
+          isDismissed = true;
+        } else {
+          window.localStorage.removeItem(DISMISS_KEY);
+        }
+      }
     } catch {
       /* ignore */
     }
+    setDismissed(isDismissed);
+    if (isDismissed) return;
     const t = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(t);
   }, []);
 
   const dismiss = () => {
     setOpen(false);
+    setDismissed(true);
     try {
-      window.sessionStorage.setItem(DISMISS_KEY, "1");
+      window.localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
   };
 
-  if (!open) return null;
+  const reopen = () => {
+    try {
+      window.localStorage.removeItem(DISMISS_KEY);
+    } catch {
+      /* ignore */
+    }
+    setDismissed(false);
+    setOpen(true);
+  };
+
+  if (!open) {
+    // Small persistent launcher so users can reopen the compare popup anytime
+    return (
+      <button
+        type="button"
+        onClick={reopen}
+        aria-label="השוואת מחירי ביטוח נסיעות"
+        className="fixed bottom-24 left-4 sm:bottom-28 sm:left-6 z-[55] inline-flex items-center gap-2 rounded-full pl-4 pr-3 py-2.5 text-xs font-bold text-[#001a4d] bg-[#FFD447] hover:bg-[#FFC000] border border-[#FFD447] shadow-[0_10px_30px_-8px_rgba(255,212,71,0.55)] hover:translate-y-[-1px] transition-all"
+        dir="rtl"
+      >
+        <span className="w-7 h-7 rounded-full bg-[#001a4d] text-[#FFD447] inline-flex items-center justify-center">
+          <ShieldCheck className="w-4 h-4" strokeWidth={2.4} />
+        </span>
+        השוואת ביטוח נסיעות
+      </button>
+    );
+  }
 
   return (
     <div
