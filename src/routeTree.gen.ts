@@ -39,6 +39,7 @@ import { Route as ApiPublicParseDealRouteImport } from './routes/api.public.pars
 import { Route as ApiPublicDealImageRouteImport } from './routes/api.public.deal-image'
 import { Route as AppCustomersIdRouteImport } from './routes/_app.customers.$id'
 import { Route as ApiPublicTelegramPollRouteImport } from './routes/api.public.telegram.poll'
+import { Route as ApiPublicHooksSyncDealsRouteImport } from './routes/api.public.hooks.sync-deals'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -188,6 +189,11 @@ const ApiPublicTelegramPollRoute = ApiPublicTelegramPollRouteImport.update({
   path: '/api/public/telegram/poll',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksSyncDealsRoute = ApiPublicHooksSyncDealsRouteImport.update({
+  id: '/api/public/hooks/sync-deals',
+  path: '/api/public/hooks/sync-deals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers/': typeof AppCustomersIndexRoute
+  '/api/public/hooks/sync-deals': typeof ApiPublicHooksSyncDealsRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
 export interface FileRoutesByTo {
@@ -247,6 +254,7 @@ export interface FileRoutesByTo {
   '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/customers': typeof AppCustomersIndexRoute
+  '/api/public/hooks/sync-deals': typeof ApiPublicHooksSyncDealsRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
 export interface FileRoutesById {
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/api/public/deal-image': typeof ApiPublicDealImageRoute
   '/api/public/parse-deal': typeof ApiPublicParseDealRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
+  '/api/public/hooks/sync-deals': typeof ApiPublicHooksSyncDealsRoute
   '/api/public/telegram/poll': typeof ApiPublicTelegramPollRoute
 }
 export interface FileRouteTypes {
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/customers/'
+    | '/api/public/hooks/sync-deals'
     | '/api/public/telegram/poll'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/customers'
+    | '/api/public/hooks/sync-deals'
     | '/api/public/telegram/poll'
   id:
     | '__root__'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/api/public/deal-image'
     | '/api/public/parse-deal'
     | '/_app/customers/'
+    | '/api/public/hooks/sync-deals'
     | '/api/public/telegram/poll'
   fileRoutesById: FileRoutesById
 }
@@ -384,6 +396,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiPublicDealImageRoute: typeof ApiPublicDealImageRoute
   ApiPublicParseDealRoute: typeof ApiPublicParseDealRoute
+  ApiPublicHooksSyncDealsRoute: typeof ApiPublicHooksSyncDealsRoute
   ApiPublicTelegramPollRoute: typeof ApiPublicTelegramPollRoute
 }
 
@@ -599,6 +612,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicTelegramPollRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/sync-deals': {
+      id: '/api/public/hooks/sync-deals'
+      path: '/api/public/hooks/sync-deals'
+      fullPath: '/api/public/hooks/sync-deals'
+      preLoaderRoute: typeof ApiPublicHooksSyncDealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -671,6 +691,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiPublicDealImageRoute: ApiPublicDealImageRoute,
   ApiPublicParseDealRoute: ApiPublicParseDealRoute,
+  ApiPublicHooksSyncDealsRoute: ApiPublicHooksSyncDealsRoute,
   ApiPublicTelegramPollRoute: ApiPublicTelegramPollRoute,
 }
 export const routeTree = rootRouteImport

@@ -221,6 +221,7 @@ function AdminDealsPage() {
         <div>
           <h1 className="text-2xl font-bold">ניהול דילים</h1>
           <p className="text-sm text-muted-foreground">הוסיפו דיל דרך קישור להצעה, או ידנית. כל שינוי מתעדכן מיד בעמוד /deals הציבורי.</p>
+          <p className="text-xs text-muted-foreground mt-1">🔄 סנכרון אוטומטי מ-quotes.goldtus.com פועל כל 3 שעות. אפשר גם להריץ ידנית עכשיו.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => refreshAllMut.mutate()} disabled={refreshAllMut.isPending}>
