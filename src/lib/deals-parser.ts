@@ -134,6 +134,15 @@ export function parseQuoteHtml(html: string): ParsedDeal {
     if (before) result.destination = before;
   }
 
+  // Markdown fallback from scraping services: "# פאפוס".
+  if (!result.destination) {
+    const mdTitle = html.match(/^#\s+([^\n#]+)/m);
+    if (mdTitle) {
+      result.destination = decode(mdTitle[1]);
+      result.title = result.title ?? result.destination;
+    }
+  }
+
   // Country lookup
   if (result.destination && CITY_TO_COUNTRY[result.destination]) {
     result.country = CITY_TO_COUNTRY[result.destination];
@@ -142,6 +151,11 @@ export function parseQuoteHtml(html: string): ParsedDeal {
   // Hero / og:image
   const ogImage = html.match(/property="og:image"\s+content="([^"]+)"/i);
   if (ogImage) result.image_url = normalizeImageUrl(ogImage[1]);
+
+  if (!result.image_url) {
+    const mdHero = html.match(/^!\[[^\]]*\]\((https?:\/\/[^)]+)\)/m);
+    if (mdHero) result.image_url = normalizeImageUrl(mdHero[1]);
+  }
 
   // Hotel: uppercase Latin name that repeats (appears in hotel section)
   const hotelMatches = Array.from(
@@ -154,6 +168,12 @@ export function parseQuoteHtml(html: string): ParsedDeal {
     const [top] = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
     if (top && top[1] >= 2) result.hotel = top[0];
     else result.hotel = hotelMatches[0];
+  }
+
+  if (!result.hotel) {
+    const mdHotel = html.match(/^###\s+([A-Z][A-Z0-9 &.'()\-]{5,})/m)
+      ?? html.match(/^([^\n#]*[A-Z][A-Z0-9 &.'()\-]{5,})·/m);
+    if (mdHotel) result.hotel = mdHotel[1].trim();
   }
 
   // Price "₪3,300" (take smallest = "from")
