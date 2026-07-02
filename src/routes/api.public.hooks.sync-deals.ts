@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { parseQuoteHtml } from "@/lib/deals-parser";
+import { fetchQuoteHtml } from "./api.public.parse-deal";
 
 // Cron-triggered sync: re-parses every deal with a quote_url from
 // quotes.goldtus.com and updates cached fields (price, dates, hotel, image).
@@ -34,17 +35,8 @@ async function run() {
     try {
       const url = d.quote_url as string;
       if (!url.startsWith("https://quotes.goldtus.com/")) continue;
-      const res = await fetch(url, {
-        redirect: "follow",
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": "he-IL,he;q=0.9,en;q=0.8",
-        },
-      });
-      if (!res.ok) { failed++; errors.push(`${d.id}: upstream ${res.status}`); continue; }
-      const html = await res.text();
+      const html = await fetchQuoteHtml(url);
+      if (!html) { failed++; errors.push(`${d.id}: upstream fetch failed`); continue; }
       const parsed = parseQuoteHtml(html);
 
       const patch = {
