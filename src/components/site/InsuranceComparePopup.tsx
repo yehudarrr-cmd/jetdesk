@@ -8,7 +8,6 @@ const REOPEN_AFTER_MS = 1000 * 60 * 30; // 30 min
 
 export function InsuranceComparePopup() {
   const [open, setOpen] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -26,7 +25,6 @@ export function InsuranceComparePopup() {
     } catch {
       /* ignore */
     }
-    setDismissed(isDismissed);
     if (isDismissed) return;
     const t = window.setTimeout(() => setOpen(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(t);
@@ -34,7 +32,6 @@ export function InsuranceComparePopup() {
 
   const dismiss = () => {
     setOpen(false);
-    setDismissed(true);
     try {
       window.localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
@@ -48,7 +45,6 @@ export function InsuranceComparePopup() {
     } catch {
       /* ignore */
     }
-    setDismissed(false);
     setOpen(true);
   };
 
