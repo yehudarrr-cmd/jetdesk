@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { AccessibilityWidget } from "@/components/site/AccessibilityWidget";
+import { InsuranceComparePopup } from "@/components/site/InsuranceComparePopup";
 import { ldScript, SITE_URL } from "@/lib/site-constants";
 
 export const Route = createFileRoute("/_site")({
@@ -68,6 +69,7 @@ function SiteLayout() {
       <SiteFooter />
       <FloatingWhatsApp />
       <AccessibilityWidget />
+      <InsuranceComparePopup />
       <CookieConsent />
     </div>
   );
