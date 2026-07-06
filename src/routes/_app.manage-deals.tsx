@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Trash2, RefreshCw, Star, Eye, EyeOff, Save, Plus, Download } from "lucide-react";
+import { Trash2, RefreshCw, Star, Eye, EyeOff, Save, Plus, Download, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -310,6 +310,25 @@ function AdminDealsPage() {
                     {d.airline ? ` · ${d.airline}` : ""}
                   </div>
                 </div>
+                {(() => {
+                  const isKosher = (d.tags ?? []).some((t) => t?.toLowerCase() === "kosher");
+                  return (
+                    <Button
+                      variant={isKosher ? "default" : "outline"}
+                      size="sm"
+                      className={isKosher ? "bg-green-600 hover:bg-green-700 text-white" : "text-green-700 border-green-600 hover:bg-green-50"}
+                      title={isKosher ? "בטל סימון כשר" : "סמן ככשר"}
+                      onClick={() => {
+                        const current = (d.tags ?? []).filter((t) => t?.toLowerCase() !== "kosher");
+                        const next = isKosher ? current : [...current, "kosher"];
+                        toggleMut.mutate({ id: d.id, patch: { tags: next } });
+                      }}
+                    >
+                      <UtensilsCrossed className="w-4 h-4 ml-1" />
+                      {isKosher ? "כשר ✓" : "סמן ככשר"}
+                    </Button>
+                  );
+                })()}
                 <Button variant="ghost" size="icon" title={d.featured ? "בטל מומלץ" : "סמן כמומלץ"}
                   onClick={() => toggleMut.mutate({ id: d.id, patch: { featured: !d.featured } })}>
                   <Star className={`w-4 h-4 ${d.featured ? "fill-yellow-400 text-yellow-500" : ""}`} />
