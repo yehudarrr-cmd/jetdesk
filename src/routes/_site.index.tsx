@@ -15,6 +15,8 @@ import {
   Luggage,
   Signal,
   MessageCircle,
+  Flame,
+  UtensilsCrossed,
 } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
 import {
@@ -451,7 +453,31 @@ function HomePage() {
 
       {/* CTA STRIP */}
       <section className="py-16 sm:py-20 px-6 bg-[#001a4d]">
-        <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-4">
+        <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Link to="/deals" className="group p-6 rounded-2xl bg-white border-2 border-[#FFD447] hover:border-[#FFC000] transition-colors shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-[#c99a1e] tracking-[0.25em] uppercase mb-2 font-bold flex items-center gap-1.5">
+                  <Flame className="w-3.5 h-3.5" fill="currentColor" /> דילים חמים
+                </div>
+                <h3 className="font-display text-xl font-bold text-[#002d72]">חופשות במחירי היכרות</h3>
+                <p className="text-sm text-[#002d72]/70 mt-1">טיסות + מלון במחירים מוזלים</p>
+              </div>
+              <ArrowLeft className="w-5 h-5 text-[#002d72] group-hover:-translate-x-1 transition-transform" />
+            </div>
+          </Link>
+          <Link to="/kosher-deals" className="group p-6 rounded-2xl bg-[#0b6b3a] border-2 border-[#FFD447] hover:bg-[#0a5a30] transition-colors shadow-[0_20px_50px_-15px_rgba(11,107,58,0.55)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-[#FFD447] tracking-[0.25em] uppercase mb-2 font-bold flex items-center gap-1.5">
+                  <UtensilsCrossed className="w-3.5 h-3.5" /> דילים כשרים
+                </div>
+                <h3 className="font-display text-xl font-bold text-[#FFD447]">חופשה עם מלון כשר</h3>
+                <p className="text-sm text-white/85 mt-1">מלונות בהשגחה, אוכל מהדרין</p>
+              </div>
+              <ArrowLeft className="w-5 h-5 text-[#FFD447] group-hover:-translate-x-1 transition-transform" />
+            </div>
+          </Link>
           <Link to="/services" className="group p-6 rounded-2xl border-2 border-[#FFD447]/40 bg-white hover:border-[#FFD447] transition-colors shadow-[0_20px_50px_-20px_rgba(0,0,0,0.5)]">
             <div className="flex items-center justify-between">
               <div>
