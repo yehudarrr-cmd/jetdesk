@@ -61,51 +61,53 @@ function DealsPage() {
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
-      {/* Hero */}
+      {/* Header */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#002d72] to-[#001a4d]">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, #FFD447 0%, transparent 40%), radial-gradient(circle at 80% 80%, #FFD447 0%, transparent 40%)" }} />
-        <div className="max-w-6xl mx-auto px-6 pt-16 pb-14 sm:pt-24 sm:pb-20 relative">
-          <div className="text-center space-y-5">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 text-[#FFD447] text-xs font-bold tracking-widest uppercase">
+        <div className="max-w-6xl mx-auto px-6 pt-8 pb-6 sm:pt-10 sm:pb-8 relative">
+          <div className="text-center space-y-3">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 text-[#FFD447] text-xs font-bold tracking-widest uppercase">
               <Flame className="w-3.5 h-3.5" fill="currentColor" /> Hot Deals
             </span>
-            <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#FFD447]">
+            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#FFD447]">
               דילים חמים לחו"ל
             </h1>
-            <p className="max-w-2xl mx-auto text-base sm:text-lg text-white/85 leading-relaxed">
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-white/85 leading-relaxed">
               הצעות נבחרות לטיסות, חבילות נופש ודילים שמתעדכנים באופן שוטף על ידי צוות GoldTus.
             </p>
-            <a
-              href={whatsappUrl("שלום, ראיתי את הדילים באתר ואשמח לקבל הצעה מותאמת")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm sm:text-base font-bold text-[#001a4d] bg-[#FFD447] hover:bg-[#FFC000] shadow-[0_10px_30px_-8px_rgba(255,212,71,0.6)] hover:translate-y-[-1px] transition-all"
-            >
-              <MessageCircle className="w-5 h-5" fill="currentColor" />
-              קבלו הצעות בוואטסאפ
-            </a>
-            <a
-              href={GOLD_DEAL_CLUB_WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm sm:text-base font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 shadow-[0_10px_30px_-12px_rgba(255,212,71,0.45)] hover:translate-y-[-1px] transition-all"
-            >
-              <MessageCircle className="w-5 h-5" fill="currentColor" />
-              הצטרפו למועדון דיל הזהב
-            </a>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={whatsappUrl("שלום, ראיתי את הדילים באתר ואשמח לקבל הצעה מותאמת")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-[#001a4d] bg-[#FFD447] hover:bg-[#FFC000] shadow-[0_10px_30px_-8px_rgba(255,212,71,0.6)] hover:translate-y-[-1px] transition-all"
+              >
+                <MessageCircle className="w-4 h-4" fill="currentColor" />
+                קבלו הצעות בוואטסאפ
+              </a>
+              <a
+                href={GOLD_DEAL_CLUB_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 shadow-[0_10px_30px_-12px_rgba(255,212,71,0.45)] hover:translate-y-[-1px] transition-all"
+              >
+                <MessageCircle className="w-4 h-4" fill="currentColor" />
+                מועדון דיל הזהב
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Info box */}
-      <section className="max-w-4xl mx-auto px-6 -mt-6 relative z-10">
-        <div className="rounded-2xl border border-[#FFD447]/30 bg-[#0b1f4a] p-5 sm:p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
+      <section className="max-w-4xl mx-auto px-6 -mt-3 relative z-10">
+        <div className="rounded-xl border border-[#FFD447]/30 bg-[#0b1f4a] p-4 sm:p-5 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
           <div className="flex items-start gap-3">
-            <div className="shrink-0 w-10 h-10 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 flex items-center justify-center">
-              <Info className="w-5 h-5 text-[#FFD447]" />
+            <div className="shrink-0 w-8 h-8 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 flex items-center justify-center">
+              <Info className="w-4 h-4 text-[#FFD447]" />
             </div>
-            <div className="text-sm text-white/85 leading-relaxed">
-              <div className="font-bold text-[#FFD447] mb-1">חשוב לדעת</div>
+            <div className="text-xs sm:text-sm text-white/85 leading-relaxed">
+              <span className="font-bold text-[#FFD447]">חשוב לדעת:</span>{" "}
               מחירי טיסות, בתי מלון וחבילות נופש משתנים באופן דינמי בהתאם לזמינות, ביקוש ועדכוני הספקים. כל המחירים המוצגים נכונים למועד פרסום ההצעה בלבד. המחיר הסופי נקבע במעמד ההזמנה בלבד. התמונות להמחשה בלבד. ט.ל.ח.
             </div>
           </div>
