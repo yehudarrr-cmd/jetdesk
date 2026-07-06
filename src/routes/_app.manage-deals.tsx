@@ -272,6 +272,17 @@ function AdminDealsPage() {
         <div className="flex items-center gap-4 text-sm">
           <label className="flex items-center gap-2"><input type="checkbox" checked={!!form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> מומלץ (מוצג בבולט)</label>
           <label className="flex items-center gap-2"><input type="checkbox" checked={form.active !== false} onChange={(e) => setForm({ ...form, active: e.target.checked })} /> פעיל (מוצג באתר)</label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={(form.tags ?? []).some((t) => t?.toLowerCase() === "kosher")}
+              onChange={(e) => {
+                const current = (form.tags ?? []).filter((t) => t?.toLowerCase() !== "kosher");
+                setForm({ ...form, tags: e.target.checked ? [...current, "kosher"] : current });
+              }}
+            />
+            כשר (יופיע בעמוד דילים כשרים)
+          </label>
         </div>
 
         <div className="flex justify-end gap-2">
