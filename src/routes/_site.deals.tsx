@@ -1,12 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Flame, Plane, Hotel, Calendar, MoonStar, MapPin, MessageCircle, ExternalLink, Info } from "lucide-react";
+import { Flame, MessageCircle, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
 import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl, GOLD_DEAL_CLUB_WHATSAPP_URL } from "@/lib/site-constants";
-import { generatedDestinationImageUrl, safeDealImageUrl } from "@/lib/deal-image";
-
-type Deal = Database["public"]["Tables"]["deals"]["Row"];
+import { DealCard } from "@/components/site/DealCard";
 
 const TITLE = 'דילים חמים לחו"ל | טיסות וחבילות נופש - GoldTus';
 const DESC =
@@ -44,12 +41,6 @@ export const Route = createFileRoute("/_site/deals")({
   }),
   component: DealsPage,
 });
-
-const IMG_FALLBACK =
-  "data:image/svg+xml;utf8," +
-  encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23001a4d'/><stop offset='1' stop-color='%23002d72'/></linearGradient></defs><rect width='800' height='500' fill='url(%23g)'/><text x='400' y='260' fill='%23FFD447' font-family='serif' font-size='42' text-anchor='middle' font-weight='700'>GoldTus</text></svg>`,
-  );
 
 function DealsPage() {
   const { data: deals = [], isLoading, error } = useQuery({
@@ -170,94 +161,4 @@ function DealsPage() {
       </section>
     </div>
   );
-}
-
-function DealCard({ deal }: { deal: Deal }) {
-  const href = deal.external_url || deal.quote_url || whatsappUrl(
-    `שלום, אשמח לפרטים על הדיל ל${deal.destination}`,
-  );
-  const dateRange = formatDateRange(deal.start_date, deal.end_date);
-  const generatedImage = generatedDestinationImageUrl(deal.destination, deal.country);
-  const imageSrc = safeDealImageUrl(deal.image_url, deal.destination, deal.country);
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col rounded-2xl overflow-hidden bg-[#0b1f4a] border border-white/10 hover:border-[#FFD447]/60 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)] hover:shadow-[0_20px_50px_-15px_rgba(255,212,71,0.35)] transition-all hover:-translate-y-1"
-    >
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#001a4d]">
-        <img
-          src={imageSrc}
-          data-generated-src={generatedImage}
-          alt={`${deal.destination} - ${deal.title ?? ""}`}
-          loading="lazy"
-          decoding="async"
-          referrerPolicy="no-referrer"
-          onError={(e) => {
-            const img = e.currentTarget;
-            const generated = img.dataset.generatedSrc;
-            if (generated && img.src !== new URL(generated, window.location.origin).href) {
-              img.src = generated;
-              return;
-            }
-            if (img.src !== IMG_FALLBACK) img.src = IMG_FALLBACK;
-          }}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-        {deal.featured && (
-          <span className="absolute top-3 right-3 inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FFD447] text-[#001a4d] text-[11px] font-bold tracking-wide">
-            <Flame className="w-3 h-3" fill="currentColor" /> מומלץ
-          </span>
-        )}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <div className="flex items-center gap-1.5 text-[#FFD447] text-xs font-semibold">
-            <MapPin className="w-3.5 h-3.5" />
-            {deal.country ? `${deal.destination} · ${deal.country}` : deal.destination}
-          </div>
-        </div>
-      </div>
-      <div className="flex-1 flex flex-col p-5 gap-3">
-        <h3 className="font-display text-xl font-bold text-white leading-tight line-clamp-2 min-h-[3.5rem]">
-          {deal.title || `חופשה ל${deal.destination}`}
-        </h3>
-        <div className="grid grid-cols-2 gap-2 text-xs text-white/75">
-          {dateRange && (
-            <div className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-[#FFD447]" /> {dateRange}</div>
-          )}
-          {deal.nights != null && (
-            <div className="flex items-center gap-1.5"><MoonStar className="w-3.5 h-3.5 text-[#FFD447]" /> {deal.nights} לילות</div>
-          )}
-          {deal.hotel && (
-            <div className="flex items-center gap-1.5 col-span-2 truncate"><Hotel className="w-3.5 h-3.5 text-[#FFD447]" /> <span className="truncate">{deal.hotel}</span></div>
-          )}
-          {deal.airline && (
-            <div className="flex items-center gap-1.5 col-span-2"><Plane className="w-3.5 h-3.5 text-[#FFD447]" /> {deal.airline}</div>
-          )}
-        </div>
-        <div className="mt-auto pt-3 flex items-end justify-between border-t border-white/10">
-          {deal.price_from != null ? (
-            <div>
-              <div className="text-[10px] uppercase tracking-widest text-white/60">החל מ־</div>
-              <div className="text-2xl font-bold text-[#FFD447] leading-none">
-                ₪{deal.price_from.toLocaleString("he-IL")}
-              </div>
-            </div>
-          ) : <span />}
-          <span className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-[#001a4d] bg-[#FFD447] group-hover:bg-[#FFC000] transition-colors">
-            לפרטים ולהזמנה <ExternalLink className="w-3.5 h-3.5" />
-          </span>
-        </div>
-      </div>
-    </a>
-  );
-}
-
-function formatDateRange(a: string | null, b: string | null): string {
-  if (!a) return "";
-  const fmt = (s: string) => {
-    const d = new Date(s);
-    return new Intl.DateTimeFormat("he-IL", { day: "2-digit", month: "2-digit" }).format(d);
-  };
-  return b ? `${fmt(a)} – ${fmt(b)}` : fmt(a);
 }
