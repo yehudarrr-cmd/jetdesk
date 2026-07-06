@@ -176,6 +176,21 @@ function KosherDealsPage() {
         </div>
       </section>
 
+      {/* Kashrut disclaimer */}
+      <section className="max-w-4xl mx-auto px-6 mt-4 relative z-10">
+        <div className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 sm:p-6">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-10 h-10 rounded-full bg-amber-400/15 border border-amber-400/40 flex items-center justify-center">
+              <Info className="w-5 h-5 text-amber-400" />
+            </div>
+            <div className="text-sm text-white/90 leading-relaxed">
+              <div className="font-bold text-amber-400 mb-1">הבהרה בנושא כשרות</div>
+              GoldTus אינה נושאת באחריות על רמת הכשרות של המלונות, המסעדות או הספקים המופיעים בדילים. פרטי הכשרות המוצגים בעמוד זה מבוססים אך ורק על המידע שמסרו המלון והספקים. לפני כל הזמנה מומלץ לוודא ישירות מול המלון או הספק את רמת הכשרות, השגחתה והתאמתה לצרכים שלכם.
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-14 sm:py-20">
         <h2 className="sr-only">רשימת הדילים הכשרים</h2>
