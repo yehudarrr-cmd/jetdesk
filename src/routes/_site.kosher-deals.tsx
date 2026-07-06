@@ -189,7 +189,7 @@ function KosherDealsPage() {
       </section>
 
       {/* Deals grid */}
-      <section className="max-w-6xl mx-auto px-6 py-14 sm:py-20">
+      <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
         <h2 className="sr-only">רשימת הדילים הכשרים</h2>
         {isLoading && <div className="text-center text-white/70 py-16">טוען דילים כשרים…</div>}
         {error && <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>}
