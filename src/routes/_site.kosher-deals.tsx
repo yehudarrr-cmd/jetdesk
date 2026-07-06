@@ -100,7 +100,7 @@ function KosherDealsPage() {
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
-      {/* Hero */}
+      {/* Header */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#002d72] to-[#001a4d]">
         <div
           className="absolute inset-0 opacity-20 pointer-events-none"
@@ -109,90 +109,43 @@ function KosherDealsPage() {
               "radial-gradient(circle at 20% 20%, #0b6b3a 0%, transparent 40%), radial-gradient(circle at 80% 80%, #FFD447 0%, transparent 40%)",
           }}
         />
-        <div className="max-w-6xl mx-auto px-6 pt-16 pb-14 sm:pt-24 sm:pb-20 relative">
-          <div className="text-center space-y-5">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0b6b3a]/25 border border-[#FFD447]/40 text-[#FFD447] text-xs font-bold tracking-widest uppercase">
+        <div className="max-w-6xl mx-auto px-6 pt-8 pb-6 sm:pt-10 sm:pb-8 relative">
+          <div className="text-center space-y-3">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0b6b3a]/25 border border-[#FFD447]/40 text-[#FFD447] text-xs font-bold tracking-widest uppercase">
               <UtensilsCrossed className="w-3.5 h-3.5" /> Kosher Deals
             </span>
-            <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#FFD447]">
+            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#FFD447]">
               דילים כשרים לחו"ל
             </h1>
-            <p className="max-w-2xl mx-auto text-base sm:text-lg text-white/85 leading-relaxed">
-              חופשות ומלונות עם השגחה כשרותית, ארוחות כשרות ויעדים ידידותיים למגזר הדתי — מבחר דילים
-              נבחר שמתעדכן באופן שוטף על ידי צוות GoldTus.
+            <p className="max-w-2xl mx-auto text-sm sm:text-base text-white/85 leading-relaxed">
+              חופשות ומלונות עם השגחה כשרותית, ארוחות כשרות ויעדים ידידותיים למגזר הדתי — מבחר דילים נבחר.
             </p>
-            <a
-              href={whatsappUrl("שלום, אשמח לקבל הצעה לחופשה כשרה עם מלון כשר")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm sm:text-base font-bold text-[#001a4d] bg-[#FFD447] hover:bg-[#FFC000] shadow-[0_10px_30px_-8px_rgba(255,212,71,0.6)] hover:translate-y-[-1px] transition-all"
-            >
-              <MessageCircle className="w-5 h-5" fill="currentColor" />
-              בקשו הצעה כשרה בוואטסאפ
-            </a>
-            <a
-              href={GOLD_DEAL_CLUB_WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm sm:text-base font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 transition-all"
-            >
-              <MessageCircle className="w-5 h-5" fill="currentColor" />
-              הצטרפו למועדון דיל הזהב
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits */}
-      <section className="max-w-6xl mx-auto px-6 -mt-6 relative z-10">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {BENEFITS.map((b) => (
-            <div
-              key={b.title}
-              className="rounded-2xl border border-[#FFD447]/25 bg-[#0b1f4a] p-5 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.6)]"
-            >
-              <div className="w-10 h-10 rounded-full bg-[#0b6b3a]/25 border border-[#FFD447]/40 flex items-center justify-center mb-3">
-                <b.icon className="w-5 h-5 text-[#FFD447]" />
-              </div>
-              <div className="text-base font-bold text-[#FFD447]">{b.title}</div>
-              <p className="text-sm text-white/80 mt-1 leading-relaxed">{b.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Info box */}
-      <section className="max-w-4xl mx-auto px-6 mt-10 relative z-10">
-        <div className="rounded-2xl border border-[#FFD447]/30 bg-[#0b1f4a] p-5 sm:p-6">
-          <div className="flex items-start gap-3">
-            <div className="shrink-0 w-10 h-10 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 flex items-center justify-center">
-              <Info className="w-5 h-5 text-[#FFD447]" />
-            </div>
-            <div className="text-sm text-white/85 leading-relaxed">
-              <div className="font-bold text-[#FFD447] mb-1">חשוב לדעת</div>
-              רמת הכשרות של כל מלון (רגילה / מהדרין / גלאט) מצוינת בפרטי הדיל וניתן לוודא במעמד ההזמנה. מחירי טיסות, בתי מלון וחבילות משתנים באופן דינמי, המחיר הסופי נקבע במעמד ההזמנה בלבד. תמונות להמחשה בלבד. ט.ל.ח.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Kashrut disclaimer */}
-      <section className="max-w-4xl mx-auto px-6 mt-4 relative z-10">
-        <div className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 sm:p-6">
-          <div className="flex items-start gap-3">
-            <div className="shrink-0 w-10 h-10 rounded-full bg-amber-400/15 border border-amber-400/40 flex items-center justify-center">
-              <Info className="w-5 h-5 text-amber-400" />
-            </div>
-            <div className="text-sm text-white/90 leading-relaxed">
-              <div className="font-bold text-amber-400 mb-1">הבהרה בנושא כשרות</div>
-              GoldTus אינה נושאת באחריות על רמת הכשרות של המלונות, המסעדות או הספקים המופיעים בדילים. פרטי הכשרות המוצגים בעמוד זה מבוססים אך ורק על המידע שמסרו המלון והספקים. לפני כל הזמנה מומלץ לוודא ישירות מול המלון או הספק את רמת הכשרות, השגחתה והתאמתה לצרכים שלכם.
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={whatsappUrl("שלום, אשמח לקבל הצעה לחופשה כשרה עם מלון כשר")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-[#001a4d] bg-[#FFD447] hover:bg-[#FFC000] shadow-[0_10px_30px_-8px_rgba(255,212,71,0.6)] hover:translate-y-[-1px] transition-all"
+              >
+                <MessageCircle className="w-4 h-4" fill="currentColor" />
+                בקשו הצעה כשרה בוואטסאפ
+              </a>
+              <a
+                href={GOLD_DEAL_CLUB_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-[#FFD447] bg-white/10 border border-[#FFD447]/55 hover:bg-white/15 transition-all"
+              >
+                <MessageCircle className="w-4 h-4" fill="currentColor" />
+                מועדון דיל הזהב
+              </a>
             </div>
           </div>
         </div>
       </section>
 
       {/* Deals grid */}
-      <section className="max-w-6xl mx-auto px-6 py-14 sm:py-20">
+      <section className="max-w-6xl mx-auto px-6 py-4 sm:py-6">
         <h2 className="sr-only">רשימת הדילים הכשרים</h2>
         {isLoading && <div className="text-center text-white/70 py-16">טוען דילים כשרים…</div>}
         {error && <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>}
@@ -208,6 +161,50 @@ function KosherDealsPage() {
           {deals.map((d) => (
             <DealCard key={d.id} deal={d} />
           ))}
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="max-w-6xl mx-auto px-6 pt-2 pb-6">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {BENEFITS.map((b) => (
+            <div
+              key={b.title}
+              className="rounded-xl border border-[#FFD447]/25 bg-[#0b1f4a] p-4 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.6)]"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#0b6b3a]/25 border border-[#FFD447]/40 flex items-center justify-center mb-2">
+                <b.icon className="w-4 h-4 text-[#FFD447]" />
+              </div>
+              <div className="text-sm font-bold text-[#FFD447]">{b.title}</div>
+              <p className="text-xs text-white/80 mt-1 leading-relaxed">{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Info boxes */}
+      <section className="max-w-4xl mx-auto px-6 pb-6 relative z-10 grid gap-3">
+        <div className="rounded-xl border border-[#FFD447]/30 bg-[#0b1f4a] p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 flex items-center justify-center">
+              <Info className="w-4 h-4 text-[#FFD447]" />
+            </div>
+            <div className="text-xs sm:text-sm text-white/85 leading-relaxed">
+              <span className="font-bold text-[#FFD447]">חשוב לדעת:</span>{" "}
+              רמת הכשרות של כל מלון (רגילה / מהדרין / גלאט) מצוינת בפרטי הדיל וניתן לוודא במעמד ההזמנה. מחירי טיסות, בתי מלון וחבילות משתנים באופן דינמי, המחיר הסופי נקבע במעמד ההזמנה בלבד. תמונות להמחשה בלבד. ט.ל.ח.
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 w-8 h-8 rounded-full bg-amber-400/15 border border-amber-400/40 flex items-center justify-center">
+              <Info className="w-4 h-4 text-amber-400" />
+            </div>
+            <div className="text-xs sm:text-sm text-white/90 leading-relaxed">
+              <span className="font-bold text-amber-400">הבהרה בנושא כשרות:</span>{" "}
+              GoldTus אינה נושאת באחריות על רמת הכשרות של המלונות, המסעדות או הספקים המופיעים בדילים. פרטי הכשרות המוצגים בעמוד זה מבוססים אך ורק על המידע שמסרו המלון והספקים. לפני כל הזמנה מומלץ לוודא ישירות מול המלון או הספק את רמת הכשרות, השגחתה והתאמתה לצרכים שלכם.
+            </div>
+          </div>
         </div>
       </section>
 
