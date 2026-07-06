@@ -144,8 +144,28 @@ function KosherDealsPage() {
         </div>
       </section>
 
+      {/* Deals grid */}
+      <section className="max-w-6xl mx-auto px-6 py-4 sm:py-6">
+        <h2 className="sr-only">רשימת הדילים הכשרים</h2>
+        {isLoading && <div className="text-center text-white/70 py-16">טוען דילים כשרים…</div>}
+        {error && <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>}
+        {!isLoading && !error && deals.length === 0 && (
+          <div className="text-center text-white/80 py-16 space-y-3">
+            <p>עדיין לא פורסמו דילים כשרים פעילים.</p>
+            <p className="text-sm text-white/60">
+              שלחו לנו הודעה בוואטסאפ עם היעד והתאריכים ונחזור עם הצעה כשרה מותאמת אישית.
+            </p>
+          </div>
+        )}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {deals.map((d) => (
+            <DealCard key={d.id} deal={d} />
+          ))}
+        </div>
+      </section>
+
       {/* Benefits */}
-      <section className="max-w-6xl mx-auto px-6 -mt-3 relative z-10">
+      <section className="max-w-6xl mx-auto px-6 pt-2 pb-6">
         <div className="grid gap-3 sm:grid-cols-3">
           {BENEFITS.map((b) => (
             <div
@@ -163,7 +183,7 @@ function KosherDealsPage() {
       </section>
 
       {/* Info boxes */}
-      <section className="max-w-4xl mx-auto px-6 mt-4 relative z-10 grid gap-3">
+      <section className="max-w-4xl mx-auto px-6 pb-6 relative z-10 grid gap-3">
         <div className="rounded-xl border border-[#FFD447]/30 bg-[#0b1f4a] p-4 sm:p-5">
           <div className="flex items-start gap-3">
             <div className="shrink-0 w-8 h-8 rounded-full bg-[#FFD447]/15 border border-[#FFD447]/40 flex items-center justify-center">
@@ -185,26 +205,6 @@ function KosherDealsPage() {
               GoldTus אינה נושאת באחריות על רמת הכשרות של המלונות, המסעדות או הספקים המופיעים בדילים. פרטי הכשרות המוצגים בעמוד זה מבוססים אך ורק על המידע שמסרו המלון והספקים. לפני כל הזמנה מומלץ לוודא ישירות מול המלון או הספק את רמת הכשרות, השגחתה והתאמתה לצרכים שלכם.
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Deals grid */}
-      <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
-        <h2 className="sr-only">רשימת הדילים הכשרים</h2>
-        {isLoading && <div className="text-center text-white/70 py-16">טוען דילים כשרים…</div>}
-        {error && <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>}
-        {!isLoading && !error && deals.length === 0 && (
-          <div className="text-center text-white/80 py-16 space-y-3">
-            <p>עדיין לא פורסמו דילים כשרים פעילים.</p>
-            <p className="text-sm text-white/60">
-              שלחו לנו הודעה בוואטסאפ עם היעד והתאריכים ונחזור עם הצעה כשרה מותאמת אישית.
-            </p>
-          </div>
-        )}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {deals.map((d) => (
-            <DealCard key={d.id} deal={d} />
-          ))}
         </div>
       </section>
 
