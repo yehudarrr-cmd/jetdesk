@@ -65,18 +65,26 @@ const pollinationsImageUrl = (prompt: string) => {
   return `https://image.pollinations.ai/prompt/${q}?width=1200&height=750&nologo=true&seed=${seed}`;
 };
 
+// Always returns a LOCAL bundled image — used as a last-resort fallback that
+// is guaranteed to load. Picks the closest regional match.
 export const generatedDestinationImageUrl = (destination?: string | null, country?: string | null) => {
   const text = `${destination ?? ""} ${country ?? ""}`;
-  if (/באטומי/.test(text)) return dealsBatumiImage;
+  if (/בטומי|באטומי/.test(text)) return dealsBatumiImage;
   if (/טביליסי/.test(text)) return dealsTbilisiImage;
   if (/בורגס|בולגריה/.test(text)) return dealsBulgariaImage;
   if (/אתונה/.test(text)) return dealsAthensImage;
   if (/פאפוס|איה נאפה|לימסול|לרנקה|קפריסין/.test(text)) return dealsCyprusImage;
-  if (/כרתים|הרסוניסוס|רודוס/.test(text)) return dealsGreeceIslandsImage;
-  const dest = (destination ?? "").trim();
-  const prompt = DEST_TO_PROMPT[dest] ?? (dest ? `${dest} ${country ?? ""} travel destination` : null);
-  if (prompt) return pollinationsImageUrl(prompt);
   return dealsGreeceIslandsImage;
+};
+
+// Returns a destination-specific generated preview URL when we don't have a
+// real deal image. May be slow/flaky (external service), so callers MUST
+// also wire a local fallback via generatedDestinationImageUrl.
+const dynamicDestinationPreviewUrl = (destination?: string | null, country?: string | null) => {
+  const dest = (destination ?? "").trim();
+  if (!dest) return null;
+  const prompt = DEST_TO_PROMPT[dest] ?? `${dest} ${country ?? ""} travel destination landmark`;
+  return pollinationsImageUrl(prompt);
 };
 
 export const safeDealImageUrl = (
@@ -85,13 +93,18 @@ export const safeDealImageUrl = (
   country?: string | null,
 ) => {
   const clean = url?.trim();
-  const localFallback = generatedDestinationImageUrl(destination, country);
-  if (!clean) return localFallback;
+  if (!clean) {
+    return dynamicDestinationPreviewUrl(destination, country)
+      ?? generatedDestinationImageUrl(destination, country);
+  }
   try {
     const host = new URL(clean).hostname.toLowerCase();
-    if (host.endsWith("bstatic.com") || host === "image.pollinations.ai") return localFallback;
+    if (host.endsWith("bstatic.com") || host === "image.pollinations.ai") {
+      return dynamicDestinationPreviewUrl(destination, country)
+        ?? generatedDestinationImageUrl(destination, country);
+    }
   } catch {
-    return localFallback;
+    return generatedDestinationImageUrl(destination, country);
   }
   return dealImageUrl(clean);
 };
