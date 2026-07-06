@@ -19,6 +19,7 @@ import { Route as SiteTermsRouteImport } from './routes/_site.terms'
 import { Route as SiteSitemapRouteImport } from './routes/_site.sitemap'
 import { Route as SiteServicesRouteImport } from './routes/_site.services'
 import { Route as SitePrivacyRouteImport } from './routes/_site.privacy'
+import { Route as SiteKosherDealsRouteImport } from './routes/_site.kosher-deals'
 import { Route as SiteInsuranceRouteImport } from './routes/_site.insurance'
 import { Route as SiteDealsRouteImport } from './routes/_site.deals'
 import { Route as SiteContactRouteImport } from './routes/_site.contact'
@@ -87,6 +88,11 @@ const SiteServicesRoute = SiteServicesRouteImport.update({
 const SitePrivacyRoute = SitePrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteKosherDealsRoute = SiteKosherDealsRouteImport.update({
+  id: '/kosher-deals',
+  path: '/kosher-deals',
   getParentRoute: () => SiteRoute,
 } as any)
 const SiteInsuranceRoute = SiteInsuranceRouteImport.update({
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof SiteContactRoute
   '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
+  '/kosher-deals': typeof SiteKosherDealsRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
   '/sitemap': typeof SiteSitemapRoute
@@ -245,6 +252,7 @@ export interface FileRoutesByTo {
   '/contact': typeof SiteContactRoute
   '/deals': typeof SiteDealsRoute
   '/insurance': typeof SiteInsuranceRoute
+  '/kosher-deals': typeof SiteKosherDealsRoute
   '/privacy': typeof SitePrivacyRoute
   '/services': typeof SiteServicesRoute
   '/sitemap': typeof SiteSitemapRoute
@@ -278,6 +286,7 @@ export interface FileRoutesById {
   '/_site/contact': typeof SiteContactRoute
   '/_site/deals': typeof SiteDealsRoute
   '/_site/insurance': typeof SiteInsuranceRoute
+  '/_site/kosher-deals': typeof SiteKosherDealsRoute
   '/_site/privacy': typeof SitePrivacyRoute
   '/_site/services': typeof SiteServicesRoute
   '/_site/sitemap': typeof SiteSitemapRoute
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/deals'
     | '/insurance'
+    | '/kosher-deals'
     | '/privacy'
     | '/services'
     | '/sitemap'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/deals'
     | '/insurance'
+    | '/kosher-deals'
     | '/privacy'
     | '/services'
     | '/sitemap'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/_site/contact'
     | '/_site/deals'
     | '/_site/insurance'
+    | '/_site/kosher-deals'
     | '/_site/privacy'
     | '/_site/services'
     | '/_site/sitemap'
@@ -470,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof SitePrivacyRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/kosher-deals': {
+      id: '/_site/kosher-deals'
+      path: '/kosher-deals'
+      fullPath: '/kosher-deals'
+      preLoaderRoute: typeof SiteKosherDealsRouteImport
       parentRoute: typeof SiteRoute
     }
     '/_site/insurance': {
@@ -661,6 +680,7 @@ interface SiteRouteChildren {
   SiteContactRoute: typeof SiteContactRoute
   SiteDealsRoute: typeof SiteDealsRoute
   SiteInsuranceRoute: typeof SiteInsuranceRoute
+  SiteKosherDealsRoute: typeof SiteKosherDealsRoute
   SitePrivacyRoute: typeof SitePrivacyRoute
   SiteServicesRoute: typeof SiteServicesRoute
   SiteSitemapRoute: typeof SiteSitemapRoute
@@ -674,6 +694,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteContactRoute: SiteContactRoute,
   SiteDealsRoute: SiteDealsRoute,
   SiteInsuranceRoute: SiteInsuranceRoute,
+  SiteKosherDealsRoute: SiteKosherDealsRoute,
   SitePrivacyRoute: SitePrivacyRoute,
   SiteServicesRoute: SiteServicesRoute,
   SiteSitemapRoute: SiteSitemapRoute,
