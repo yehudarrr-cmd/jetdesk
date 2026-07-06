@@ -115,7 +115,7 @@ function DealsPage() {
       </section>
 
       {/* Deals grid */}
-      <section className="max-w-6xl mx-auto px-6 py-14 sm:py-20">
+      <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
         {isLoading && (
           <div className="text-center text-white/70 py-16">טוען דילים…</div>
         )}
