@@ -1,15 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Flame, MessageCircle, Info } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl, GOLD_DEAL_CLUB_WHATSAPP_URL } from "@/lib/site-constants";
 import { DealCard } from "@/components/site/DealCard";
+import { getPublicDeals } from "@/lib/public-deals.functions";
 
 const TITLE = 'דילים חמים לחו"ל | טיסות וחבילות נופש - GoldTus';
 const DESC =
   'דילים חמים לחו"ל, טיסות, חבילות נופש ומבצעים שמתעדכנים באופן שוטף. מצאו את החופשה הבאה שלכם עם GoldTus.';
 
+const publicDealsQuery = queryOptions({
+  queryKey: ["public-deals"],
+  queryFn: () => getPublicDeals({ data: { kosher: false } }),
+});
+
 export const Route = createFileRoute("/_site/deals")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(publicDealsQuery),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -43,21 +49,7 @@ export const Route = createFileRoute("/_site/deals")({
 });
 
 function DealsPage() {
-  const { data: deals = [], isLoading, error } = useQuery({
-    queryKey: ["public-deals"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deals")
-        .select("*")
-        .eq("active", true)
-        .order("featured", { ascending: false })
-        .order("price_from", { ascending: true, nullsFirst: false })
-        .order("sort_order", { ascending: false })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const { data: deals = [] } = useSuspenseQuery(publicDealsQuery);
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
@@ -116,13 +108,7 @@ function DealsPage() {
 
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
-        {isLoading && (
-          <div className="text-center text-white/70 py-16">טוען דילים…</div>
-        )}
-        {error && (
-          <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>
-        )}
-        {!isLoading && !error && deals.length === 0 && (
+        {deals.length === 0 && (
           <div className="text-center text-white/75 py-16">
             אין דילים פעילים כרגע — צרו קשר בוואטסאפ להצעה אישית.
           </div>
