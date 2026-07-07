@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { UtensilsCrossed, MessageCircle, Info, ShieldCheck, Star } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import {
   canonical,
   ldScript,
@@ -11,12 +10,19 @@ import {
   GOLD_DEAL_CLUB_WHATSAPP_URL,
 } from "@/lib/site-constants";
 import { DealCard } from "@/components/site/DealCard";
+import { getPublicDeals } from "@/lib/public-deals.functions";
 
 const TITLE = 'דילים כשרים לחו"ל | חופשות ומלונות כשרים - GoldTus';
 const DESC =
   'דילים כשרים לחו"ל: חופשות עם מלונות כשרים, ארוחות בהשגחה, טיסות ליעדים ידידותיים למגזר הדתי וחבילות שבת מאורגנות. מתעדכן באופן שוטף על ידי GoldTus.';
 
+const kosherDealsQuery = queryOptions({
+  queryKey: ["public-deals", "kosher"],
+  queryFn: () => getPublicDeals({ data: { kosher: true } }),
+});
+
 export const Route = createFileRoute("/_site/kosher-deals")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(kosherDealsQuery),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -81,22 +87,7 @@ const BENEFITS = [
 ];
 
 function KosherDealsPage() {
-  const { data: deals = [], isLoading, error } = useQuery({
-    queryKey: ["public-deals", "kosher"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("deals")
-        .select("*")
-        .eq("active", true)
-        .contains("tags", ["kosher"])
-        .order("featured", { ascending: false })
-        .order("price_from", { ascending: true, nullsFirst: false })
-        .order("sort_order", { ascending: false })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const { data: deals = [] } = useSuspenseQuery(kosherDealsQuery);
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
@@ -147,9 +138,7 @@ function KosherDealsPage() {
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-4 sm:py-6">
         <h2 className="sr-only">רשימת הדילים הכשרים</h2>
-        {isLoading && <div className="text-center text-white/70 py-16">טוען דילים כשרים…</div>}
-        {error && <div className="text-center text-red-300 py-16">שגיאה בטעינת הדילים</div>}
-        {!isLoading && !error && deals.length === 0 && (
+        {deals.length === 0 && (
           <div className="text-center text-white/80 py-16 space-y-3">
             <p>עדיין לא פורסמו דילים כשרים פעילים.</p>
             <p className="text-sm text-white/60">
