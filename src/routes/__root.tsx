@@ -93,6 +93,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Heebo:wght@300;400;500;600;700;800&display=swap" },
       { rel: "alternate", type: "text/markdown", href: "/llms.txt", title: "llms.txt" },
     ],
+    scripts: [
+      { src: "https://www.googletagmanager.com/gtag/js?id=G-4BH0Z7Q26R", async: true },
+      {
+        children:
+          "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-4BH0Z7Q26R');",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -116,6 +123,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const unsub = router.subscribe("onResolved", ({ toLocation }) => {
+      if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+        (window as any).gtag("event", "page_view", {
+          page_path: toLocation.pathname + toLocation.searchStr,
+          page_location: window.location.href,
+          page_title: document.title,
+        });
+      }
+    });
+    return () => unsub();
+  }, [router]);
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
