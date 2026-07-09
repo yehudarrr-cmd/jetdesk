@@ -57,8 +57,45 @@ export const Route = createFileRoute("/_site/deals")({
   component: DealsPage,
 });
 
+function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
+  const base =
+    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold border transition-all";
+  const active =
+    "bg-[#FFD447] text-[#001a4d] border-[#FFD447] shadow-[0_8px_24px_-8px_rgba(255,212,71,0.55)]";
+  const inactive =
+    "bg-white/5 text-white/90 border-white/20 hover:bg-white/10 hover:border-[#FFD447]/40";
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+      <span className="text-sm text-white/70 flex items-center gap-1.5 ml-1">
+        <ArrowUpDown className="w-4 h-4" />
+        מיון:
+      </span>
+      <Link
+        from="/deals"
+        search={(prev) => ({ ...prev, sort: "price_asc" })}
+        className={`${base} ${sort === "price_asc" ? active : inactive}`}
+        aria-current={sort === "price_asc" ? "page" : undefined}
+      >
+        <Banknote className="w-4 h-4" />
+        הזול ביותר קודם
+      </Link>
+      <Link
+        from="/deals"
+        search={(prev) => ({ ...prev, sort: "date_asc" })}
+        className={`${base} ${sort === "date_asc" ? active : inactive}`}
+        aria-current={sort === "date_asc" ? "page" : undefined}
+      >
+        <CalendarArrowUp className="w-4 h-4" />
+        תאריכי יציאה קרובים קודם
+      </Link>
+    </div>
+  );
+}
+
 function DealsPage() {
-  const { data: deals = [] } = useSuspenseQuery(publicDealsQuery);
+  const { sort } = Route.useSearch();
+  const { data: deals = [] } = useSuspenseQuery(publicDealsQuery(sort));
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
@@ -117,6 +154,7 @@ function DealsPage() {
 
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
+        <SortToggle sort={sort} />
         {deals.length === 0 && (
           <div className="text-center text-white/75 py-16">
             אין דילים פעילים כרגע — צרו קשר בוואטסאפ להצעה אישית.
