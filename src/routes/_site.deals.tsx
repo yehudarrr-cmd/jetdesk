@@ -58,7 +58,7 @@ export const Route = createFileRoute("/_site/deals")({
 });
 
 function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
-  const navigate = useNavigate({ from: "/deals" });
+  const navigate = Route.useNavigate();
   const base =
     "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold border transition-all";
   const active =
