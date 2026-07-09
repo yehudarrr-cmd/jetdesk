@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { UtensilsCrossed, MessageCircle, Info, ShieldCheck, Star } from "lucide-react";
+import { UtensilsCrossed, MessageCircle, Info, ShieldCheck, Star, ArrowUpDown, CalendarArrowUp, Banknote } from "lucide-react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import {
   canonical,
   ldScript,
@@ -16,13 +18,20 @@ const TITLE = 'דילים כשרים לחו"ל | חופשות ומלונות כ�
 const DESC =
   'דילים כשרים לחו"ל: חופשות עם מלונות כשרים, ארוחות בהשגחה, טיסות ליעדים ידידותיים למגזר הדתי וחבילות שבת מאורגנות. מתעדכן באופן שוטף על ידי GoldTus.';
 
-const kosherDealsQuery = queryOptions({
-  queryKey: ["public-deals", "kosher"],
-  queryFn: () => getPublicDeals({ data: { kosher: true } }),
+const searchSchema = z.object({
+  sort: fallback(z.union([z.literal("price_asc"), z.literal("date_asc")]), "price_asc").default("price_asc"),
 });
 
+const kosherDealsQuery = (sort: "price_asc" | "date_asc") =>
+  queryOptions({
+    queryKey: ["public-deals", "kosher", sort],
+    queryFn: () => getPublicDeals({ data: { kosher: true, sort } }),
+  });
+
 export const Route = createFileRoute("/_site/kosher-deals")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(kosherDealsQuery),
+  validateSearch: zodValidator(searchSchema),
+  loaderDeps: ({ search: { sort } }) => ({ sort }),
+  loader: ({ context, deps: { sort } }) => context.queryClient.ensureQueryData(kosherDealsQuery(sort)),
   head: () => ({
     meta: [
       { title: TITLE },
