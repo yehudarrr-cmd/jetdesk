@@ -5,16 +5,19 @@ import type { Database } from "@/integrations/supabase/types";
 
 type Deal = Database["public"]["Tables"]["deals"]["Row"];
 
+const sortSchema = z.union([z.literal("price_asc"), z.literal("date_asc")]).catch("price_asc");
+
 export const getPublicDeals = createServerFn({ method: "GET" })
   .inputValidator((input) =>
     z
       .object({
         kosher: z.boolean().optional(),
+        sort: sortSchema.optional().default("price_asc"),
       })
       .parse(input ?? {}),
   )
   .handler(async ({ data }): Promise<Deal[]> => {
-    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
+    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITSupabase_URL;
     const supabaseKey = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
@@ -30,10 +33,19 @@ export const getPublicDeals = createServerFn({ method: "GET" })
       .from("deals")
       .select("*")
       .eq("active", true)
-      .order("featured", { ascending: false })
-      .order("price_from", { ascending: true, nullsFirst: false })
-      .order("sort_order", { ascending: false })
-      .order("created_at", { ascending: false });
+      .order("featured", { ascending: false });
+
+    if (data.sort === "date_asc") {
+      query = query
+        .order("start_date", { ascending: true, nullsFirst: false })
+        .order("sort_order", { ascending: false })
+        .order("created_at", { ascending: false });
+    } else {
+      query = query
+        .order("price_from", { ascending: true, nullsFirst: false })
+        .order("sort_order", { ascending: false })
+        .order("created_at", { ascending: false });
+    }
 
     if (data.kosher) {
       query = query.contains("tags", ["kosher"]);
