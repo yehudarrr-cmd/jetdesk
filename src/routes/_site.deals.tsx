@@ -74,7 +74,7 @@ function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
       </span>
       <button
         type="button"
-        onClick={() => navigate({ search: (prev) => ({ ...prev, sort: "price_asc" }) })}
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "price_asc" }) })}
         className={`${base} ${sort === "price_asc" ? active : inactive}`}
         aria-current={sort === "price_asc" ? "true" : undefined}
       >
@@ -83,7 +83,7 @@ function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
       </button>
       <button
         type="button"
-        onClick={() => navigate({ search: (prev) => ({ ...prev, sort: "date_asc" }) })}
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "date_asc" }) })}
         className={`${base} ${sort === "date_asc" ? active : inactive}`}
         aria-current={sort === "date_asc" ? "true" : undefined}
       >
