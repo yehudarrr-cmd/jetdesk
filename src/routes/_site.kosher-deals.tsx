@@ -95,8 +95,46 @@ const BENEFITS = [
   },
 ];
 
+function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
+  const navigate = Route.useNavigate();
+  const base =
+    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold border transition-all";
+  const active =
+    "bg-[#FFD447] text-[#001a4d] border-[#FFD447] shadow-[0_8px_24px_-8px_rgba(255,212,71,0.55)]";
+  const inactive =
+    "bg-white/5 text-white/90 border-white/20 hover:bg-white/10 hover:border-[#FFD447]/40";
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+      <span className="text-sm text-white/70 flex items-center gap-1.5 ml-1">
+        <ArrowUpDown className="w-4 h-4" />
+        מיון:
+      </span>
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "price_asc" }) })}
+        className={`${base} ${sort === "price_asc" ? active : inactive}`}
+        aria-current={sort === "price_asc" ? "true" : undefined}
+      >
+        <Banknote className="w-4 h-4" />
+        הזול ביותר קודם
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "date_asc" }) })}
+        className={`${base} ${sort === "date_asc" ? active : inactive}`}
+        aria-current={sort === "date_asc" ? "true" : undefined}
+      >
+        <CalendarArrowUp className="w-4 h-4" />
+        תאריכי יציאה קרובים קודם
+      </button>
+    </div>
+  );
+}
+
 function KosherDealsPage() {
-  const { data: deals = [] } = useSuspenseQuery(kosherDealsQuery);
+  const { sort } = Route.useSearch();
+  const { data: deals = [] } = useSuspenseQuery(kosherDealsQuery(sort));
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
@@ -147,6 +185,7 @@ function KosherDealsPage() {
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-4 sm:py-6">
         <h2 className="sr-only">רשימת הדילים הכשרים</h2>
+        <SortToggle sort={sort} />
         {deals.length === 0 && (
           <div className="text-center text-white/80 py-16 space-y-3">
             <p>עדיין לא פורסמו דילים כשרים פעילים.</p>
