@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Flame, MessageCircle, Info } from "lucide-react";
+import { Flame, MessageCircle, Info, ArrowUpDown, CalendarArrowUp, Banknote } from "lucide-react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl, GOLD_DEAL_CLUB_WHATSAPP_URL } from "@/lib/site-constants";
 import { DealCard } from "@/components/site/DealCard";
 import { getPublicDeals } from "@/lib/public-deals.functions";
@@ -9,13 +11,20 @@ const TITLE = 'דילים חמים לחו"ל | טיסות וחבילות נופ�
 const DESC =
   'דילים חמים לחו"ל, טיסות, חבילות נופש ומבצעים שמתעדכנים באופן שוטף. מצאו את החופשה הבאה שלכם עם GoldTus.';
 
-const publicDealsQuery = queryOptions({
-  queryKey: ["public-deals"],
-  queryFn: () => getPublicDeals({ data: { kosher: false } }),
+const searchSchema = z.object({
+  sort: fallback(z.union([z.literal("price_asc"), z.literal("date_asc")]), "price_asc").default("price_asc"),
 });
 
+const publicDealsQuery = (sort: "price_asc" | "date_asc") =>
+  queryOptions({
+    queryKey: ["public-deals", sort],
+    queryFn: () => getPublicDeals({ data: { kosher: false, sort } }),
+  });
+
 export const Route = createFileRoute("/_site/deals")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(publicDealsQuery),
+  validateSearch: zodValidator(searchSchema),
+  loaderDeps: ({ search: { sort } }) => ({ sort }),
+  loader: ({ context, deps: { sort } }) => context.queryClient.ensureQueryData(publicDealsQuery(sort)),
   head: () => ({
     meta: [
       { title: TITLE },
