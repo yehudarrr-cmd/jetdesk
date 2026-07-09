@@ -58,6 +58,7 @@ export const Route = createFileRoute("/_site/deals")({
 });
 
 function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
+  const navigate = useNavigate({ from: "/deals" });
   const base =
     "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold border transition-all";
   const active =
@@ -71,24 +72,24 @@ function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
         <ArrowUpDown className="w-4 h-4" />
         מיון:
       </span>
-      <Link
-        from="/deals"
-        search={(prev) => ({ ...prev, sort: "price_asc" })}
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev) => ({ ...prev, sort: "price_asc" }) })}
         className={`${base} ${sort === "price_asc" ? active : inactive}`}
-        aria-current={sort === "price_asc" ? "page" : undefined}
+        aria-current={sort === "price_asc" ? "true" : undefined}
       >
         <Banknote className="w-4 h-4" />
         הזול ביותר קודם
-      </Link>
-      <Link
-        from="/deals"
-        search={(prev) => ({ ...prev, sort: "date_asc" })}
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev) => ({ ...prev, sort: "date_asc" }) })}
         className={`${base} ${sort === "date_asc" ? active : inactive}`}
-        aria-current={sort === "date_asc" ? "page" : undefined}
+        aria-current={sort === "date_asc" ? "true" : undefined}
       >
         <CalendarArrowUp className="w-4 h-4" />
         תאריכי יציאה קרובים קודם
-      </Link>
+      </button>
     </div>
   );
 }
