@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Flame, MessageCircle, Info } from "lucide-react";
+import { Flame, MessageCircle, Info, ArrowUpDown, CalendarArrowUp, Banknote } from "lucide-react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { canonical, ldScript, breadcrumbLd, SITE_URL, whatsappUrl, GOLD_DEAL_CLUB_WHATSAPP_URL } from "@/lib/site-constants";
 import { DealCard } from "@/components/site/DealCard";
 import { getPublicDeals } from "@/lib/public-deals.functions";
@@ -9,13 +11,20 @@ const TITLE = 'דילים חמים לחו"ל | טיסות וחבילות נופ�
 const DESC =
   'דילים חמים לחו"ל, טיסות, חבילות נופש ומבצעים שמתעדכנים באופן שוטף. מצאו את החופשה הבאה שלכם עם GoldTus.';
 
-const publicDealsQuery = queryOptions({
-  queryKey: ["public-deals"],
-  queryFn: () => getPublicDeals({ data: { kosher: false } }),
+const searchSchema = z.object({
+  sort: fallback(z.union([z.literal("price_asc"), z.literal("date_asc")]), "price_asc").default("price_asc"),
 });
 
+const publicDealsQuery = (sort: "price_asc" | "date_asc") =>
+  queryOptions({
+    queryKey: ["public-deals", sort],
+    queryFn: () => getPublicDeals({ data: { kosher: false, sort } }),
+  });
+
 export const Route = createFileRoute("/_site/deals")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(publicDealsQuery),
+  validateSearch: zodValidator(searchSchema),
+  loaderDeps: ({ search: { sort } }) => ({ sort }),
+  loader: ({ context, deps: { sort } }) => context.queryClient.ensureQueryData(publicDealsQuery(sort)),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -48,8 +57,46 @@ export const Route = createFileRoute("/_site/deals")({
   component: DealsPage,
 });
 
+function SortToggle({ sort }: { sort: "price_asc" | "date_asc" }) {
+  const navigate = Route.useNavigate();
+  const base =
+    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold border transition-all";
+  const active =
+    "bg-[#FFD447] text-[#001a4d] border-[#FFD447] shadow-[0_8px_24px_-8px_rgba(255,212,71,0.55)]";
+  const inactive =
+    "bg-white/5 text-white/90 border-white/20 hover:bg-white/10 hover:border-[#FFD447]/40";
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-2 mb-5">
+      <span className="text-sm text-white/70 flex items-center gap-1.5 ml-1">
+        <ArrowUpDown className="w-4 h-4" />
+        מיון:
+      </span>
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "price_asc" }) })}
+        className={`${base} ${sort === "price_asc" ? active : inactive}`}
+        aria-current={sort === "price_asc" ? "true" : undefined}
+      >
+        <Banknote className="w-4 h-4" />
+        הזול ביותר קודם
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate({ search: (prev: { sort?: string }) => ({ ...prev, sort: "date_asc" }) })}
+        className={`${base} ${sort === "date_asc" ? active : inactive}`}
+        aria-current={sort === "date_asc" ? "true" : undefined}
+      >
+        <CalendarArrowUp className="w-4 h-4" />
+        תאריכי יציאה קרובים קודם
+      </button>
+    </div>
+  );
+}
+
 function DealsPage() {
-  const { data: deals = [] } = useSuspenseQuery(publicDealsQuery);
+  const { sort } = Route.useSearch();
+  const { data: deals = [] } = useSuspenseQuery(publicDealsQuery(sort));
 
   return (
     <div className="bg-[#001a4d] text-white" dir="rtl">
@@ -108,6 +155,7 @@ function DealsPage() {
 
       {/* Deals grid */}
       <section className="max-w-6xl mx-auto px-6 py-6 sm:py-10">
+        <SortToggle sort={sort} />
         {deals.length === 0 && (
           <div className="text-center text-white/75 py-16">
             אין דילים פעילים כרגע — צרו קשר בוואטסאפ להצעה אישית.
