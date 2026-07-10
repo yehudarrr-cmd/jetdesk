@@ -157,8 +157,8 @@ function HomePage() {
     <>
       {/* HERO — cinematic slider with subtle Ken-Burns zoom */}
       <section className="relative bg-[#001a4d] overflow-hidden">
-        {/* Full-width slider band */}
-        <div className="relative w-full h-[68vh] min-h-[520px] sm:min-h-[560px] lg:min-h-[640px] max-h-[820px]">
+        {/* Compact slider band so the lead form is visible in the upper third */}
+        <div className="relative w-full h-[46vh] min-h-[360px] sm:min-h-[400px] lg:min-h-[440px] max-h-[560px]">
           {HERO_SLIDES.map((s, i) => (
             <div
               key={s.url}
@@ -185,35 +185,25 @@ function HomePage() {
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(0,26,77,0.55)_0%,rgba(0,26,77,0.35)_45%,rgba(0,26,77,0.85)_100%)]" />
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,rgba(255,212,71,0.10),transparent_55%)]" />
 
-          {/* Headline overlay */}
-          <div className="absolute inset-0 flex items-center pb-24 sm:pb-28">
+          {/* Headline overlay — compact so form starts within upper third */}
+          <div className="absolute inset-0 flex items-center pb-16 sm:pb-20">
             <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 text-right text-white">
-              <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-5 py-2 border border-white/25">
-                Premium Wanderlust · גולדטוס
+              <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/25">
+                גולדטוס · שירות אישי, מהתכנון ועד הנחיתה
               </span>
               <h1
-                className="mt-6 animate-rise-in font-display text-4xl sm:text-6xl lg:text-[5.25rem] font-semibold leading-[1.05] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+                className="mt-4 animate-rise-in font-display text-[1.9rem] sm:text-4xl lg:text-[3.2rem] font-semibold leading-[1.1] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] max-w-4xl"
                 style={{ animationDelay: "120ms" }}
               >
-                טסים ברמה אחרת
-                <span className="block text-[#FFD447] mt-3 font-normal">חופשות פרימיום בהתאמה אישית</span>
+                אתם אורזים מזוודה
+                <span className="block text-[#FFD447] mt-2 font-normal">אנחנו כבר נדאג לכל השאר</span>
               </h1>
               <p
-                className="mt-6 animate-rise-in text-base sm:text-lg lg:text-xl font-light text-white/90 leading-relaxed max-w-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
+                className="mt-4 animate-rise-in text-sm sm:text-base lg:text-[1.05rem] font-light text-white/90 leading-relaxed max-w-3xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
                 style={{ animationDelay: "260ms" }}
               >
-                שלחו יעד, תאריכים ומספר נוסעים — נחזור עם הצעה מדויקת. ליווי אישי, מהתכנון ועד הנחיתה.
+                טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד.
               </p>
-              <div
-                className="mt-7 animate-rise-in flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-white/80"
-                style={{ animationDelay: "400ms" }}
-              >
-                <span className="flex items-center gap-2"><Plane className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> טיסות פרימיום</span>
-                <span className="hidden sm:inline h-1 w-1 rounded-full bg-white/40" />
-                <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> שירות אישי</span>
-                <span className="hidden sm:inline h-1 w-1 rounded-full bg-white/40" />
-                <span className="flex items-center gap-2"><Crown className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> VIP בנתב"ג</span>
-              </div>
             </div>
           </div>
 
@@ -233,8 +223,8 @@ function HomePage() {
           </div>
         </div>
 
-        {/* Floating booking card — lighter, thinner ring */}
-        <div className="relative z-20 max-w-5xl mx-auto px-5 sm:px-10 -mt-24 sm:-mt-32 pb-14">
+        {/* Floating booking card — lighter, thinner ring; larger overlap so form is instantly visible */}
+        <div className="relative z-20 max-w-5xl mx-auto px-5 sm:px-10 -mt-20 sm:-mt-28 pb-14">
           <div className="rounded-3xl bg-white/95 backdrop-blur-xl shadow-[0_40px_100px_-30px_rgba(0,10,40,0.5)] ring-1 ring-black/5 p-5 sm:p-8">
             <QuickQuoteForm />
           </div>
@@ -242,7 +232,7 @@ function HomePage() {
       </section>
 
       {/* TRUST BAR — clean 4-column, generous whitespace, no cards */}
-      <section className="bg-white py-16 sm:py-24 px-5 sm:px-10 border-b border-black/[0.04]">
+      <section className="bg-[#FBF7ED] py-16 sm:py-24 px-5 sm:px-10 border-b border-[#e9dfc4]/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 sm:mb-14">
             <span className="inline-block text-[11px] tracking-[0.4em] text-[#c99a1e] uppercase font-medium">
