@@ -214,7 +214,7 @@ function HomePage() {
                 ))}
               </div>
 
-              <div className="relative flex items-center justify-end gap-6 sm:gap-8">
+              <div className="relative">
                 <div className="min-w-0">
                   <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-4 py-1.5 border border-[rgba(212,164,55,0.55)] shadow-[0_2px_18px_-6px_rgba(212,164,55,0.4)]">
                     <span className="text-gold-metallic font-semibold">גולדטוס</span>
@@ -248,7 +248,6 @@ function HomePage() {
                     טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד.
                   </p>
                 </div>
-
               </div>
             </div>
           </div>
