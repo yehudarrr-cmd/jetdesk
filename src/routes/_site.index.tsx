@@ -15,7 +15,7 @@ import {
   Flame,
   UtensilsCrossed,
   HeadphonesIcon,
-  Star,
+  Umbrella,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -68,29 +68,33 @@ const TIP_IMAGES = {
 export const Route = createFileRoute("/_site/")({
   head: () => ({
     meta: [
-      { title: "גולדטוס | טיסות וחופשות פרימיום בהתאמה אישית" },
-      { name: "description", content: "גולדטוס מבית אמירים טורס: סוכן נסיעות פרימיום עם שירות אישי, טיסות עסקיות, מלונות יוקרה, VIP בנתב\"ג וקונסיירז' מלא. הצעה אישית בוואטסאפ." },
-      { name: "keywords", content: "גולדטוס, GoldTus, אמירים טורס, סוכן נסיעות, טיסות פרימיום, חופשות יוקרה, VIP בנתב\"ג, ביטוח נסיעות" },
-      { property: "og:title", content: "גולדטוס - טסים ברמה אחרת" },
-      { property: "og:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
+      { title: "גולדטוס | סוכנות נסיעות פרימיום עם שירות אישי" },
+      { name: "description", content: "אתם אורזים מזוודה — אנחנו דואגים לכל השאר. טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד. הצעה אישית בוואטסאפ." },
+      { name: "keywords", content: "גולדטוס, GoldTus, סוכנות נסיעות פרימיום, סוכן נסיעות אישי, טיסות, מלונות, ביטוח נסיעות, השכרת רכב, eSIM, VIP בנתב\"ג, דילים לחו\"ל" },
+      { property: "og:title", content: "גולדטוס | אתם אורזים מזוודה - אנחנו כבר נדאג לכל השאר" },
+      { property: "og:description", content: "טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד, עם ליווי אישי מהתכנון ועד הנחיתה." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "גולדטוס" },
+      { property: "og:locale", content: "he_IL" },
       { property: "og:url", content: canonical("/") },
       { property: "og:image", content: heroImage },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: heroImage },
-      { name: "twitter:title", content: "גולדטוס - טסים ברמה אחרת" },
-      { name: "twitter:description", content: "טיסות וחופשות פרימיום עם שירות אישי ודילים נבחרים בלבד." },
+      { name: "twitter:title", content: "גולדטוס | אתם אורזים מזוודה - אנחנו כבר נדאג לכל השאר" },
+      { name: "twitter:description", content: "שירות אישי, זמינות מלאה, ושקט נפשי לפני, במהלך ואחרי הנסיעה." },
+      { name: "robots", content: "index,follow,max-image-preview:large,max-snippet:-1" },
     ],
     links: [{ rel: "canonical", href: canonical("/") }],
     scripts: [
       ldScript({
         "@context": "https://schema.org",
-        "@type": "WebSite",
+        "@type": "TravelAgency",
         name: "גולדטוס",
         alternateName: "GoldTus",
         url: SITE_URL,
         inLanguage: "he-IL",
-        publisher: { "@type": "Organization", name: "גולדטוס" },
+        description: "סוכנות נסיעות פרימיום עם שירות אישי — טיסות, מלונות, ביטוח נסיעות, eSIM ושירות VIP.",
+        areaServed: "IL",
       }),
     ],
   }),
@@ -107,24 +111,27 @@ const trustPillars = [
 const reviews = [
   {
     name: "יעל ק.",
-    trip: "פאפוס · יולי",
+    trip: "פאפוס · חופשה זוגית",
     quote:
-      "הרגשנו כמו לקוחות של חברת תעופה, לא של סוכן. כל פרט טופל מראש — נחתנו והכל היה מוכן.",
-    rating: 5,
+      "יחס אישי אמיתי מהרגע הראשון. שאלנו שאלות בכל שעה של היום — וקיבלנו מענה מיידי. הרגשנו שיש עלינו מי שסומכים.",
   },
   {
     name: "אבי מ.",
-    trip: "מלדיביים · הרעה\"ד",
+    trip: "מלדיביים · ירח דבש",
     quote:
-      "השירות של גולדטוס ברמה של מלון חמישה כוכבים. מחיר טוב, ליווי מלא, ואפס כאב ראש.",
-    rating: 5,
+      "חסכו לנו ימים של חיפושים. הכל תואם מראש — טיסה, מלון, העברות וביטוח. הגענו רגועים ליעד בלי לגעת בכלום.",
   },
   {
     name: "משפחת לוי",
-    trip: "רומא · חופש של פסח",
+    trip: "רומא · חופשת פסח",
     quote:
-      "הזמנו טיסה + מלון + השכרת רכב במקום אחד. חסכו לנו ימים של חיפושים ומאות שקלים.",
-    rating: 5,
+      "הליווי היה אישי, מקצועי וזמין. גם כשהיו שינויים בטיסה — טיפלו בזה במקומנו. שקט נפשי אמיתי לאורך כל הדרך.",
+  },
+  {
+    name: "דנה ש.",
+    trip: "יוון · חופשה משפחתית",
+    quote:
+      "מרגישים שיש עליכם מישהו שדואג. תשובה מהירה בוואטסאפ, המלצות מדויקות, וטיפול בכל פרט קטן. חוזרים בהמשך השנה.",
   },
 ];
 
@@ -150,8 +157,8 @@ function HomePage() {
     <>
       {/* HERO — cinematic slider with subtle Ken-Burns zoom */}
       <section className="relative bg-[#001a4d] overflow-hidden">
-        {/* Full-width slider band */}
-        <div className="relative w-full h-[68vh] min-h-[520px] sm:min-h-[560px] lg:min-h-[640px] max-h-[820px]">
+        {/* Compact slider band so the lead form is visible in the upper third */}
+        <div className="relative w-full h-[46vh] min-h-[360px] sm:min-h-[400px] lg:min-h-[440px] max-h-[560px]">
           {HERO_SLIDES.map((s, i) => (
             <div
               key={s.url}
@@ -178,35 +185,25 @@ function HomePage() {
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(0,26,77,0.55)_0%,rgba(0,26,77,0.35)_45%,rgba(0,26,77,0.85)_100%)]" />
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,rgba(255,212,71,0.10),transparent_55%)]" />
 
-          {/* Headline overlay */}
-          <div className="absolute inset-0 flex items-center pb-24 sm:pb-28">
+          {/* Headline overlay — compact so form starts within upper third */}
+          <div className="absolute inset-0 flex items-center pb-16 sm:pb-20">
             <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 text-right text-white">
-              <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-5 py-2 border border-white/25">
-                Premium Wanderlust · גולדטוס
+              <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/25">
+                גולדטוס · שירות אישי, מהתכנון ועד הנחיתה
               </span>
               <h1
-                className="mt-6 animate-rise-in font-display text-4xl sm:text-6xl lg:text-[5.25rem] font-semibold leading-[1.05] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)]"
+                className="mt-4 animate-rise-in font-display text-[1.9rem] sm:text-4xl lg:text-[3.2rem] font-semibold leading-[1.1] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] max-w-4xl"
                 style={{ animationDelay: "120ms" }}
               >
-                טסים ברמה אחרת
-                <span className="block text-[#FFD447] mt-3 font-normal">חופשות פרימיום בהתאמה אישית</span>
+                אתם אורזים מזוודה
+                <span className="block text-[#FFD447] mt-2 font-normal">אנחנו כבר נדאג לכל השאר</span>
               </h1>
               <p
-                className="mt-6 animate-rise-in text-base sm:text-lg lg:text-xl font-light text-white/90 leading-relaxed max-w-2xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
+                className="mt-4 animate-rise-in text-sm sm:text-base lg:text-[1.05rem] font-light text-white/90 leading-relaxed max-w-3xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
                 style={{ animationDelay: "260ms" }}
               >
-                שלחו יעד, תאריכים ומספר נוסעים — נחזור עם הצעה מדויקת. ליווי אישי, מהתכנון ועד הנחיתה.
+                טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד.
               </p>
-              <div
-                className="mt-7 animate-rise-in flex flex-wrap items-center gap-x-7 gap-y-3 text-sm text-white/80"
-                style={{ animationDelay: "400ms" }}
-              >
-                <span className="flex items-center gap-2"><Plane className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> טיסות פרימיום</span>
-                <span className="hidden sm:inline h-1 w-1 rounded-full bg-white/40" />
-                <span className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> שירות אישי</span>
-                <span className="hidden sm:inline h-1 w-1 rounded-full bg-white/40" />
-                <span className="flex items-center gap-2"><Crown className="w-4 h-4 text-[#FFD447]" strokeWidth={1.6} /> VIP בנתב"ג</span>
-              </div>
             </div>
           </div>
 
@@ -226,8 +223,8 @@ function HomePage() {
           </div>
         </div>
 
-        {/* Floating booking card — lighter, thinner ring */}
-        <div className="relative z-20 max-w-5xl mx-auto px-5 sm:px-10 -mt-24 sm:-mt-32 pb-14">
+        {/* Floating booking card — lighter, thinner ring; larger overlap so form is instantly visible */}
+        <div className="relative z-20 max-w-5xl mx-auto px-5 sm:px-10 -mt-20 sm:-mt-28 pb-14">
           <div className="rounded-3xl bg-white/95 backdrop-blur-xl shadow-[0_40px_100px_-30px_rgba(0,10,40,0.5)] ring-1 ring-black/5 p-5 sm:p-8">
             <QuickQuoteForm />
           </div>
@@ -235,7 +232,7 @@ function HomePage() {
       </section>
 
       {/* TRUST BAR — clean 4-column, generous whitespace, no cards */}
-      <section className="bg-white py-16 sm:py-24 px-5 sm:px-10 border-b border-black/[0.04]">
+      <section className="bg-[#FBF7ED] py-16 sm:py-24 px-5 sm:px-10 border-b border-[#e9dfc4]/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 sm:mb-14">
             <span className="inline-block text-[11px] tracking-[0.4em] text-[#c99a1e] uppercase font-medium">
@@ -317,24 +314,20 @@ function HomePage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF — light reviews slider */}
-      <section className="py-20 sm:py-28 px-5 sm:px-10 bg-white">
+      {/* SOCIAL PROOF — warm ivory reviews slider */}
+      <section className="relative py-20 sm:py-28 px-5 sm:px-10 bg-[#FAF6EC]">
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(255,212,71,0.10),transparent_65%)]" />
+        <div className="relative">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block text-[11px] tracking-[0.4em] text-[#c99a1e] uppercase font-medium">
-            Voices of GoldTus
+            Client Voices
           </span>
           <h2 className="mt-2 font-display text-2xl sm:text-3xl lg:text-[2.5rem] font-semibold tracking-tight text-[#001a4d]">
-            לקוחות שחזרו — ומספרים
+            לקוחות שחזרו אלינו — ומספרים
           </h2>
-          <div className="mt-3 flex items-center justify-center gap-2 text-sm text-[#001a4d]/70">
-            <div className="flex items-center gap-0.5" aria-label="דירוג 5 מתוך 5">
-              {[0,1,2,3,4].map(i => (
-                <Star key={i} className="w-4 h-4 text-[#FFD447]" fill="currentColor" strokeWidth={0} />
-              ))}
-            </div>
-            <span className="font-medium">5.0</span>
-            <span className="text-[#001a4d]/50">· Google Reviews</span>
-          </div>
+          <p className="mt-3 text-sm text-[#001a4d]/60 max-w-xl mx-auto">
+            מאות משפחות וזוגות סמכו עלינו לתכנן את החופשה שלהם — הנה כמה מהחוויות שלהם.
+          </p>
 
           <div className="relative mt-12 min-h-[220px] sm:min-h-[200px]">
             {reviews.map((r, i) => (
@@ -404,6 +397,7 @@ function HomePage() {
               <ArrowLeft className="w-4 h-4" />
             </a>
           </div>
+        </div>
         </div>
       </section>
 
@@ -522,12 +516,43 @@ function HomePage() {
                 </a>
               </div>
             </article>
+
+            <article className="group bg-white rounded-2xl overflow-hidden border border-black/[0.05] shadow-[0_10px_30px_-15px_rgba(0,26,77,0.15)] hover:shadow-[0_25px_50px_-20px_rgba(0,26,77,0.25)] hover:-translate-y-1 transition-all duration-500 text-right">
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1508433957232-3107f5fd5995?auto=format&fit=crop&w=800&q=80"
+                  alt="טיפ לחיסכון בביטוח נסיעות"
+                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[1200ms] ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-[#001a4d] shadow-sm">
+                  <Umbrella className="w-4 h-4" strokeWidth={1.75} />
+                </div>
+              </div>
+              <div className="p-6 sm:p-7">
+                <h3 className="font-display text-lg font-semibold text-[#001a4d] leading-snug">
+                  טיפ לחיסכון בביטוח נסיעות
+                </h3>
+                <p className="mt-3 text-sm text-[#001a4d]/65 leading-relaxed line-clamp-3">
+                  אם יש לכם גמישות בתאריכים, השתדלו להימנע מטיסות בימי ראשון וחמישי. ברוב המקרים אלו ימים מבוקשים יותר, ולכן גם מחירי ביטוח הנסיעות נוטים להיות גבוהים יותר לעומת אמצע השבוע.
+                </p>
+                <a
+                  href={PASSPORTCARD_URL}
+                  target="_blank"
+                  rel="noopener sponsored"
+                  className="inline-flex items-center gap-2 mt-4 text-xs font-semibold text-[#001a4d] hover:text-[#c99a1e] transition-colors"
+                >
+                  להשוואת ביטוחי נסיעות
+                  <ArrowLeft className="w-4 h-4" />
+                </a>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* CTA STRIP — compact, lighter */}
-      <section className="py-16 sm:py-20 px-5 sm:px-10 bg-white">
+      {/* CTA STRIP — compact, warm ivory */}
+      <section className="py-16 sm:py-20 px-5 sm:px-10 bg-[#FAF6EC]">
         <div className="max-w-5xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link to="/deals" className="group p-6 rounded-2xl bg-white border border-black/[0.06] hover:border-[#FFD447] hover:-translate-y-0.5 transition-all shadow-[0_10px_30px_-15px_rgba(0,26,77,0.12)]">
             <div className="flex items-center justify-between">
