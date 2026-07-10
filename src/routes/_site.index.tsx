@@ -188,22 +188,119 @@ function HomePage() {
           {/* Headline overlay — compact so form starts within upper third */}
           <div className="absolute inset-0 flex items-center pb-16 sm:pb-20">
             <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 text-right text-white">
-              <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/25">
-                גולדטוס · שירות אישי, מהתכנון ועד הנחיתה
-              </span>
-              <h1
-                className="mt-4 animate-rise-in font-display text-[1.9rem] sm:text-4xl lg:text-[3.2rem] font-semibold leading-[1.1] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] max-w-4xl"
-                style={{ animationDelay: "120ms" }}
-              >
-                אתם אורזים מזוודה
-                <span className="block text-[#FFD447] mt-2 font-normal">אנחנו כבר נדאג לכל השאר</span>
-              </h1>
-              <p
-                className="mt-4 animate-rise-in text-sm sm:text-base lg:text-[1.05rem] font-light text-white/90 leading-relaxed max-w-3xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
-                style={{ animationDelay: "260ms" }}
-              >
-                טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד.
-              </p>
+              {/* Floating luxury particles */}
+              <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                {[
+                  { top: "22%", right: "12%", size: 5, delay: "0s" },
+                  { top: "48%", right: "6%",  size: 3, delay: "2.5s" },
+                  { top: "68%", right: "22%", size: 4, delay: "1.2s" },
+                  { top: "32%", right: "38%", size: 2, delay: "4s" },
+                  { top: "58%", right: "46%", size: 3, delay: "3.2s" },
+                ].map((p, i) => (
+                  <span
+                    key={i}
+                    className="absolute rounded-full animate-lux-float"
+                    style={{
+                      top: p.top,
+                      right: p.right,
+                      width: p.size,
+                      height: p.size,
+                      background:
+                        "radial-gradient(circle, rgba(255,242,194,0.95) 0%, rgba(212,164,55,0.35) 45%, transparent 70%)",
+                      boxShadow: "0 0 12px rgba(230,193,90,0.6)",
+                      animationDelay: p.delay,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <div className="relative flex items-center justify-end gap-6 sm:gap-8">
+                <div className="min-w-0">
+                  <span className="inline-block animate-rise-in text-[11px] sm:text-xs tracking-[0.45em] uppercase font-medium bg-white/8 backdrop-blur-md rounded-full px-4 py-1.5 border border-[rgba(212,164,55,0.55)] shadow-[0_2px_18px_-6px_rgba(212,164,55,0.4)]">
+                    <span className="text-gold-metallic font-semibold">גולדטוס</span>
+                    <span className="opacity-80"> · שירות אישי, מהתכנון ועד הנחיתה</span>
+                  </span>
+                  <h1
+                    className="mt-5 animate-rise-in font-display text-[2rem] sm:text-[2.6rem] lg:text-[3.4rem] font-semibold leading-[1.08] tracking-[-0.015em] drop-shadow-[0_4px_28px_rgba(0,0,0,0.5)] max-w-4xl"
+                    style={{ animationDelay: "120ms" }}
+                  >
+                    אתם אורזים{" "}
+                    <span className="relative inline-block">
+                      <span className="text-gold-metallic font-bold">מזוודה</span>
+                      <span
+                        aria-hidden
+                        className="absolute -bottom-1 left-1 right-1 h-[2px] rounded-full"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, transparent, #d4a437 20%, #fff2c2 50%, #d4a437 80%, transparent)",
+                          filter: "drop-shadow(0 0 6px rgba(230,193,90,0.7))",
+                        }}
+                      />
+                    </span>
+                    <span className="block text-white/95 mt-3 font-light tracking-[-0.01em]">
+                      אנחנו כבר נדאג לכל השאר
+                    </span>
+                  </h1>
+                  <p
+                    className="mt-5 animate-rise-in text-sm sm:text-base lg:text-[1.05rem] font-light text-white/85 leading-[1.75] max-w-3xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.35)]"
+                    style={{ animationDelay: "260ms" }}
+                  >
+                    טיסות, מלונות, העברות, השכרת רכב, ביטוח נסיעות, eSIM ושירות אישי — הכל במקום אחד.
+                  </p>
+                </div>
+
+                {/* Premium suitcase line-art — hidden on small screens */}
+                <div
+                  aria-hidden
+                  className="hidden lg:block relative shrink-0 animate-rise-in"
+                  style={{ animationDelay: "180ms" }}
+                >
+                  <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(230,193,90,0.35),transparent_60%)] blur-2xl" />
+                  <div className="absolute -inset-4 rounded-full opacity-60 animate-lux-spin-slow"
+                       style={{
+                         background:
+                           "conic-gradient(from 0deg, transparent 0%, rgba(230,193,90,0.55) 22%, transparent 45%, rgba(255,242,194,0.4) 70%, transparent 92%)",
+                         WebkitMask: "radial-gradient(circle, transparent 55%, black 56%, black 62%, transparent 63%)",
+                         mask: "radial-gradient(circle, transparent 55%, black 56%, black 62%, transparent 63%)",
+                       }}
+                  />
+                  <svg
+                    viewBox="0 0 200 200"
+                    className="relative w-40 xl:w-48 h-auto"
+                    fill="none"
+                    stroke="url(#lux-gold)"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <defs>
+                      <linearGradient id="lux-gold" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#b8862b" />
+                        <stop offset="45%" stopColor="#fff2c2" />
+                        <stop offset="100%" stopColor="#d4a437" />
+                      </linearGradient>
+                    </defs>
+                    {/* Handle */}
+                    <path d="M78 52 Q100 32 122 52 L122 70 L112 70 L112 60 Q100 48 88 60 L88 70 L78 70 Z" />
+                    {/* Body */}
+                    <rect x="52" y="70" width="96" height="98" rx="10" />
+                    {/* Center divider */}
+                    <line x1="100" y1="72" x2="100" y2="166" strokeDasharray="2 4" opacity="0.75" />
+                    {/* Corners */}
+                    <path d="M60 78 L60 84 M60 154 L60 160" opacity="0.7" />
+                    <path d="M140 78 L140 84 M140 154 L140 160" opacity="0.7" />
+                    {/* Luggage tag */}
+                    <path d="M132 62 L146 58 L152 76 L138 80 Z" />
+                    <circle cx="139" cy="66" r="1.2" fill="url(#lux-gold)" />
+                    {/* Feet */}
+                    <line x1="62" y1="168" x2="62" y2="176" />
+                    <line x1="138" y1="168" x2="138" y2="176" />
+                    {/* Monogram G */}
+                    <path d="M104 110 Q90 110 90 122 Q90 134 104 134 L104 126 L98 126"
+                          strokeWidth="1.6" />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
 
