@@ -273,3 +273,24 @@
   50%      { box-shadow: 0 0 0 14px oklch(0.60 0.15 155 / 0); }
 }
 .animate-wa-pulse { animation: wa-pulse 2s ease-in-out infinite; }
+
+/* Slow, cinematic zoom for hero slides — no bounce, no jitter */
+@keyframes hero-zoom {
+  0%   { transform: scale(1.04); }
+  100% { transform: scale(1.12); }
+}
+.animate-hero-zoom { animation: hero-zoom 12s ease-out both; }
+
+/* Soft rise-in for headline copy */
+@keyframes rise-in {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-rise-in { animation: rise-in 1.1s cubic-bezier(.22,.61,.36,1) both; }
+
+/* Subtle horizontal marquee for logos / trust bar */
+@keyframes review-slide {
+  0%,   28% { opacity: 1; transform: translateY(0); }
+  33%, 95% { opacity: 0; transform: translateY(-6px); }
+  100%     { opacity: 1; transform: translateY(0); }
+}
