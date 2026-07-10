@@ -47,10 +47,10 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
               <Link
                 key={`${n.to}-${n.label}`}
                 to={n.to}
-                className={`px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
+                className={`nav-link-lux px-4 py-2 rounded-full whitespace-nowrap tracking-[0.01em] ${
                   active
-                    ? "text-[#001a4d] font-semibold border-[#FFD447] bg-[#FFF7DA]/60 shadow-[0_2px_10px_-4px_rgba(255,212,71,0.5)]"
-                    : "text-[#001a4d]/75 border-transparent hover:text-[#001a4d] hover:border-[#001a4d]/15 hover:bg-[#001a4d]/[0.03]"
+                    ? "nav-link-lux-active text-[#001a4d]"
+                    : "text-[#001a4d]/70 hover:text-[#001a4d] hover:bg-white/40"
                 }`}
               >
                 {n.label}
@@ -65,7 +65,7 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             href={whatsappUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-white bg-success hover:bg-[oklch(0.55_0.15_155)] shadow-[0_8px_24px_-10px_rgba(5,150,105,0.5)] hover:translate-y-[-1px] transition-all animate-wa-pulse"
+            className="btn-lux-emerald inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.02em]"
           >
             <MessageCircle className="w-4 h-4" fill="currentColor" />
             וואטסאפ
@@ -74,18 +74,18 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             href={PASSPORTCARD_URL}
             target="_blank"
             rel="noopener sponsored"
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-primary-foreground shadow-[0_8px_24px_-10px_rgba(11,30,59,0.5)] bg-[linear-gradient(135deg,oklch(0.22_0.08_260),oklch(0.42_0.13_258))] hover:translate-y-[-1px] hover:shadow-[0_12px_28px_-10px_rgba(11,30,59,0.55)] transition-all border border-[oklch(0.75_0.13_82_/_0.55)]"
+            className="btn-lux-dark inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.02em]"
           >
-            <ShieldCheck className="w-4 h-4" strokeWidth={2} />
+            <ShieldCheck className="w-4 h-4" strokeWidth={1.7} />
             ביטוח נסיעות
           </a>
           <a
             href={WIFLY_URL}
             target="_blank"
             rel="noopener sponsored"
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold text-white bg-[oklch(0.60_0.15_155)] hover:bg-[oklch(0.55_0.15_155)] shadow-[0_8px_24px_-10px_rgba(5,150,105,0.5)] hover:translate-y-[-1px] hover:shadow-[0_12px_28px_-10px_rgba(5,150,105,0.6)] transition-all"
+            className="btn-lux-glass inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.02em] text-[#001a4d]"
           >
-            <Wifi className="w-4 h-4" strokeWidth={2} />
+            <Wifi className="w-4 h-4 text-[#0f7a52]" strokeWidth={1.7} />
             eSIM גלובלי
           </a>
         </div>
