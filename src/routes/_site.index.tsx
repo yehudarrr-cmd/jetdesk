@@ -17,6 +17,10 @@ import {
   MessageCircle,
   Flame,
   UtensilsCrossed,
+  HeadphonesIcon,
+  Star,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { QuickQuoteForm } from "@/components/site/QuickQuoteForm";
 import {
