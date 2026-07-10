@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
-  Heart,
-  Award,
-  Sparkles,
   ShieldCheck,
   Wifi,
   Plane,
@@ -99,13 +96,6 @@ export const Route = createFileRoute("/_site/")({
   }),
   component: HomePage,
 });
-
-const whyUs = [
-  { icon: Heart, title: "שירות אישי", desc: "מלווים אתכם מהרעיון ועד החזרה הביתה" },
-  { icon: Award, title: "גב של אמירים טורס", desc: "עשרות שנות ניסיון ומוניטין בתעשייה" },
-  { icon: Sparkles, title: "מחירים בלעדיים", desc: "דילים שמורים שלא תמצאו באתרי ההזמנות" },
-  { icon: ShieldCheck, title: "ביטחון מלא", desc: "ליווי צמוד וזמינות מלאה בכל שעה" },
-];
 
 const trustPillars = [
   { icon: Crown, title: "שירות VIP אישי", desc: "מנהל תיק ייעודי לכל לקוח" },
