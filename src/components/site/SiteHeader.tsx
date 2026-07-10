@@ -32,22 +32,25 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             width={260}
             height={104}
             className="h-16 sm:h-20 lg:h-24 w-auto"
-            style={{ filter: "drop-shadow(0 6px 16px rgba(11,30,59,0.35)) drop-shadow(0 0 1px rgba(11,30,59,0.4))" }}
+            style={{
+              filter:
+                "contrast(1.15) saturate(1.15) drop-shadow(0 2px 4px rgba(11,30,59,0.25)) drop-shadow(0 8px 20px rgba(11,30,59,0.35))",
+            }}
           />
         </Link>
 
-        {/* Center: nav */}
-        <nav className="hidden md:flex items-center justify-center gap-1 text-sm">
+        {/* Center: nav — premium pill styling */}
+        <nav className="hidden md:flex items-center justify-center gap-1 text-[13px]">
           {NAV.map((n) => {
             const active = n.to === "/" ? location.pathname === "/" : location.pathname.startsWith(n.to);
             return (
               <Link
                 key={`${n.to}-${n.label}`}
                 to={n.to}
-                className={`px-3 py-2 rounded-md transition-colors ${
+                className={`px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
                   active
-                    ? "text-primary font-semibold"
-                    : "text-foreground/75 hover:text-primary"
+                    ? "text-[#001a4d] font-semibold border-[#FFD447] bg-[#FFF7DA]/60 shadow-[0_2px_10px_-4px_rgba(255,212,71,0.5)]"
+                    : "text-[#001a4d]/75 border-transparent hover:text-[#001a4d] hover:border-[#001a4d]/15 hover:bg-[#001a4d]/[0.03]"
                 }`}
               >
                 {n.label}
