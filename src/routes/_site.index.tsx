@@ -587,7 +587,7 @@ function HomePage() {
                   rel="noopener sponsored"
                   className="inline-flex items-center gap-2 mt-4 text-xs font-semibold text-[#001a4d] hover:text-[#c99a1e] transition-colors"
                 >
-                  להשוואת ביטוחי נסיעות
+                  לביטוח נסיעות PassportCard
                   <ArrowLeft className="w-4 h-4" />
                 </a>
               </div>

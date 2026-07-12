@@ -9,7 +9,6 @@ export const PASSPORTCARD_URL =
 /** Affiliate: WiFly eSIM / global roaming */
 export const WIFLY_URL = "https://aff.wifly.co.il/click?campaign_id=1&ref_id=247";
 export const GOLD_DEAL_CLUB_WHATSAPP_URL = "https://chat.whatsapp.com/L8bWaSPyqKEAlsDZHhqfZB";
-export const TRUSTY_INSURANCE_COMPARE_URL = "https://trusty.co.il?url_code=fk0nkb";
 
 export const canonical = (path = "/") =>
   `${SITE_URL}${path === "/" ? "/" : path.replace(/\/$/, "")}`;
