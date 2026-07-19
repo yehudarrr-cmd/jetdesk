@@ -13,7 +13,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,14 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (mode === "signup") {
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("שלחנו לך מייל עם קישור לאיפוס סיסמה");
+        setMode("login");
+      } else if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo: `${window.location.origin}/dashboard` },
@@ -68,20 +75,38 @@ function AuthPage() {
             <Label htmlFor="email">אימייל</Label>
             <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">סיסמה</Label>
-            <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
+          {mode !== "forgot" && (
+            <div className="space-y-2">
+              <Label htmlFor="password">סיסמה</Label>
+              <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+          )}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "..." : mode === "login" ? "כניסה" : "הרשמה"}
+            {loading ? "..." : mode === "login" ? "כניסה" : mode === "signup" ? "הרשמה" : "שלח קישור לאיפוס"}
           </Button>
         </form>
-        <button
-          className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-foreground"
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-        >
-          {mode === "login" ? "אין לך חשבון? הירשם" : "יש לך חשבון? התחבר"}
-        </button>
+        <div className="mt-4 flex flex-col gap-2 text-center text-sm text-muted-foreground">
+          {mode === "login" && (
+            <>
+              <button className="hover:text-foreground" onClick={() => setMode("forgot")}>
+                שכחת סיסמה?
+              </button>
+              <button className="hover:text-foreground" onClick={() => setMode("signup")}>
+                אין לך חשבון? הירשם
+              </button>
+            </>
+          )}
+          {mode === "signup" && (
+            <button className="hover:text-foreground" onClick={() => setMode("login")}>
+              יש לך חשבון? התחבר
+            </button>
+          )}
+          {mode === "forgot" && (
+            <button className="hover:text-foreground" onClick={() => setMode("login")}>
+              חזרה לכניסה
+            </button>
+          )}
+        </div>
       </Card>
     </div>
   );
